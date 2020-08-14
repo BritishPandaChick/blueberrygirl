@@ -521,6 +521,15 @@ function likebtn_admin_settings() {
                                 <textarea name="likebtn_js" class="likebtn_input" rows="4"><?php echo htmlspecialchars(get_option('likebtn_js')); ?></textarea>
                             </td>
                         </tr>
+                        <tr valign="top">
+                            <th scope="row"><label><?php _e('Show info notices', LIKEBTN_I18N_DOMAIN); ?></label>
+                            </th>
+                            <td>
+                                 <input type="checkbox" name="likebtn_info_message" value="1" <?php checked('1', get_option('likebtn_info_message')); ?> />
+
+                                 <small class="description"><?php _e("Show notice instead of the button when it is restricted by tariff plan", LIKEBTN_I18N_DOMAIN); ?></small>
+                            </td>
+                        </tr>
                     </table>
                 </div>
             </div>
@@ -621,6 +630,11 @@ function likebtn_admin_settings() {
                 </table>
             </div>
         </div>
+
+        <?php if (!get_option('likebtn_account_email') || !get_option('likebtn_account_api_key')): ?>
+            <br/>
+            <?php echo _likebtn_get_markup('post', 'demo', array(), '', false, false); ?>
+        <?php endif ?>
 
     </div>
     <?php

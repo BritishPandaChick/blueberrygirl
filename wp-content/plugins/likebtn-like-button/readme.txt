@@ -2,8 +2,8 @@
 Contributors: likebtn, LikeBtn Support
 Tags: like button, voting, rating, vote, like, dislike, contest, rate, widget, widgets, like button widget, facebook like, facebook like button, poll, survey, donate, donations, share, share button, share buttons, thumbs up, thumb, thumbs, like counter, likes counter, post, posts, sharing, woocommerce, wordpress, bbPress, buddypress, comment, comments, rich snippets, page, pages, facebook, ratings, review, reviews, seo, votes, plugin, mobile plugin, youtube, mycred, ranking, user rating, open graph, Facebook Open Graph, metadata, opengraph, epoch
 Requires at least: 2.8
-Tested up to: 5.1
-Stable tag: 2.6.14
+Tested up to: 5.5
+Stable tag: 2.6.28
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,15 +37,15 @@ The **Like Button Rating** plugin allows you to add a cool looking fully customi
 *   Voting statistics. (PRO/VIP/ULTRA)
 *   Multisite compatible.
 *   Email notifications on new votes for admin. (PRO)
+*   Tracking voters by IP+Device+Cookie or by users.
+*   Like box displaying users who liked an item.
+*   Compatible with <a href="https://wordpress.org/plugins/mycred/" target="_blank">myCRED</a> and <a href="https://wordpress.org/plugins/gamipress/" target="_blank">GamiPress</a>.
 *   The list of the the most liked content using widget or <code>[likebtn_most_liked]</code> shortcode. (PRO/VIP/ULTRA)
 *   The list of the content liked by the current authenticated user using widget or <code>[likebtn_liked_by_user]</code> shortcode. (PRO/VIP/ULTRA)
 *   Shortcode <code>[likebtn]</code> to display the Like button inside a post or page.
 *   Shortcodes <code>[likebtn_likes]</code> and <code>[likebtn_dislikes]</code> to display number of likes and dislikes.
 *   Shortcode <code>[likebtn_off]</code> to disable the Like button in a post or page.
 *   Shortcode <code>[likebtn_category_likes]</code> to display total number of likes for category.
-*   Tracking voters by IP+Device+Cookie or by users.
-*   Like box displaying users who liked an item.
-*   Compatible with <a href="https://wordpress.org/plugins/mycred/" target="_blank">myCRED</a> points management system.
 *   BuddyPress notifications for authors when authenticated users like or dislike author's content.
 *   Recording like & dislike actions in BuddyPress activity stream (votes in private groups are NOT displayed in the public activity stream).
 *   Custom templates for snippets in BuddyPress activity stream.
@@ -111,6 +111,55 @@ The Like Button Rating plugin is powered by <a href="http://likebtn.com" target=
 18. WooCommerce
 
 == Changelog ==
+
+= 2.6.28 =
+* Fix - Fixed posts without a title in Statistics.
+
+= 2.6.27 =
+* Fix - Fixed 'Cannot redeclare inet_to_bits()' error.
+
+= 2.6.26 =
+* Fix - BuddyPress 6 compatibility.
+
+= 2.6.25 =
+* Change - WordPress 5.4 compatibility.
+
+= 2.6.24 =
+* Fix - Fixed bbPress error: Too few arguments to function bbp_format_buddypress_notifications
+
+= 2.6.23 =
+* Change - Do not show elements with both zero likes and dislikes in widgets.
+
+= 2.6.22 =
+* Change - Clarified Show Info Notices option in Settings.
+
+= 2.6.21 =
+* Change - Remove follow buttons in the plugin admin sidebar.
+
+= 2.6.20 =
+* Fix - Escape brackets in shortcodes.
+
+= 2.6.19 =
+* Add - Automatically fix votes table collation in widget in case of "Illegal mix of collations" error.
+
+= 2.6.18 =
+* Add - Added Telegram to sharing.
+* Fix - Fixed map when clicking on User IP in Votes.
+
+= 2.6.17 =
+* Fix - Fixed BuddyPress notifications text.
+
+= 2.6.16 =
+* Add - Integration with GamiPress.
+
+= 2.6.15 =
+* Add - Allow to export item details in Votes: ID, Title, URL, Type.
+* Add - Display Ultmate Member users in Likeв By User widget.
+* Add - Display proper user names in Votes.
+* Fix - Export full titles in Votes.
+* Fix - Fixed custom post types in MyCRED.
+* Fix - Fixed BuddyPress realtime notifications.
+* Fix - Fixed configuring like button in Ultmate Member users list.
 
 = 2.6.14 =
 * Add - WordPress 5.1 compatibility.

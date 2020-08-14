@@ -69,23 +69,38 @@ class LikeBtnLikeButton {
         $likebtn_version = LIKEBTN_VERSION;
         $php_version = phpversion();
         $useragent = "WordPress $wp_version; likebtn plugin $likebtn_version; PHP $php_version";
+        $direct_url = str_replace('http://', 'http://direct.', $url);
 
         try {
             $http = new WP_Http();
             $response = $http->request($url, array('headers' => array("User-Agent" => $useragent)));
         } catch (Exception $e) {
-            return json_encode(array(
-                'result' => 'error',
-                'message' => $this->prepareCurlError($e->getMesssage())
-            ));
+            try {
+                $response = $http->request($direct_url, array('headers' => array("User-Agent" => $useragent)));
+            } catch (Exception $e) {
+                return json_encode(array(
+                    'result' => 'error',
+                    'message' => $this->prepareCurlError($e->getMesssage())
+                ));
+            }
         }
 
         // Error occured
         if (is_wp_error($response)) {
-            return json_encode(array(
-                'result' => 'error',
-                'message' => $this->prepareCurlError($response->get_error_message())
-            ));
+            try {
+                $response = $http->request($direct_url, array('headers' => array("User-Agent" => $useragent)));
+            } catch (Exception $e) {
+                return json_encode(array(
+                    'result' => 'error',
+                    'message' => $this->prepareCurlError($e->getMesssage())
+                ));
+            }
+            if (is_wp_error($response)) {
+                return json_encode(array(
+                    'result' => 'error',
+                    'message' => $this->prepareCurlError($response->get_error_message())
+                ));
+            }
         }
 
         if (is_array($response) && !empty($response['body'])) {

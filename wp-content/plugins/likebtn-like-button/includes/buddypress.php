@@ -28,7 +28,7 @@ function likebtn_notifications_get_notifications_for_user($action, $item_id, $se
 	$return = '';
 
     // Parse action
-    preg_match("/likebtn_(.*)_(like|dislike)/", $action, $m);
+    preg_match("/likebtn_(.*?)(?:_\d+)?_(like|dislike)/", $action, $m);
 
     if (count($m) == 3) {
 
@@ -85,12 +85,14 @@ function likebtn_notifications_get_notifications_for_user($action, $item_id, $se
         }
 
         // We modify global wp_filter to call our bbPress wrapper function
-        if (isset($wp_filter['bp_notifications_get_notifications_for_user'][10]['bbp_format_buddypress_notifications'])) {
-            if (version_compare($wp_version, '4.7', '>=' )) {
-                // https://make.wordpress.org/core/2016/09/08/wp_hook-next-generation-actions-and-filters/
-                $wp_filter['bp_notifications_get_notifications_for_user']->callbacks[10]['bbp_format_buddypress_notifications']['function'] = 'likebtn_bbp_format_buddypress_notifications';
-            } else {
-                $wp_filter['bp_notifications_get_notifications_for_user'][10]['bbp_format_buddypress_notifications']['function'] = 'likebtn_bbp_format_buddypress_notifications';
+        if ( function_exists('bbp_get_version') && version_compare( bbp_get_version(), '2.6.0' , '<') ) {
+            if (isset($wp_filter['bp_notifications_get_notifications_for_user'][10]['bbp_format_buddypress_notifications'])) {
+                if (version_compare($wp_version, '4.7', '>=' )) {
+                    // https://make.wordpress.org/core/2016/09/08/wp_hook-next-generation-actions-and-filters/
+                    $wp_filter['bp_notifications_get_notifications_for_user']->callbacks[10]['bbp_format_buddypress_notifications']['function'] = 'likebtn_bbp_format_buddypress_notifications';
+                } else {
+                    $wp_filter['bp_notifications_get_notifications_for_user'][10]['bbp_format_buddypress_notifications']['function'] = 'likebtn_bbp_format_buddypress_notifications';
+                }
             }
         }
 
@@ -126,7 +128,9 @@ function _likebtn_bp_notifications_add_notification($entity_name, $entity_id, $v
         'item_id'           => $entity_id,
         'secondary_item_id' => $voter_id,
         'component_name'    => LIKEBTN_BP_COMPONENT_NAME,
-        'component_action'  => 'likebtn_'.$entity_name.'_'.$action,
+        // BuddyPress is grouping notifications by this field in the top counter
+        //'component_action'  => 'likebtn_'.$entity_name.'_'.$action,
+        'component_action'  => 'likebtn_'.$entity_name.'_'.$entity_id.'_'.$action,
         'date_notified'     => bp_core_current_time(),
         'is_new'            => 1,
     );

@@ -340,9 +340,9 @@ function likebtn_admin_votes() {
             </div>
         </div>
     </div>
-    <script async defer
+    <?php /*<script async defer
         src="https://maps.googleapis.com/maps/api/js?v=3.exp&callback=showMap">
-    </script>
+    </script>*/ ?>
     <div id="likebtn_vg" class="hidden">
         <div class="likebtn-vgraph"></div>
         <div class="likebtn-vgraph-error likebtn_error">
@@ -630,7 +630,11 @@ function likebtn_admin_votes() {
             <label><input type="checkbox" name="fields[]" value="country" checked="checked" /> <?php _e('Country', LIKEBTN_I18N_DOMAIN); ?></label><br/>
             <label><input type="checkbox" name="fields[]" value="date" checked="checked" /> <?php _e('Date', LIKEBTN_I18N_DOMAIN); ?></label><br/>
             <label><input type="checkbox" name="fields[]" value="type" checked="checked" /> <?php _e('Vote type', LIKEBTN_I18N_DOMAIN); ?></label><br/>
-            <label><input type="checkbox" name="fields[]" value="item" checked="checked" /> <?php _e('Item', LIKEBTN_I18N_DOMAIN); ?></label><br/><br/>
+            <label><input type="checkbox" name="fields[]" value="item_id" checked="checked" /> <?php _e('Item ID', LIKEBTN_I18N_DOMAIN); ?></label><br/>
+            <label><input type="checkbox" name="fields[]" value="item_title" checked="checked" /> <?php _e('Item Title', LIKEBTN_I18N_DOMAIN); ?></label><br/>
+            <label><input type="checkbox" name="fields[]" value="item_url" checked="checked" /> <?php _e('Item URL', LIKEBTN_I18N_DOMAIN); ?></label><br/>
+            <label><input type="checkbox" name="fields[]" value="item_type" checked="checked" /> <?php _e('Item Type', LIKEBTN_I18N_DOMAIN); ?></label><br/>
+            <br/>
             <strong><?php _e('Encoding', LIKEBTN_I18N_DOMAIN); ?>:</strong> 
             <select name="encoding">
                 <option value="UCS-2LE">UTF-16LE (UCS-2LE) - <?php _e('Recommended'); ?></option>

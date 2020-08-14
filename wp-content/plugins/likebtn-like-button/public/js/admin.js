@@ -1372,6 +1372,9 @@ function likebtnShowShortcode(id, properties)
             continue;
         }
         value = value.replaceAll('"', '&quot;');
+        // Escape brackets
+        value = value.replaceAll('[', '&#91;');
+        value = value.replaceAll(']', '&#93;');
         if (value !== '') {
             shortcode += ' '+name+'="'+value+'"';
         }
@@ -1437,6 +1440,9 @@ function likebtnWidgetShortcode(mnemonic, sc_name, msg_save, no_toggle)
     for (var name in properties) {
         value = properties[name];
         value = value.replaceAll('"', '&quot;');
+        // Escape brackets
+        value = value.replaceAll('[', '&#91;');
+        value = value.replaceAll(']', '&#93;');
         shortcode += ' '+name+'="'+value+'"';
     }
     shortcode += ']';
@@ -1605,7 +1611,7 @@ function loadReports()
 }
 
 // Show heat map
-function showMap()
+/*function showMap()
 {
     if (!jQuery(".reports-map:first").size() || !likebtn_reports_loc.length) {
         return;
@@ -1625,7 +1631,7 @@ function showMap()
         data: points,
         map: map
     });
-}
+}*/
 
 // Get series from data
 function reportsGetSeries(data, mode)
@@ -2133,7 +2139,7 @@ function likebtnIpInfo(ip)
             return;
         }
         var loc = response.loc.split(',');
-        var map_opts = {
+        /*var map_opts = {
             zoom: 2,
             mapTypeId: google.maps.MapTypeId.HYBRID
         }
@@ -2150,6 +2156,13 @@ function likebtnIpInfo(ip)
                 map: map,
                 title: ip
             });
+        }*/
+        if (loc.length == 2) {
+            var lat = loc[0]*1;
+            var lon = loc[1]*1;
+
+            var map_html = '<iframe width="100%" height="200" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.openstreetmap.org/export/embed.html?bbox='+Math.abs(lon-1)+'%2C'+Math.abs(lat-1)+'%2C'+Math.abs(lon+1)+'%2C'+Math.abs(lat+1)+'&amp;layer=mapnik&amp;marker='+lat+'%2C'+lon+'"></iframe>';
+            jQuery(".likebtn_ip_info .likebtn_ip_info_map:visible").html(map_html);
         }
 
         var ip = '';

@@ -403,3 +403,7 @@ function likebtn_db_update_18() {
 function likebtn_db_update_19() {
     update_option('likebtn_bp_filter', '1');
 }
+
+function likebtn_db_update_20() {
+    update_option('likebtn_info_message', '1');
+}

@@ -13,7 +13,7 @@ function likebtn_um_profile($args) {
 add_filter('um_pre_header_editprofile', 'likebtn_um_profile');
 
 function likebtn_um_member_directory($user_id) {
-    echo _likebtn_get_content_universal(LIKEBTN_ENTITY_UM_USER, $user_id, '', false);
+    echo _likebtn_get_content_universal(LIKEBTN_ENTITY_UM_USER_LIST, $user_id, '', false);
 }
 
 add_filter('um_members_just_after_name', 'likebtn_um_member_directory');

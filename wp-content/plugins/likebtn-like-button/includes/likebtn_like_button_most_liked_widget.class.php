@@ -316,6 +316,9 @@ class LikeBtnLikeButtonMostLikedWidget extends WP_Widget {
 
     public static function prepareInstanceStatic($instance, $instance_default)
     {
+        if (!is_array($instance)) {
+            return $instance;
+        }
         foreach ($instance_default as $field => $default_value) {
             if (!isset($instance[$field])) {
                 if ($field == 'title') {
@@ -729,7 +732,15 @@ class LikeBtnLikeButtonMostLiked {
         }
 
         // bbPress User
+        // UM User
+        $user_post_type = '';
         if (_likebtn_is_bbp_active() && in_array(LIKEBTN_ENTITY_BBP_USER, $instance['entity_name'])) {
+            $user_post_type = LIKEBTN_ENTITY_BBP_USER;
+        }
+        if (in_array(LIKEBTN_ENTITY_UM_USER, $instance['entity_name'])) {
+            $user_post_type = LIKEBTN_ENTITY_UM_USER;
+        }
+        if ($user_post_type) {
             if ($post_types_count > 0) {
                 $query .= " UNION ";
             }
@@ -741,7 +752,7 @@ class LikeBtnLikeButtonMostLiked {
                     CONVERT(pm_likes.meta_value, UNSIGNED INTEGER) as 'likes',
                     CONVERT(pm_dislikes.meta_value, UNSIGNED INTEGER) as 'dislikes',
                     CONVERT(pm_likes_minus_dislikes.meta_value, SIGNED INTEGER) as 'likes_minus_dislikes',
-                    '" . LIKEBTN_ENTITY_BBP_USER . "' as post_type,
+                    '" . $user_post_type . "' as post_type,
                     '' as post_mime_type,
                     '' as url
                  FROM {$wpdb->prefix}usermeta pm_likes
@@ -792,12 +803,14 @@ class LikeBtnLikeButtonMostLiked {
                 ";
         } else if ((int)$instance['voter']) {
             $query = "SELECT * FROM (".$query. ") main_query";
+            // WHERE (likes != 0 OR dislikes != 0)
             $query .= " 
                 INNER JOIN ".$wpdb->prefix.LIKEBTN_TABLE_VOTE." v ON v.identifier = CONCAT(main_query.post_type, '_', main_query.post_id) AND v.user_id = ".(int)$instance['voter']. " 
                 GROUP BY v.identifier
             ";
         } else if ($post_types_count > 1) {
             $query = "SELECT * FROM (".$query. ") main_query";
+            //$query .= " WHERE (likes != 0 OR dislikes != 0) ";
         }
 
         $query .= "
@@ -825,9 +838,12 @@ class LikeBtnLikeButtonMostLiked {
         $query .= " DESC";
 
         $query .= " {$query_limit}";
-// echo "<pre>";
-// print_r($query);
-// exit();
+
+// if (!$instance['voter']) {
+//     echo "<pre>";
+//     print_r($query);
+//     exit();
+// }
 // if ($wpdb->last_error) {
 //     echo 'last_error';
 //     print_r($wpdb->last_error);
@@ -840,10 +856,34 @@ class LikeBtnLikeButtonMostLiked {
 // }
         $posts = $wpdb->get_results($query);
 
+        if ($wpdb->last_error && strstr($wpdb->last_error, 'Illegal mix of collations')) {
+            // Try to change votes table collation.
+            $charset = '';
+            $collation = '';
+            $query_coll = "SHOW TABLE STATUS where name like '{$wpdb->prefix}posts'";
+            $coll = $wpdb->get_row($query_coll);
+
+            if (!empty($coll->Collation)) {
+                $collation = $coll->Collation;
+                $charset = preg_replace("/^([^_]+)_.*/", "$1", $collation);
+            }
+            if (!empty($charset) && !empty($collation)) {
+                $sql = "ALTER TABLE {$wpdb->prefix}".LIKEBTN_TABLE_VOTE." CONVERT TO CHARACTER SET $charset COLLATE '$collation';";
+                $wpdb->query($sql);
+
+                $posts = $wpdb->get_results($query);
+            }
+        }
+        
         $post_loop = array();
 
         if (count($posts) > 0) {
             foreach ($posts as $i=>$db_post) {
+                // Remove posts with zero values
+                if ($db_post->likes == 0 && $db_post->dislikes == 0) {
+                    continue;
+                }
+
                 $post = array(
                     'id' => $db_post->post_id,
                     'type' => $db_post->post_type,

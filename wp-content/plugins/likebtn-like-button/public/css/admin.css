@@ -552,3 +552,6 @@ ul.likebtn-is li {
 .likebtn_vn_container {
     font-weight: bold;
 }
+small.description {
+    color: #666;
+}

@@ -43,6 +43,9 @@ if (class_exists('myCRED_Hook')) {
 		const REF_DISLIKE = 'likebtn_dislike';
 		const REF_GET_DISLIKE = 'likebtn_get_dislike';
 
+		public $hook_prefs_copy;
+		public $type_copy;
+
 		/**
 		 * Construct
 		 */
@@ -71,6 +74,9 @@ if (class_exists('myCRED_Hook')) {
 					$this->prefs[$instance.'_'.LIKEBTN_ENTITY_POST] = $hook_prefs[self::ID][$instance];
 				}
 			}
+
+			$this->hook_prefs_copy = $hook_prefs;
+			$this->type_copy = $type;
 		}
 
 		/**
@@ -100,6 +106,11 @@ if (class_exists('myCRED_Hook')) {
 		 * Award user and author
 		 */
 		public function award($entity_name, $entity_id, $instance, $ref_user, $ref_author) {
+
+			// We have to call cunstructor again, as custom post types are not
+			// ready when it is called first time.
+			$this->__construct( $this->hook_prefs_copy, $this->type_copy );
+
 			$user_id 	= get_current_user_id();
 
 			if (!$user_id) {
