@@ -351,7 +351,8 @@ class LikeBtnLikeButton {
 
                     if (!empty($bp_activity) && function_exists('bp_activity_get_meta')) {
                         if ($likes != -1) {
-                            if (count(bp_activity_get_meta($entity_id, LIKEBTN_META_KEY_LIKES)) > 1) {
+                            $meta_value = bp_activity_get_meta($entity_id, LIKEBTN_META_KEY_LIKES);
+                            if (is_array($meta_value) && count($meta_value) > 1) {
                                 bp_activity_delete_meta($entity_id, LIKEBTN_META_KEY_LIKES);
                                 bp_activity_add_meta($entity_id, LIKEBTN_META_KEY_LIKES, $likes, true);
                             } else {
@@ -359,7 +360,8 @@ class LikeBtnLikeButton {
                             }
                         }
                         if ($dislikes != -1) {
-                            if (count(bp_activity_get_meta($entity_id, LIKEBTN_META_KEY_DISLIKES)) > 1) {
+                            $meta_value = bp_activity_get_meta($entity_id, LIKEBTN_META_KEY_DISLIKES);
+                            if (is_array($meta_value) && count($meta_value) > 1) {
                                 bp_activity_delete_meta($entity_id, LIKEBTN_META_KEY_DISLIKES);
                                 bp_activity_add_meta($entity_id, LIKEBTN_META_KEY_DISLIKES, $dislikes, true);
                             } else {
@@ -367,7 +369,8 @@ class LikeBtnLikeButton {
                             }
                         }
                         if ($likes_minus_dislikes !== null) {
-                            if (count(bp_activity_get_meta($entity_id, LIKEBTN_META_KEY_LIKES_MINUS_DISLIKES)) > 1) {
+                            $meta_value = bp_activity_get_meta($entity_id, LIKEBTN_META_KEY_LIKES_MINUS_DISLIKES);
+                            if (is_array($meta_value) && count($meta_value) > 1) {
                                 bp_activity_delete_meta($entity_id, LIKEBTN_META_KEY_LIKES_MINUS_DISLIKES);
                                 bp_activity_add_meta($entity_id, LIKEBTN_META_KEY_LIKES_MINUS_DISLIKES, $likes_minus_dislikes, true);
                             } else {
