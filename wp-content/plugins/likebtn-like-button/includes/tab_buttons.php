@@ -20,6 +20,9 @@ function likebtn_admin_buttons()
     wp_register_script('select2-likebtn', _likebtn_get_public_url().'js/jquery/select2/select2.js', array('jquery'), LIKEBTN_VERSION, true);
     wp_register_script('select2-sortable', _likebtn_get_public_url().'js/jquery/select2/select2.sortable.js', array('select2-likebtn'), LIKEBTN_VERSION, true);
     wp_register_style('select2-css', _likebtn_get_public_url().'css/jquery/select2/select2.css', false, LIKEBTN_VERSION, 'all');
+    // jQuery UI is needed for buttonset, datepicker, durationPicker
+    // Includes: buttons
+    // Theme: UI lightness
     wp_register_script('likebtn-jquery-ui', _likebtn_get_public_url().'js/jquery/jquery-ui/jquery-ui.js', array('jquery'), LIKEBTN_VERSION, true);
     wp_register_style('likebtn-jquery-ui-css', _likebtn_get_public_url().'css/jquery/jquery-ui/jquery-ui.css', false, LIKEBTN_VERSION, 'all');
     wp_register_style('likebtn-addthis', _likebtn_get_public_url().'css/addthis.css', false, LIKEBTN_VERSION, 'all');
