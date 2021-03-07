@@ -135,11 +135,11 @@ function likebtn_db_update_4() {
             $new_option_name = 'likebtn_settings_'.$option_name.'_'.$entity_name;
             $old_option_name = str_replace('likebtn_', 'likebtn_like_button_', $new_option_name);
 
-            $option_exists = $wpdb->get_row("
+            $option_exists = $wpdb->get_row($wpdb->prepare("
                 SELECT option_value
                 FROM ".$wpdb->prefix."options
-                WHERE option_name = '{$old_option_name}'
-            ");
+                WHERE option_name = %s
+            ", $old_option_name));
             if ($option_exists) {
                 update_option($new_option_name, get_option($old_option_name));
                 delete_option($old_option_name);
@@ -163,11 +163,11 @@ function likebtn_db_update_5() {
 
         $option_name = 'likebtn_settings_voting_enabled_'.$entity_name;
 
-        $option_exists = $wpdb->get_row("
+        $option_exists = $wpdb->get_row($wpdb->prepare("
             SELECT option_value
             FROM ".$wpdb->prefix."options
-            WHERE option_name = '{$option_name}'
-        ");
+            WHERE option_name = %s
+        ", $option_name));
         if ($option_exists) {
             update_option($option_name, '1');
         }
@@ -196,11 +196,11 @@ function likebtn_db_update_7() {
 
         $option_name = 'likebtn_settings_popup_enabled_'.$entity_name;
 
-        $option_exists = $wpdb->get_row("
+        $option_exists = $wpdb->get_row($wpdb->prepare("
             SELECT option_value
             FROM ".$wpdb->prefix."options
-            WHERE option_name = '{$option_name}'
-        ");
+            WHERE option_name = %s
+        ", $option_name));
         if ($option_exists) {
             if ((int)$option_exists->option_value != 1) {
                 update_option('likebtn_settings_popup_disabled_'.$entity_name, '1');
@@ -390,7 +390,7 @@ function likebtn_db_update_16() {
 function likebtn_db_update_17() {
     update_option('likebtn_notify_to', get_option('admin_email'));
     update_option('likebtn_notify_from', likebtn_default_notify_from());
-    update_option('likebtn_notify_subject', '♥ '.__('New {vote_type} on {domain}', LIKEBTN_I18N_DOMAIN));
+    update_option('likebtn_notify_subject', '♥ '.__('New {vote_type} on {domain}', 'likebtn-like-button'));
     update_option('likebtn_notify_text', likebtn_default_notify_text());
 }
 

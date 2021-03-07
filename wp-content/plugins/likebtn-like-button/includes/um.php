@@ -21,7 +21,7 @@ add_filter('um_members_just_after_name', 'likebtn_um_member_directory');
 function likebtn_um_profile_tabs($tabs) {
     
     $tabs['likebtn-liked-content'] = array(
-        'name' => __('Liked Content', LIKEBTN_I18N_DOMAIN),
+        'name' => __('Liked Content', 'likebtn-like-button'),
         'icon' => 'um-faicon-heart',
     );
         

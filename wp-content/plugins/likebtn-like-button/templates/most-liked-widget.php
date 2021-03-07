@@ -74,7 +74,7 @@ if ( !defined('ABSPATH') )
             <?php if ($empty_text): ?>
                 <?php echo $empty_text; ?>
             <?php else: ?>
-                <?php _e('No items liked yet.', LIKEBTN_I18N_DOMAIN); ?>
+                <?php _e('No items liked yet.', 'likebtn-like-button'); ?>
             <?php endif ?>
         </p>
 	</div>

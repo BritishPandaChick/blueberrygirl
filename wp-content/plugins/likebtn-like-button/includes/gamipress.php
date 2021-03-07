@@ -70,54 +70,33 @@ function likebtn_gamipress_activity_triggers($triggers)
 {
     $likebtn_entities = _likebtn_get_entities(true, false, false);
 
-    $trigger_name = __('Like Button', LIKEBTN_I18N);
+    $trigger_name = __('Like Button', 'likebtn-like-button');
     $triggers[$trigger_name] = array(
-        'gamipress_likebtn_like'        => __('Like anything', LIKEBTN_I18N),
-        'gamipress_likebtn_get_like'    => __('Get a like anywhere', LIKEBTN_I18N),
-        'gamipress_likebtn_dislike'     => __('Dislike anything', LIKEBTN_I18N),
-        'gamipress_likebtn_get_dislike' => __('Get a dislike anywhere', LIKEBTN_I18N),
+        'gamipress_likebtn_like'        => __('Like anything', 'likebtn-like-button'),
+        'gamipress_likebtn_get_like'    => __('Get a like anywhere', 'likebtn-like-button'),
+        'gamipress_likebtn_dislike'     => __('Dislike anything', 'likebtn-like-button'),
+        'gamipress_likebtn_get_dislike' => __('Get a dislike anywhere', 'likebtn-like-button'),
     );
 
     foreach ($likebtn_entities as $entity_name => $entity_title) {
-        $triggers[$trigger_name]['gamipress_likebtn_like_'.$entity_name] = strtr(__('Like a %entity_name%', LIKEBTN_I18N), array('%entity_name%' => $entity_title));
-        $triggers[$trigger_name]['gamipress_likebtn_get_like_'.$entity_name] = strtr(__('Get a like on a %entity_name%', LIKEBTN_I18N), array('%entity_name%' => $entity_title));
-        $triggers[$trigger_name]['gamipress_likebtn_dislike_'.$entity_name] = strtr(__('Dislike a %entity_name%', LIKEBTN_I18N), array('%entity_name%' => $entity_title));
-        $triggers[$trigger_name]['gamipress_likebtn_get_dislike_'.$entity_name] = strtr(__('Get a dislike on a %entity_name%', LIKEBTN_I18N), array('%entity_name%' => $entity_title));
+        $triggers[$trigger_name]['gamipress_likebtn_like_'.$entity_name] = strtr(__('Like a %entity_name%', 'likebtn-like-button'), array('%entity_name%' => $entity_title));
+        $triggers[$trigger_name]['gamipress_likebtn_get_like_'.$entity_name] = strtr(__('Get a like on a %entity_name%', 'likebtn-like-button'), array('%entity_name%' => $entity_title));
+        $triggers[$trigger_name]['gamipress_likebtn_dislike_'.$entity_name] = strtr(__('Dislike a %entity_name%', 'likebtn-like-button'), array('%entity_name%' => $entity_title));
+        $triggers[$trigger_name]['gamipress_likebtn_get_dislike_'.$entity_name] = strtr(__('Get a dislike on a %entity_name%', 'likebtn-like-button'), array('%entity_name%' => $entity_title));
     }
 
-    $triggers[$trigger_name]['gamipress_likebtn_like_custom_item'] = strtr(__('Like a %entity_name%', LIKEBTN_I18N), array('%entity_name%' => __('Custom Item', LIKEBTN_I18N)));
-    $triggers[$trigger_name]['gamipress_likebtn_dislike_custom_item'] = strtr(__('Dislike a %entity_name%', LIKEBTN_I18N), array('%entity_name%' => __('Custom Item', LIKEBTN_I18N)));
+    $triggers[$trigger_name]['gamipress_likebtn_like_custom_item'] = strtr(__('Like a %entity_name%', 'likebtn-like-button'), array('%entity_name%' => __('Custom Item', 'likebtn-like-button')));
+    $triggers[$trigger_name]['gamipress_likebtn_dislike_custom_item'] = strtr(__('Dislike a %entity_name%', 'likebtn-like-button'), array('%entity_name%' => __('Custom Item', 'likebtn-like-button')));
 
     return $triggers;
 }
 
-/**
- * Get user for a given trigger action.
- */
-// function likebtn_gamipress_trigger_get_user_id($user_id, $trigger, $args)
-// {
-//     if (preg_match("/^gamipress_likebtn_/", $trigger)) {
-//         $user_id = $args[1];
-//     }
-
-//     return $user_id;
-// }
 
 /**
  * Extended meta data for event trigger logging.
  */
 function likebtn_gamipress_log_event_trigger_meta_data($log_meta, $user_id, $trigger, $site_id, $args)
 {
-    /*if (preg_match("/^gamipress_likebtn_get_/", $trigger)) {
-        // Add object ID and the user that perform the like/unlike (on author events)
-        $log_meta['id'] = $args[0];
-        $log_meta['liker_id'] = $args[2];
-    } elseif (preg_match("/^gamipress_likebtn_/", $trigger)) {
-        // Add object ID
-        $log_meta['id'] = $args[0];
-        $log_meta['liker_id'] = $args[1];
-    }*/
-
     $log_meta['entity_name'] = $args['entity_name'];
     $log_meta['entity_id'] = $args['entity_id'];
 
@@ -147,7 +126,7 @@ function likebtn_gamipress_log_extra_data_fields($fields, $object_id, $type, $ob
 
     if ($entity_name == LIKEBTN_ENTITY_CUSTOM_ITEM) {
         $fields[] = array(
-            'name'  => __('Liked/Disliked Entity', LIKEBTN_I18N),
+            'name'  => __('Liked/Disliked Entity', 'likebtn-like-button'),
             'id'    => $prefix . 'entity_id',
             'type'  => 'text',
         );
@@ -157,7 +136,7 @@ function likebtn_gamipress_log_extra_data_fields($fields, $object_id, $type, $ob
 
         if ($entity_title) {
             $fields[] = array(
-                'name'  => __('Liked/Disliked Entity', LIKEBTN_I18N),
+                'name'  => __('Liked/Disliked Entity', 'likebtn-like-button'),
                 'desc'  => '<a href="'.$entity_url.'" target="_blank">'.htmlentities($entity_title).'</a>',
                 'id'    => $prefix . 'entity_name',
                 'type'  => 'text',
@@ -169,7 +148,7 @@ function likebtn_gamipress_log_extra_data_fields($fields, $object_id, $type, $ob
             $voter_name = _likebtn_get_entity_title(LIKEBTN_ENTITY_USER, $voter_id);
             $voter_url  = _likebtn_get_entity_url(LIKEBTN_ENTITY_USER, $voter_id);
             $fields[] = array(
-                'name'  => __('Voter ID', LIKEBTN_I18N),
+                'name'  => __('Voter ID', 'likebtn-like-button'),
                 'desc'  => '<a href="'.$voter_url.'" target="_blank">'.htmlentities($voter_name).'</a>',
                 'id'    => $prefix . 'voter_id',
                 'type'  => 'text',

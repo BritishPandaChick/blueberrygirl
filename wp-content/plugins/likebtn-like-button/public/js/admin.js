@@ -1561,8 +1561,8 @@ function loadReports()
             }
             
             // Graphs
-            Highcharts.setOptions({
-                lang: global_highcharts_lang
+            Graph.setOptions({
+                lang: global_graph_lang
             });
             
             var chart_options = {
@@ -1595,7 +1595,7 @@ function loadReports()
                 }
             };
             
-            var reports_chart = new Highcharts.StockChart(chart_options);
+            var reports_chart = new Graph.StockChart(chart_options);
 
             // Year
             chart_options.series = reportsGetSeries(stats.m, 'm');
@@ -1603,7 +1603,7 @@ function loadReports()
             chart_options.rangeSelector.inputDateFormat = '%m.%Y';
             chart_options.rangeSelector.inputEditDateFormat = '%m.%Y';
             chart_options.title.text = '';
-            reports_chart = new Highcharts.StockChart(chart_options);
+            reports_chart = new Graph.StockChart(chart_options);
         },
         true,
         likebtn_couch_db_type
@@ -1896,7 +1896,7 @@ function likebtnScriptButtons(subpage, plan)
         });
        
         // Radio images
-        jQuery('.image_toggle').buttonset();
+        //jQuery('.image_toggle').buttonset();
 
         displayFields();
 

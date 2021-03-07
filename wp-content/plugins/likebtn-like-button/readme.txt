@@ -2,8 +2,8 @@
 Contributors: likebtn, LikeBtn Support
 Tags: like button, voting, rating, vote, like, dislike, contest, rate, widget, widgets, like button widget, facebook like, facebook like button, poll, survey, donate, donations, share, share button, share buttons, thumbs up, thumb, thumbs, like counter, likes counter, post, posts, sharing, woocommerce, wordpress, bbPress, buddypress, comment, comments, rich snippets, page, pages, facebook, ratings, review, reviews, seo, votes, plugin, mobile plugin, youtube, mycred, ranking, user rating, open graph, Facebook Open Graph, metadata, opengraph, epoch
 Requires at least: 2.8
-Tested up to: 5.6
-Stable tag: 2.6.31
+Tested up to: 5.7
+Stable tag: 2.6.36
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -111,6 +111,22 @@ The Like Button Rating plugin is powered by <a href="http://likebtn.com" target=
 18. WooCommerce
 
 == Changelog ==
+
+= 2.6.36 =
+* Fix - Fixed JS on MyCRED hooks page.
+
+= 2.6.35 =
+* Change - WP 5.7 compatibility.
+
+= 2.6.34 =
+* Change - Load styles and JS only on Like Button admin pages to avoid conflicts with other plugins.
+
+= 2.6.33 =
+* Change - Improved code quality.
+
+= 2.6.32 =
+* Fix - Fixed host check security issue.
+* Fix - Fixed unescaped SQL parameter issues.
 
 = 2.6.31 =
 * Fix - WP 5.6 compatibility.

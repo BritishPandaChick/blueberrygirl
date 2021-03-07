@@ -118,7 +118,7 @@ class LikeBtnLikeButton {
     public function prepareCurlError($text)
     {
         if (strstr(strtolower($text), 'name lookup timed out')) {
-            $text .= '. '.__('Please install http://wordpress.org/extend/plugins/core-control/ plugin, open the Core Control settings page, activate the HTTP Module and click the Disable Transport link for cURL.', LIKEBTN_I18N_DOMAIN);
+            $text .= '. '.__('Please install http://wordpress.org/extend/plugins/core-control/ plugin, open the Core Control settings page, activate the HTTP Module and click the Disable Transport link for cURL.', 'likebtn-like-button');
         }
         return $text;
     }
@@ -277,14 +277,8 @@ class LikeBtnLikeButton {
         list($entity_name, $entity_id) = $this->parseIdentifier($identifier);
 
         $likes = (int)$likes;
-        /*if ($likes < 0) {
-            $likes = 0;
-        }*/
         $dislikes = (int)$dislikes;
-        /*if ($dislikes < 0) {
-            $dislikes = 0;
-        }*/
-        
+
         $likes_minus_dislikes = null;
         if ($likes != -1 && $dislikes != -1) {
             $likes_minus_dislikes = $likes - $dislikes;
@@ -338,16 +332,11 @@ class LikeBtnLikeButton {
                         break;
                     }
                     // BuddyPress Activity
-                    /*$bp_activity_list = bp_activity_get(array(
-                        'show_hidden'  => true,
-                        'spam'  => 'all',
-                        //'in'           => array((int)$entity_id)
-                    ));*/
-                    $bp_activity = $wpdb->get_row("
+                    $bp_activity = $wpdb->get_row($wpdb->prepare("
                         SELECT id
                         FROM ".$wpdb->prefix."bp_activity
-                        WHERE id = {$entity_id}
-                    ");
+                        WHERE id = %d
+                    ", $entity_id));
 
                     if (!empty($bp_activity) && function_exists('bp_activity_get_meta')) {
                         if ($likes != -1) {
@@ -413,12 +402,12 @@ class LikeBtnLikeButton {
                             global $sitepress;
                             $trid = $sitepress->get_element_trid($entity_id, 'post_'.$entity_name);
                             //$translations = $sitepress->get_element_translations($trid,'post_'.$entity_name);
-                            $translations = $wpdb->get_results("
+                            $translations = $wpdb->get_results($wpdb->prepare("
                                 SELECT element_id
                                 FROM {$wpdb->prefix}icl_translations
-                                WHERE trid = {$trid} 
+                                WHERE trid = %d 
                                 AND element_type = 'post_{$entity_name}' 
-                            ");
+                            ", $trid));
                             foreach ($translations as $langkey => $translation) {
                                 likebtn_set_post_votes($translation->element_id, $likes, $dislikes, $likes_minus_dislikes);
                             }
@@ -540,11 +529,11 @@ class LikeBtnLikeButton {
                     if (!_likebtn_is_bp_active()) {
                         break;
                     }
-                    $bp_activity = $wpdb->get_row("
+                    $bp_activity = $wpdb->get_row($wpdb->prepare("
                         SELECT id
                         FROM ".$wpdb->prefix."bp_activity
-                        WHERE id = {$entity_id}
-                    ");
+                        WHERE id = %d
+                    ", $entity_id));
 
                     if (!empty($bp_activity)) {
                         bp_activity_delete_meta($entity_id, LIKEBTN_META_KEY_LIKES);
