@@ -469,12 +469,11 @@ function dethide_twap(id)
 							'class'              => 'postform',
 							'depth'              => 0,
 							'tab_index'          => 0,
-							'taxonomy'           => 'category',
-							'hide_if_empty'      => false );
+							'taxonomy'           => 'category');
 
 					if(count(get_categories($args))>0)
 					{
-						$twap_categories=get_categories();
+						$twap_categories=get_categories($args);
 						foreach ($twap_categories as $twap_cat)
 						{
 							$cat_id[]=$twap_cat->cat_ID;

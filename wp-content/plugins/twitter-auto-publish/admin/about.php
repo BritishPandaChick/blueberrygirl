@@ -253,7 +253,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Publish multiple images to facebook, tumblr and twitter along with post content</td>
+		<td>Publish multiple images to facebook, tumblr, linkedin and twitter along with post content</td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -316,7 +316,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	<!-- Filter Options  -->
 
 	<tr>
-	<td rowspan="7"><h4>Filter Options</h4></td>
+	<td rowspan="9"><h4>Filter Options</h4></td>
 		<td>Filter posts to publish based on categories</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
@@ -335,7 +335,15 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 	</tr>
-
+	<tr>
+		<td>Filter posts to publish based on sticky posts</td>
+		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
+		</td>
+		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
+		</td>
+		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
+		</td>
+	</tr>
 	<tr>
 		<td>Configuration to enable/disable page publishing</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -385,7 +393,15 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 	</tr>
-
+	<tr>
+		<td>Override auto publish based on sticky posts for individual accounts</td>
+		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
+		</td>
+		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
+		</td>
+		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
+		</td>
+	</tr>
 	<!-- Scheduling  -->
 
 	<tr>

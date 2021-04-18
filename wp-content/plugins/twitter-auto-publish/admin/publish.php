@@ -247,7 +247,7 @@ function xyz_twap_link_publish($post_ID) {
 		$caption = html_entity_decode(get_bloginfo('title'), ENT_QUOTES, get_bloginfo('charset'));
 		
 		if($tit_flag==1)
-			$name = apply_filters('the_title', $name);
+			$name = apply_filters('the_title', $name,$post_ID);
 		
 		$name = html_entity_decode($name, ENT_QUOTES, get_bloginfo('charset'));
 		$name=strip_tags($name);
@@ -317,7 +317,7 @@ function xyz_twap_link_publish($post_ID) {
 				$final_str='';
 				$len=0;
 				$tw_max_len=get_option('xyz_twap_tw_char_limit');
-				if (function_exists('mb_strlen')) {
+				if (function_exists('mb_strlen') && function_exists('mb_substr') && function_exists('mb_strpos')) {
 				foreach ($matches as $key=>$val)
 				{
 					$url_max_len=23;//23 for https and 22 for http

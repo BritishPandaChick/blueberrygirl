@@ -106,7 +106,8 @@ jQuery(document).ready(function() {
 	
 	 var xyz_twap_twpost_permission=jQuery("input[name='xyz_twap_twpost_permission']:checked").val();
 	 XyzTwapToggleRadio(xyz_twap_twpost_permission,'xyz_twap_twpost_permission'); 
-		
+	var wp_version='<?php echo XYZ_TWAP_WP_VERSION; ?>';
+	if (wp_version <= '5.3') {
 	jQuery('#category-all').bind("DOMSubtreeModified",function(){
 		twap_get_categorylist(1);
 		});
@@ -123,6 +124,7 @@ jQuery(document).ready(function() {
 	jQuery(document).on('change', 'input[type="checkbox"]', function() {
 		twap_get_categorylist(2);
 				});
+		}
 });
 
 function twap_get_categorylist(val)

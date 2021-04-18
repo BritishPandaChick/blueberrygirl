@@ -62,7 +62,7 @@ if(!function_exists('xyz_twap_string_limit')){
 function xyz_twap_string_limit($string, $limit) {
 
 	$space=" ";$appendstr=" ...";
-	if (function_exists('mb_strlen')) {
+	if (function_exists('mb_strlen') && function_exists('mb_substr') && function_exists('mb_strripos')) {
 	if(mb_strlen($string) <= $limit) return $string;
 	if(mb_strlen($appendstr) >= $limit) return '';
 	$string = mb_substr($string, 0, $limit-mb_strlen($appendstr));
