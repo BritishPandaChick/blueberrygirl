@@ -23,8 +23,27 @@ function likebtn_admin_votes() {
     require_once(dirname(__FILE__) . '/likebtn_like_button_pagination.class.php');
 
     $pagination_target = "admin.php?page=likebtn_votes";
-    foreach ($_GET as $get_parameter => $get_value) {
-        $pagination_target .= '&' . urlencode($get_parameter) . '=' . urlencode(stripcslashes($get_value));
+    if (isset($_GET['likebtn_entity_name'])) {
+        $pagination_target .= '&likebtn_entity_name='.sanitize_text_field(stripcslashes($_GET['likebtn_entity_name']));
+    }
+    // likebtn_post_id may contain any text, not only numbers
+    if (isset($_GET['likebtn_post_id'])) {
+        $pagination_target .= '&likebtn_post_id='.sanitize_text_field(stripcslashes($_GET['likebtn_post_id']));
+    }
+    if (isset($_GET['likebtn_user_id'])) {
+        $pagination_target .= '&likebtn_user_id='.(int)$_GET['likebtn_user_id'];
+    }
+    if (isset($_GET['likebtn_ip'])) {
+        $pagination_target .= '&likebtn_ip='.preg_replace("/[^\.:0-9a-zA-Z]/", '', $_GET['likebtn_ip']);
+    }
+    if (isset($_GET['likebtn_country'])) {
+        $pagination_target .= '&likebtn_country='.preg_replace("/[^A-Z]/", '', $_GET['likebtn_country']);
+    }
+    if (isset($_GET['likebtn_vote_type'])) {
+        $pagination_target .= '&likebtn_vote_type='.(int)$_GET['likebtn_vote_type'];
+    }
+    if (isset($_GET['likebtn_page_size'])) {
+        $pagination_target .= '&likebtn_page_size='.(int)$_GET['likebtn_page_size'];
     }
 
     $p = new LikeBtnLikeButtonPagination();
@@ -625,6 +644,7 @@ function likebtn_admin_votes() {
     <div id="likebtn_export" class="likebtn_export hidden">
         <form action="<?php echo admin_url('admin-ajax.php') ?>?action=likebtn_export_votes&<?php echo $_SERVER['QUERY_STRING'] ?>" method="post" target="_blank">
             <input type="hidden" name="export" value="1" />
+            <input type="hidden" name="nonce" value="<?php echo wp_create_nonce( 'likebtn_export_votes' ); ?>" />
             <strong><?php _e('Data to export', 'likebtn-like-button'); ?>:</strong><br/>
             <label><input type="checkbox" name="fields[]" value="user" checked="checked" /> <?php _e('User Name', 'likebtn-like-button'); ?></label><br/>
             <label><input type="checkbox" name="fields[]" value="user_email" checked="checked" /> <?php _e('User Email', 'likebtn-like-button'); ?></label><br/>

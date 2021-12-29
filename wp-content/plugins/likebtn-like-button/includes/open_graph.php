@@ -113,7 +113,7 @@ function _likebtn_og_output($metas)
 	foreach ($metas as $property => $content) { 
 		$content = is_array($content) ? $content : array($content);
 		foreach ($content as $content_single) {
-			echo '<meta property="' . $property . '" content="' . esc_attr(trim($content_single)) . '" />' . "\n";
+			echo '<meta property="' . esc_attr($property) . '" content="' . esc_attr(trim($content_single)) . '" />' . "\n";
 		} 
 	}
 	echo "<!-- /Open Graph Meta Data -->\n";

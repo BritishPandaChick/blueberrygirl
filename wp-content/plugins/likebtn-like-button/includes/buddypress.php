@@ -154,14 +154,8 @@ function likebtn_bbp_buddypress_mark_notifications()
 {
     global $wp;
 
-    $action = '';
-    if (isset($_GET['action'])) {
-        $action = $_GET['action'];
-    }
-
-    // Sanitizing:
     // Bail if action is not for this function
-    if ('likebtn_bp_mark_read' !== $action ) {
+    if (!isset($_GET['action']) || 'likebtn_bp_mark_read' !== $_GET['action'] ) {
         return;
     }
 
@@ -169,18 +163,22 @@ function likebtn_bbp_buddypress_mark_notifications()
         return;
     }
 
-    // Sanitising is not needed here as likebtn_bp_params are used  only in md5() function
-    // and bp_notifications_mark_notifications_by_item_id() which performs it's own sanitizing
     $params = base64_decode($_GET['likebtn_bp_params']);
 
+    // Validation.
     if (empty($params['item_id']) || empty($params['secondary_item_id']) || empty($params['component_action'])) {
         return;
     }
 
+    // Sanitize params
+    $item_id = sanitize_text_field($params['item_id']);
+    $secondary_item_id = sanitize_text_field($params['secondary_item_id']);
+    $component_action = sanitize_text_field($params['component_action']);
+
     // Get required data
     $user_id  = bp_loggedin_user_id();
     $errors = false;
-    $none_name = 'likebtn_bp_mark_read_'.md5($params['component_action'].$params['item_id'].$params['secondary_item_id']);
+    $none_name = 'likebtn_bp_mark_read_'.md5($component_action.$item_id.$secondary_item_id);
 
     // Check nonce
     if (!wp_verify_nonce($_GET['_wpnonce'], $none_name)) {
@@ -193,7 +191,7 @@ function likebtn_bbp_buddypress_mark_notifications()
     // Bail if we have errors
     if (!$errors) {
         // Attempt to clear notifications for the current user from this topic
-        $success = bp_notifications_mark_notifications_by_item_id( $user_id, sanitize_text_field($params['item_id']), LIKEBTN_BP_COMPONENT_NAME, sanitize_text_field($params['component_action']), sanitize_text_field($params['secondary_item_id']));
+        $success = bp_notifications_mark_notifications_by_item_id( $user_id, $item_id, LIKEBTN_BP_COMPONENT_NAME, $component_action, $secondary_item_id);
     }
 
     // Redirect url

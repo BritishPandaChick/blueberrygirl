@@ -106,13 +106,13 @@ class LikeBtnLikeButtonPagination {
     function show() {
         if (!$this->calculate)
             if ($this->calculate())
-                echo "<div class=\"$this->className\">$this->pagination</div>\n";
+                echo "<div class=\"".esc_attr($this->className)."\">".wp_kses($this->pagination, 'post')."</div>\n";
     }
 
     function getOutput() {
         if (!$this->calculate)
             if ($this->calculate())
-                return "<div class=\"$this->className\">$this->pagination</div>\n";
+                return "<div class=\"".esc_attr($this->className)."\">$this->pagination</div>\n";
     }
 
     function get_pagenum_link($id) {
