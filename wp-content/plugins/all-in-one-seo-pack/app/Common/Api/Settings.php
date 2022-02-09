@@ -134,8 +134,7 @@ class Settings {
 
 		return new \WP_REST_Response( [
 			'success'       => true,
-			'notifications' => Models\Notification::getNotifications(),
-			'redirection'   => aioseo()->options->getRedirection()
+			'notifications' => Models\Notification::getNotifications()
 		], 200 );
 	}
 
@@ -246,7 +245,7 @@ class Settings {
 
 			if ( ! empty( $contents['postOptions'] ) ) {
 				$notAllowedFields = aioseo()->access->getNotAllowedPageFields();
-				foreach ( $contents['postOptions'] as $postType => $postData ) {
+				foreach ( $contents['postOptions'] as $postData ) {
 					// Posts.
 					if ( ! empty( $postData['posts'] ) ) {
 						foreach ( $postData['posts'] as $post ) {
@@ -391,6 +390,13 @@ class Settings {
 			case 'clear-cache':
 				aioseo()->cache->clear();
 				break;
+			case 'readd-capabilities':
+				aioseo()->access->addCapabilities();
+				break;
+			case 'rerun-migrations':
+				aioseo()->internalOptions->database->installedTables   = '';
+				aioseo()->internalOptions->internal->lastActiveVersion = '4.0.0';
+				break;
 			case 'remove-duplicates':
 				aioseo()->updates->removeDuplicateRecords();
 				break;
@@ -399,12 +405,6 @@ class Settings {
 				break;
 			case 'clear-image-data':
 				aioseo()->sitemap->query->resetImages();
-				break;
-			case 'clear-video-data':
-				$video = aioseo()->sitemap->addons['video'];
-				if ( ! empty( $video ) ) {
-					aioseo()->sitemap->addons['video']['query']->resetVideos();
-				}
 				break;
 			case 'restart-v3-migration':
 				Migration\Helpers::redoMigration();

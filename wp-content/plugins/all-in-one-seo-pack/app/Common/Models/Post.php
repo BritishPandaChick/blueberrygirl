@@ -77,6 +77,8 @@ class Post extends Model {
 		if ( ! $post->exists() ) {
 			$post->post_id = $postId;
 			$post          = self::setDynamicDefaults( $post, $postId );
+		} else {
+			$post = self::runDynamicMigrations( $post );
 		}
 
 		return $post;
@@ -106,6 +108,37 @@ class Post extends Model {
 
 		if ( aioseo()->helpers->isStaticHomePage( $postId ) ) {
 			$post->og_object_type = 'website';
+		}
+
+		$post->twitter_use_og = aioseo()->options->social->twitter->general->useOgData;
+
+		return $post;
+	}
+
+	/**
+	 * Runs dynamic migrations whenever the post object is loaded.
+	 *
+	 * @since 4.1.7
+	 *
+	 * @param  Post $post The Post object.
+	 * @return Post       The modified Post object.
+	 */
+	private static function runDynamicMigrations( $post ) {
+		$pageBuilder = aioseo()->helpers->getPostPageBuilderName( $post->post_id );
+		if ( ! $pageBuilder ) {
+			return $post;
+		}
+
+		$deprecatedImageSources = 'seedprod' === strtolower( $pageBuilder )
+			? [ 'auto', 'custom', 'featured' ]
+			: [ 'auto' ];
+
+		if ( ! empty( $post->og_image_type ) && in_array( $post->og_image_type, $deprecatedImageSources, true ) ) {
+			$post->og_image_type = 'default';
+		}
+
+		if ( ! empty( $post->twitter_image_type ) && in_array( $post->twitter_image_type, $deprecatedImageSources, true ) ) {
+			$post->twitter_image_type = 'default';
 		}
 
 		return $post;
@@ -211,9 +244,12 @@ class Post extends Model {
 		$thePost->og_title                    = ! empty( $data['og_title'] ) ? sanitize_text_field( $data['og_title'] ) : null;
 		$thePost->og_description              = ! empty( $data['og_description'] ) ? sanitize_text_field( $data['og_description'] ) : null;
 		$thePost->og_object_type              = ! empty( $data['og_object_type'] ) ? sanitize_text_field( $data['og_object_type'] ) : 'default';
+		$thePost->og_image_type               = ! empty( $data['og_image_type'] ) ? sanitize_text_field( $data['og_image_type'] ) : 'default';
+		$thePost->og_image_url                = null; // We'll reset this below.
+		$thePost->og_image_width              = null; // We'll reset this below.
+		$thePost->og_image_height             = null; // We'll reset this below.
 		$thePost->og_image_custom_url         = ! empty( $data['og_image_custom_url'] ) ? esc_url_raw( $data['og_image_custom_url'] ) : null;
 		$thePost->og_image_custom_fields      = ! empty( $data['og_image_custom_fields'] ) ? sanitize_text_field( $data['og_image_custom_fields'] ) : null;
-		$thePost->og_image_type               = ! empty( $data['og_image_type'] ) ? sanitize_text_field( $data['og_image_type'] ) : 'default';
 		$thePost->og_video                    = ! empty( $data['og_video'] ) ? sanitize_text_field( $data['og_video'] ) : '';
 		$thePost->og_article_section          = ! empty( $data['og_article_section'] ) ? sanitize_text_field( $data['og_article_section'] ) : null;
 		$thePost->og_article_tags             = ! empty( $data['og_article_tags'] ) ? sanitize_text_field( $data['og_article_tags'] ) : null;
@@ -222,9 +258,10 @@ class Post extends Model {
 		$thePost->twitter_description         = ! empty( $data['twitter_description'] ) ? sanitize_text_field( $data['twitter_description'] ) : null;
 		$thePost->twitter_use_og              = isset( $data['twitter_use_og'] ) ? rest_sanitize_boolean( $data['twitter_use_og'] ) : 0;
 		$thePost->twitter_card                = ! empty( $data['twitter_card'] ) ? sanitize_text_field( $data['twitter_card'] ) : 'default';
+		$thePost->twitter_image_type          = ! empty( $data['twitter_image_type'] ) ? sanitize_text_field( $data['twitter_image_type'] ) : 'default';
+		$thePost->twitter_image_url           = null; // We'll reset this below.
 		$thePost->twitter_image_custom_url    = ! empty( $data['twitter_image_custom_url'] ) ? esc_url_raw( $data['twitter_image_custom_url'] ) : null;
 		$thePost->twitter_image_custom_fields = ! empty( $data['twitter_image_custom_fields'] ) ? sanitize_text_field( $data['twitter_image_custom_fields'] ) : null;
-		$thePost->twitter_image_type          = ! empty( $data['twitter_image_type'] ) ? sanitize_text_field( $data['twitter_image_type'] ) : 'default';
 		// Schema
 		$thePost->schema_type                 = ! empty( $data['schema_type'] ) ? sanitize_text_field( $data['schema_type'] ) : 'default';
 		$thePost->schema_type_options         = ! empty( $data['schema_type_options'] )
@@ -235,8 +272,71 @@ class Post extends Model {
 		$thePost->local_seo                   = ! empty( $data['local_seo'] ) ? wp_json_encode( $data['local_seo'] ) : null;
 		$thePost->updated                     = gmdate( 'Y-m-d H:i:s' );
 
+		// Before we determine the OG/Twitter image, we need to set the meta data cache manually because the changes haven't been saved yet.
+		aioseo()->meta->metaData->bustPostCache( $thePost->post_id, $thePost );
+
+		// Set the OG/Twitter image data.
+		$thePost = self::setOgTwitterImageData( $thePost );
+
 		if ( ! $thePost->exists() ) {
 			$thePost->created = gmdate( 'Y-m-d H:i:s' );
+		}
+
+		return $thePost;
+	}
+
+	/**
+	 * Set the OG/Twitter image data on the post object.
+	 *
+	 * @since 4.1.6
+	 *
+	 * @param  Post $thePost The Post object to modify.
+	 * @return Post          The modified Post object.
+	 */
+	public static function setOgTwitterImageData( $thePost ) {
+		// Set the OG image.
+		if (
+			in_array( $thePost->og_image_type, [
+				'featured',
+				'content',
+				'attach',
+				'custom',
+				'custom_image'
+			], true )
+		) {
+			// Disable the cache.
+			aioseo()->social->image->useCache = false;
+
+			// Set the image details.
+			$ogImage                  = aioseo()->social->facebook->getImage( $thePost->post_id );
+			$thePost->og_image_url    = is_array( $ogImage ) ? $ogImage[0] : $ogImage;
+			$thePost->og_image_width  = aioseo()->social->facebook->getImageWidth();
+			$thePost->og_image_height = aioseo()->social->facebook->getImageHeight();
+
+			// Reset the cache property.
+			aioseo()->social->image->useCache = true;
+		}
+
+		// Set the Twitter image.
+		if (
+			! $thePost->twitter_use_og &&
+			in_array( $thePost->twitter_image_type, [
+				'featured',
+				'content',
+				'attach',
+				'custom',
+				'custom_image'
+			], true )
+		) {
+			// Disable the cache.
+			aioseo()->social->image->useCache = false;
+
+			// Set the image details.
+			$ogImage                    = aioseo()->social->twitter->getImage( $thePost->post_id );
+			$thePost->twitter_image_url = is_array( $ogImage ) ? $ogImage[0] : $ogImage;
+
+			// Reset the cache property.
+			aioseo()->social->image->useCache = true;
 		}
 
 		return $thePost;
@@ -300,11 +400,37 @@ class Post extends Model {
 						'error'       => 1,
 						'maxScore'    => 5,
 						'score'       => 0,
-						'title'       => __( 'Images/Videos in content', 'all-in-one-seo-pack' ),
+						'title'       => __( 'No content yet', 'all-in-one-seo-pack' ),
 						'description' => __( 'Please add some content first.', 'all-in-one-seo-pack' )
 					],
 				]
 			]
+		];
+
+		return json_decode( wp_json_encode( $defaults ) );
+	}
+
+	/**
+	 * Returns the defaults for the keyphrases column.
+	 *
+	 * @since 4.1.7
+	 *
+	 * @return array The defaults.
+	 */
+	public static function getKeyphrasesDefaults() {
+		$defaults = [
+			'focus'      => [
+				'keyphrase' => '',
+				'score'     => 0,
+				'analysis'  => [
+					'keyphraseInTitle' => [
+						'score'    => 0,
+						'maxScore' => 9,
+						'error'    => 1
+					]
+				]
+			],
+			'additional' => []
 		];
 
 		return json_decode( wp_json_encode( $defaults ) );

@@ -3,6 +3,7 @@ title: Genesis WP-CLI Commands
 menuTitle: WP-CLI Commands
 layout: layouts/base.njk
 permalink: developer-features/wp-cli/index.html
+minVersion: Genesis 2.10.0+
 tags: docs
 ---
 

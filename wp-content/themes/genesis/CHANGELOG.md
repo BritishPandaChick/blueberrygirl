@@ -6,7 +6,190 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Up until release 2.7.0, this project did _not_ follow semantic versioning. It followed the WordPress policy where updates of x and y in an x.y.z version number means a major release, and updates to z means a patch release.
 
-## [3.0.2] = 2019-07-03
+## [3.3.5] - 2021-08-05
+
+### Fixed
+* Change hook used for `genesis_handle_block_widget_editor` from `admin_init` to `widgets_init` to ensure widgets can be added, removed, and edited in the Customizer.
+
+## [3.3.4] - 2021-07-08
+
+### Added
+* Using the use_widgets_block_editor filter in WordPress 5.8, the pre-5.8 widget screen behavior remains the same. To opt-in to the new WP 5.8 widgets editor, place this code in your theme's functions.php file: `add_filter( 'use_widgets_block_editor', '__return_true' );`
+
+## [3.3.3] - 2020-08-10
+
+### Added
+* Accessibility: Added title as `aria-label` to `<article>` element to improve screen reader UX when using the rotor to view all articles on the page.
+
+### Fixed
+* Add missing `permission_callback` to public Genesis REST routes to prevent a notice under WordPress 5.5.
+
+### Changed
+* Use `excerpt_remove_blocks` to remove block content such as image captions and embed URLs from `get_the_content_limit`.
+* Change "Enable auto-updates" in WordPress 5.5 to text that describes where to enable Genesis update checks.
+* Improved standards for admin CSS.
+* Disable `genesis-lazy-load-images` theme support under WordPress 5.5. WordPress 5.5 adds image lazy loading by default.
+
+### Removed
+* Use of `wp_make_content_images_responsive` in archive, singular, and featured widget images; `srcset` is applied via `wp_calculate_image_srcset` in `wp_get_attachment_image` used by `genesis_get_image`.
+
+## [3.3.2] - 2020-04-22
+
+Adds support for Gutenberg 7.9 and future block editor adjustments.
+
+### Fixed
+* Block Editor: prevent an editor crash if the Genesis sidebar is active.
+* Block Editor: ensure the Genesis sidebar icon is visible.
+
+## [3.3.1] - 2020-03-25
+
+Includes fixes for the Genesis language pack update feature.
+
+### Fixed
+* Internationalization: Deactivate Genesis Translations plugin on upgrade to Genesis 3.3.1. Ensures official Genesis translation language packs load correctly.
+* Internationalization: Enable language pack updates work on WordPress multisite as long as the main site is using a Genesis theme. Previously, Genesis language pack update prompts would only appear if the main site used a Genesis theme and did not use the en_US locale.
+* Internationalization: Fix a fatal error that could occur on sites with custom Genesis translation files that contain an unreadable PO-Revision-Date header.
+
+## [3.3.0] - 2020-02-26
+
+### Added
+* Internationalization: Non US English sites can now download the latest Genesis parent theme translations without using a plugin. 
+    1. Check your language is listed and has translations at https://translate.studiopress.com/global/projects/genesis-framework/genesis/.
+    2. Disable the Genesis Translations plugin if using.
+    3. Check for language pack updates at Dashboard → Updates. If you do not see language pack updates, switch your site language to US English at Settings → General, save changes, then switch back to your own language and check for language updates again.
+
+### Fixed
+* Accessibility: Author box titles on author archives now use h2 instead of h4 to prevent heading levels from jumping.
+* Accessibility: Prevent “Reader Interactions” screenreader text appearing below content if there are no comments, comment form, or trackbacks on display.
+* Accessibility: Move `role="navigation"` from the list element to the wrapper element on pagination navigation.
+* AMP: Fix CSS string format used in the AMP menu styles.
+* Block Editor: Show singular, post-type, and ID-specific layouts in the Genesis sidebar layout selector.
+
+### Changed
+* REST: Accept multiple comma-separated layout types for the /layouts/ Genesis REST endpoint.
+* Standards: switch all instances of `date()` to `gmdate()` to adhere to new WordPress standards recommendations.
+* Tooling: simplified the creation of the Genesis zip file during the release process.
+
+### Removed
+* Internationalization: Old translations download script tooling was removed in favor of the new automated language pack download feature.
+
+## [3.2.1] - 2019-11-14
+
+### Fixed
+* Accessibility: Prevent screenreader text such as “interim pages omitted” from appearing in paginated navigation for themes that have not added Genesis accessibility support.
+
+### Changed
+* Tooling: Allow PHP short array and ternary syntax.
+
+## [3.2.0] - 2019-11-13
+
+### Added
+* Feature: Open Graph Tag support (off by default, disabled if select plugins are outputting OG tags).
+* Feature: Ability to disable footer widgets on single entries.
+* Feature: Lazy load images in Chrome 76+ (off by default, enabled with `genesis-lazy-load-images` theme support).
+* Feature: Modify entry meta output via Theme Settings in customizer.
+
+### Changed
+* Admin: Theme Setup CSS tweak
+* Filter: Added `genesis_amp_menu_css` filter for AMP inline styles for control over the output.
+* Accessibility: Added aria labels, screen reader text to numeric entry navigation.
+* `genesis_markup()` now accepts `atts` to add attributes to markup at the point of use.
+
+## [3.1.3] - 2019-11-06
+
+### Fixed
+* Ensure unchecked checkboxes in the Genesis editor sidebar save correctly with WordPress 5.3.
+* Prevent a warning during One-click Theme Setup under WordPress 5.3.
+* Display comment reply forms directly below the comment instead of after nested responses.
+* Remove empty entry-meta wrappers if post info or meta is removed via a filter.
+* Prevent a fatal error that could occur when visiting the Customizer if the `genesis_footer_output` filter was used with more than one argument.
+* Make sure that the `[footer_childtheme_link]` shortcode renders if the Theme URI stylesheet header is missing but the theme declares a `CHILD_THEME_URL`.
+* Correct the deprecation message for `genesis_attributes_nav`.
+
+## [3.1.2] - 2019-09-05
+
+### Fixed
+* Prevent the block editor and Genesis sidebar failing to load if a custom post type supports `genesis-layouts` but not `custom-fields`.
+* Find '© 2019' in stored footer text and replace it with the `[footer_copyright]` shortcode during the Genesis update process. This is designed to ensure that the copyright year in footer text updates in future years.
+
+## [3.1.1] - 2019-08-29
+
+### Added
+* Add a new genesis-breadcrumbs-visible body class if breadcrumbs are visible on a page.
+* Add new genesis-singular-image-visible body class to allow styling of pages if a featured image appears on them.
+
+### Changed
+* Add the genesis-breadcrumbs-hidden body class if breadcrumbs are disabled for the current page type. (Previously this was only applied if breadcrumbs were active but hidden using “hide breadcrumbs”.)
+* Hide Custom Classes panel in the Genesis sidebar if the current post type is not public.
+* Do not emit genesis-singular-image-hidden body class if unsupported by current post type.
+* Hide Breadcrumbs panel in the new Genesis editor sidebar if a theme opts to disable support for Genesis breadcrumbs.
+* Hide Genesis sidebar if no panels will display.
+
+### Fixed
+* Fix an issue where heading levels would change for static homepages on sites using SEO plugins.
+* Fix an issue where changes to Genesis sidebar settings would fail to save if the Easy Digital Downloads plugin was in use.
+* Prevent the Genesis sidebar from appearing on posts that do not support custom-fields.
+
+## [3.1.0] - 2019-08-21
+
+Requires WordPress 5.0+ and PHP 5.6+.
+
+### Added
+* Theme support: Add `genesis-custom-logo` theme support for logo output. This enables logo upload in the Site Identity section, outputs a logo, and improves accessibility of the site title.
+* Customizer: Add a footer text option under Theme Settings -> Footer.
+* Customizer: Add new Singular Content section to hold settings specific to posts, pages and other post types.
+* Editor: Add a new Genesis sidebar for sites that use the block editor.
+* Editor: Add a “hide breadcrumbs” checkbox to the Genesis sidebar in the block editor.
+* Editor: Add a “hide title” checkbox to the Genesis sidebar in the block editor.
+* Editor: Add a “hide featured image” checkbox to the Genesis sidebar in the block editor.
+* Editor: Add status info to the Breadcrumbs panel to show global status of breadcrumbs for the current post type (requires the `edit-theme-options` capability and `genesis-breadcrumbs-toggle` post type support).
+* Editor: Add status info to the Images panel to show global status of featured images for the current post type (requires the `edit-theme-options` capability and `genesis-singular-images` post type support).
+* Editor: Add link to the Breadcrumbs panel to toggle breadcrumbs on and off globally for the current post type (requires the `edit-theme-options` capability and `genesis-breadcrumbs-toggle` post type support).
+* Editor: Add link to the Images panel to toggle featured images on and off globally for the current post type (requires the `edit-theme-options` capability and `genesis-singular-images` post type support).
+* Schema: Suppress output of Genesis schema if Yoast SEO is outputting JSON-LD markup.
+* Schema: developers can disable schema with `add_filter( 'genesis_disable_microdata', '__return_true' );`.
+* Post type support: Add `genesis-singular-images` post type support to enable output of featured images, and a related output setting in the new Singular Content Customizer panel.
+* Post type support: Add `genesis-breadcrumbs-toggle` post type support to control which post types support the “hide breadcrumbs” checkbox.
+* Post type support: Add `genesis-title-toggle` post type support to control which post types support the “hide title” checkbox.
+* CSS: Add 'genesis-title-hidden' body class if the “hide title” checkbox is enabled.
+* Theme setup: add option to import widgets during one-click theme setup. See Genesis Sample's `onboarding.php` for an up-to-date usage example.
+* Theme setup: Add Starter Packs feature. Theme developers can now offer users a choice of content and plugin packs during theme setup. See Genesis Sample's `onboarding.php` for an up-to-date usage example.
+* Theme setup: Add Child Theme Setup menu item to the Genesis admin menu to make finding the Getting Started page again easier for active themes that support one-click theme setup.
+* REST API: Genesis now exposes hide title and hide breadcrumbs state, page layout, and custom body and post class via the `meta` field in the `posts` endpoint: `/wp-json/wp/v2/posts/[id]`
+* REST API: Genesis now exposes supported layouts for the active theme via a new `layouts` endpoint: `/wp-json/genesis/v1/layouts/site`.
+* Tooling: use the `@wordpress/scripts` package to build ES2015+ and React code.
+
+### Removed
+* SEO: Remove `noodp` and `noydir` settings. The Yahoo! Directory (the `ydir` in `noydir`) closed in 2014. The Open Directory Project (the `odp` in `noodp`) closed in 2017. Related settings are also removed from the database during upgrade.
+* Deprecation: The `genesis_footer_creds_text` filter is now deprecated. Developers can point users who want to edit their footer text to the new Genesis footer setting in the Customizer. If you want to set default footer text for your child theme during theme activation, you should set the `footer_text key` in your theme’s `child-theme-settings.php` file.
+* Tooling: remove the `phpcs-fixed` command. Genesis now runs `phpcs` against all files instead of a subset of known-good files.
+
+### Changed
+* Code: Switch to PHP short array syntax and enforce this via `phpcs.xml.dist`.
+* Translation: Remove HTML from translated strings where possible.
+* Tooling: language files are now generated with WP-CLI. This ensures strings in JavaScript files are now captured.
+* Documentation: Add link to the Genesis developer documentation site to the readme.
+* Theme setup: create new menus during one-click theme setup instead of appending menu items to existing menus.
+* SEO: The Genesis SEO “Primary Title H1” setting will now apply on static homepages.
+* Accessibility: Change skip link text from “Skip to content” to “Skip to main content” to improve pronunciation of “content” by screen readers.
+* Customizer: Update text in the Theme Settings -> Updates panel to clarify what site data is sent during update requests and link to the privacy policy.
+
+### Fixed
+* Standards: Remove an unneeded argument when calling `genesis_onboarding_import_content()`.
+* Standards: Address all PHP_CodeSniffer coding standards violations.
+* Standards: Fix a warning that could appear during update if Genesis Simple Sidebars was in use.
+* Tooling: Correct an issue where PHP_CodeSniffer extensions for VS Code and Atom users would fail to run.
+* Translation: Correct missing translators comments and correct numbered placeholders.
+* Translation: Fix translators comments that differed for the same string.
+* Breadcrumbs: Ensure “Breadcrumbs on Homepage” enables breadcrumbs on static homepages. Previously “Breadcrumbs on Pages” also had to be checked.
+* General: `genesis_get_global_post_type_name()` will now return the correct post type if the main query has been filtered to show additional post types.
+
+## [3.0.3] - 2019-08-05
+
+### Added
+* Ensure that default settings get inserted on theme activation
+
+## [3.0.2] - 2019-07-03
 
 ### Fixed
 * Fixed instances of late escaping that were too aggressive.
@@ -1221,6 +1404,18 @@ _Requires WordPress 3.1.0._
 
 First public release.
 
+[3.3.4]: https://github.com/studiopress/genesis/compare/3.3.3...3.3.4
+[3.3.3]: https://github.com/studiopress/genesis/compare/3.3.2...3.3.3
+[3.3.2]: https://github.com/studiopress/genesis/compare/3.3.1...3.3.2
+[3.3.1]: https://github.com/studiopress/genesis/compare/3.3.0...3.3.1
+[3.3.0]: https://github.com/studiopress/genesis/compare/3.2.1...3.3.0
+[3.2.1]: https://github.com/studiopress/genesis/compare/3.2.0...3.2.1
+[3.2.0]: https://github.com/studiopress/genesis/compare/3.1.3...3.2.0
+[3.1.3]: https://github.com/studiopress/genesis/compare/3.1.2...3.1.3
+[3.1.2]: https://github.com/studiopress/genesis/compare/3.1.1...3.1.2
+[3.1.1]: https://github.com/studiopress/genesis/compare/3.1.0...3.1.1
+[3.1.0]: https://github.com/studiopress/genesis/compare/3.0.3...3.1.0
+[3.0.3]: https://github.com/studiopress/genesis/compare/3.0.2...3.0.3
 [3.0.2]: https://github.com/studiopress/genesis/compare/3.0.1...3.0.2
 [3.0.1]: https://github.com/studiopress/genesis/compare/3.0.0...3.0.1
 [3.0.0]: https://github.com/studiopress/genesis/compare/2.10.1...3.0.0

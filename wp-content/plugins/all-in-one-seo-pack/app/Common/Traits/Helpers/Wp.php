@@ -66,7 +66,8 @@ trait Wp {
 		}
 	}
 
-	/** Whether or not we should enqueue a file.
+	/**
+	 * Whether or not we should enqueue a file.
 	 *
 	 * @since 4.0.0
 	 *
@@ -198,11 +199,47 @@ trait Wp {
 				'adminUrl'    => admin_url( $pluginUpgrader->pluginAdminUrls[ $key ] ),
 				'canInstall'  => aioseo()->addons->canInstall(),
 				'canActivate' => aioseo()->addons->canActivate(),
+				'canUpdate'   => aioseo()->addons->canUpdate(),
 				'wpLink'      => ! empty( $pluginUpgrader->wpPluginLinks[ $key ] ) ? $pluginUpgrader->wpPluginLinks[ $key ] : null
 			];
 		}
 
 		return $plugins;
+	}
+
+	/**
+	 * Get all registered Post Statuses.
+	 *
+	 * @since 4.1.6
+	 *
+	 * @param  boolean $statusesOnly Whether or not to only return statuses.
+	 * @return array              An array of post statuses.
+	 */
+	public function getPublicPostStatuses( $statusesOnly = false ) {
+		$allStatuses = get_post_stati( [ 'show_in_admin_all_list' => true ], 'objects' );
+
+		$postStatuses = [];
+		foreach ( $allStatuses as $status => $data ) {
+			if (
+				! $data->public &&
+				! $data->protected &&
+				! $data->private
+			) {
+				continue;
+			}
+
+			if ( $statusesOnly ) {
+				$postStatuses[] = $status;
+				continue;
+			}
+
+			$postStatuses[] = [
+				'label'  => $data->label,
+				'status' => $status
+			];
+		}
+
+		return $postStatuses;
 	}
 
 	/**
@@ -266,7 +303,7 @@ trait Wp {
 			];
 		}
 
-		return $postTypes;
+		return apply_filters( 'aioseo_public_post_types', $postTypes, $namesOnly, $hasArchivesOnly );
 	}
 
 	/**
@@ -326,7 +363,7 @@ trait Wp {
 			];
 		}
 
-		return $taxonomies;
+		return apply_filters( 'aioseo_public_taxonomies', $taxonomies, $namesOnly );
 	}
 
 	/**
@@ -379,6 +416,7 @@ trait Wp {
 		if ( ! get_theme_support( 'custom-logo' ) ) {
 			return false;
 		}
+
 		return get_theme_mod( 'custom_logo' );
 	}
 
@@ -399,6 +437,7 @@ trait Wp {
 		if ( empty( $image ) ) {
 			return false;
 		}
+
 		return $image[0];
 	}
 
@@ -418,6 +457,7 @@ trait Wp {
 		if ( is_object( $wp_filesystem ) ) {
 			return $wp_filesystem;
 		}
+
 		return false;
 	}
 
@@ -442,6 +482,7 @@ trait Wp {
 	 */
 	public function isPostTypeNoindexed( $postType ) {
 		$noindexedPostTypes = $this->getNoindexedPostTypes();
+
 		return in_array( $postType, $noindexedPostTypes, true );
 	}
 
@@ -466,6 +507,7 @@ trait Wp {
 	 */
 	public function isTaxonomyNoindexed( $taxonomy ) {
 		$noindexedTaxonomies = $this->getNoindexedTaxonomies();
+
 		return in_array( $taxonomy, $noindexedTaxonomies, true );
 	}
 
@@ -487,6 +529,7 @@ trait Wp {
 				$noindexed[] = $name;
 			}
 		}
+
 		return $noindexed;
 	}
 
@@ -506,6 +549,7 @@ trait Wp {
 				$names[] = aioseo()->helpers->internationalize( $category->cat_name );
 			}
 		}
+
 		return $names;
 	}
 
@@ -528,6 +572,7 @@ trait Wp {
 				}
 			}
 		}
+
 		return $names;
 	}
 
@@ -549,5 +594,23 @@ trait Wp {
 
 		$mofile = $domain . '-' . get_user_locale() . '.mo';
 		load_textdomain( $domain, WP_LANG_DIR . '/plugins/' . $mofile );
+	}
+
+	/**
+	 * Get the page builder the given Post ID was built with.
+	 *
+	 * @since 4.1.7
+	 *
+	 * @param  int         $postId The Post ID.
+	 * @return bool|string         The page builder or false if not built with page builders.
+	 */
+	public function getPostPageBuilderName( $postId ) {
+		foreach ( aioseo()->postSettings->integrations as $integration => $pageBuilder ) {
+			if ( $pageBuilder->isBuiltWith( $postId ) ) {
+				return $integration;
+			}
+		}
+
+		return false;
 	}
 }

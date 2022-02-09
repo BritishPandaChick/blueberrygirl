@@ -3,7 +3,7 @@
   Plugin Name: Like Button Rating ♥ LikeBtn
   Plugin URI: https://likebtn.com/en/wordpress-like-button-plugin
   Description: Add Like button to posts, pages, comments, WooCommerce, BuddyPress, bbPress, custom post types! Sort content by likes! Get instant stats and insights!
-  Version: 2.6.40
+  Version: 2.6.42
   Text Domain: likebtn-like-button
   Author: LikeBtn
   Author URI: https://likebtn.com
@@ -14,7 +14,7 @@
 // ini_set('error_reporting', E_ALL);
 
 // Plugin version
-define('LIKEBTN_VERSION', '2.6.40');
+define('LIKEBTN_VERSION', '2.6.42');
 // Current DB version
 define('LIKEBTN_DB_VERSION', 20);
 
@@ -1828,9 +1828,14 @@ function _likebtn_comment_meta_box()
 function likebtn_admin_head() {
 
     // Enqueue only on plugin's pages
-    if ((!empty($_GET['page']) && (preg_match("/^likebtn_/", $_GET['page']) || preg_match("/^mycred-hooks/", $_GET['page'])))
-        || (strstr($_SERVER['PHP_SELF'], 'plugins.php'))
+    if ((!empty($_GET['page']) && (preg_match("/^likebtn_/", $_GET['page']) || preg_match("/^mycred.*\-hooks/", $_GET['page'])))
+        || strstr($_SERVER['PHP_SELF'], 'plugins.php')
+        || strstr($_SERVER['PHP_SELF'], 'widgets.php')
     ) {
+        if (strstr($_SERVER['PHP_SELF'], 'widgets.php')) {
+            wp_enqueue_script('select2-likebtn', _likebtn_get_public_url().'js/jquery/select2/select2.js', array('jquery'), LIKEBTN_VERSION);
+            wp_enqueue_style('select2-css', _likebtn_get_public_url().'css/jquery/select2/select2.css', array(), LIKEBTN_VERSION, 'all');
+        }
         wp_enqueue_style('likebtn-admin', _likebtn_get_public_url() . 'css/admin.css', array(), LIKEBTN_VERSION, 'all');
         wp_enqueue_style('likebtn-tipsy', _likebtn_get_public_url() . 'css/jquery/tipsy.css', array(), LIKEBTN_VERSION, 'all');
 

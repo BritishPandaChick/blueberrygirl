@@ -189,14 +189,6 @@ add_theme_support(
 );
 ```
 
-### Genesis responsive viewport
-
-Add a viewport meta tag for responsive display on mobile browsers.
-
-```php
-add_theme_support( 'genesis-responsive-viewport' );
-```
-
 ### Genesis after entry widget area
 
 Add a widget area after post entries. Useful for calls to action.
@@ -213,31 +205,18 @@ Add the given number of footer widget areas. You must provide your own CSS to co
 add_theme_support( 'genesis-footer-widgets', 3 );
 ```
 
-## Support for Genesis features in custom post types
+### Genesis image lazy loading
 
-Genesis automatically adds these features to the Post and Page type:
+WordPress 5.5 adds [lazy loading](https://web.dev/native-lazy-loading) of images by default, including images embedded in pages or posts. Genesis image lazy loading support is no longer necessary and should be removed.
 
-<table>
-  <tr>
-    <th>Option</th>
-    <th>Description</th> 
-  </tr>
-  <tr>
-    <td>genesis-seo</td>
-    <td>Add a Genesis SEO panel to your post type.</td>
-  </tr>
-  <tr>
-    <td>genesis-scripts</td>
-    <td>Add a Genesis Scripts field to your post type for per-page scripts.</td>
-  </tr>
-  <tr>
-    <td>genesis-layouts</td>
-    <td>Add Genesis layout options to your post type.</td>
-  </tr>
-</table>
+****
 
-You can extend these features to your own custom post types using [`add_post_type_support()`](https://developer.wordpress.org/reference/functions/add_post_type_support/):
+For WordPress versions prior to 5.5, add support for [lazy loading](https://web.dev/native-lazy-loading) of images:
 
 ```php
-add_post_type_support( 'your-custom-post-type-slug', array( 'genesis-seo', 'genesis-scripts', 'genesis-layouts' ) );
+add_theme_support( 'genesis-lazy-load-images' );
 ```
+
+Genesis will then add a “loading” attribute with a value of “lazy” via the `wp_get_attachment_image_attributes` filter. Images that are output without that filter running will not gain the loading attribute.
+
+The `wp_get_attachment_image_attributes` filter does not affect iframes or images embedded in pages and posts. By default the filter runs on images that WordPress outputs via the `wp_get_attachment_image` function, such as featured images.

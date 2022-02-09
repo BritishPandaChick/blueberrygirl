@@ -157,7 +157,7 @@ Genesis automatically enqueues the `style.css` file from your Genesis child them
 
 ## Where to go from here
 
-- Learn about <a href="{{ '/developer-features/' | url }}">Genesis Developer features</a> like <a href="{{ '/developer-features/theme-support/' | url }}">theme supports</a> and the <a href="{{ '/developer-features/onboarding/' | url }}">Onboarding API</a>.
+- Learn about <a href="{{ '/developer-features/' | url }}">Genesis Developer features</a> like <a href="{{ '/developer-features/theme-support/' | url }}">theme supports</a> and the <a href="{{ '/theme-setup/' | url }}">Theme Setup API</a>.
 - [Get Genesis](https://www.studiopress.com/features/#genesis-feature-9), then download and modify an existing Genesis child theme, such as [Genesis Sample](https://github.com/studiopress/genesis-sample/releases).
 - Join the <a href="{{ '/contribute/community/' | url }}">Genesis community</a> to ask questions and get help.
 - <a href="{{ '/contribute/' | url }}">Contribute to Genesis</a> and help to shape its future.

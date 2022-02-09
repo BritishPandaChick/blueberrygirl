@@ -13,7 +13,7 @@ Genesis enhances WordPress with powerful features that site owners love.
 
 Developers using Genesis can offer their clients these features without having to build them from scratch or install additional plugins:
 
-- **Selectable page and archive layouts**, including full-width, content-sidebar, sidebar-content and more.
+- **Selectable page and archive layouts**, including full-width, content-sidebar, sidebar-content and more. More on <a href="{{ '/developer-features/genesis-layouts/' | url }}">Genesis Layouts</a>. 
 - **Accessible HTML markup** and other accessibility considerations.
 - **Great SEO by default**, with schema.org markup and SEO options that require no additional plugins unless you choose to use your own.
 - **Custom widgets** for User Profile, Features Posts, and Featured Page.
@@ -32,7 +32,7 @@ The Tenon accessibility team found <strong>Genesis-powered WordPress sites are t
 Genesis offers features for busy developers too:
 
 - **Genesis provides a <a href="{{ '/basics/how-genesis-works/' | url }}">battle-tested HTML structure by default</a>** to help you avoid SEO and accessibility pitfalls when hand-writing HTML from scratch, and to accelerate the development cycle.
-- **The <a href="{{ '/developer-features/onboarding/' | url }}">Genesis Onboarding API</a> is a theme setup wizard** for Genesis child themes that enables you to install plugins and set up sample homepage and page content upon theme activation.
+- **The <a href="{{ '/theme-setup/' | url }}">Genesis Theme Setup API</a> is a theme setup wizard** for Genesis child themes that enables you to install plugins and set up sample homepage and page content upon theme activation.
 - **The <a href="{{ '/developer-features/configuration/' | url }}">Genesis Configuration API</a>** lets you override Genesis configuration in your child theme, and store your own PHP configuration centrally in your theme's `config` folder.
 - **Genesis offers a wealth of <a href="{{ '/developer-features/theme-support/' | url }}">theme support options</a>** to enhance your custom child theme with Genesis features. These also simplify the addition of common site functionality such as footer and after-post widget areas.
 - **A starter child theme called [Genesis Sample](https://github.com/studiopress/genesis-sample/releases)** to use as a starting point for your Genesis powered sites.
