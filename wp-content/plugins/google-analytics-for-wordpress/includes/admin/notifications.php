@@ -337,7 +337,7 @@ class MonsterInsights_Notifications {
 		$displayed  = array();
 
 		foreach ( $all_active as $notification ) {
-			if ( $notification['priority'] === 1 || count( $displayed ) < 5 ) {
+			if ( ( isset( $notification['priority'] ) && $notification['priority'] === 1 ) || count( $displayed ) < 5 ) {
 				$displayed[] = $notification;
 			}
 		}
@@ -423,12 +423,16 @@ class MonsterInsights_Notifications {
 
         //  Sort notifications by priority
 		usort( $notifications, function( $a, $b ) {
-            if ( $a['priority'] == $b['priority'] ) {
-                return 0;
-            }
+			if ( ! isset( $a['priority'] ) || ! isset( $b['priority'] ) ) {
+				return 0;
+			}
 
-            return $a['priority'] < $b['priority'] ? -1 : 1;
-        });
+			if ( $a['priority'] == $b['priority'] ) {
+				return 0;
+			}
+
+			return $a['priority'] < $b['priority'] ? -1 : 1;
+		});
 
 		update_option(
 			$this->option_name,
