@@ -3,7 +3,7 @@
   Plugin Name: Like Button Rating ♥ LikeBtn
   Plugin URI: https://likebtn.com/en/wordpress-like-button-plugin
   Description: Add Like button to posts, pages, comments, WooCommerce, BuddyPress, bbPress, custom post types! Sort content by likes! Get instant stats and insights!
-  Version: 2.6.42
+  Version: 2.6.43
   Text Domain: likebtn-like-button
   Author: LikeBtn
   Author URI: https://likebtn.com
@@ -14,7 +14,7 @@
 // ini_set('error_reporting', E_ALL);
 
 // Plugin version
-define('LIKEBTN_VERSION', '2.6.42');
+define('LIKEBTN_VERSION', '2.6.43');
 // Current DB version
 define('LIKEBTN_DB_VERSION', 20);
 
@@ -5146,27 +5146,33 @@ function likebtn_test_vote_notification() {
         'result_text' => ''
     );
 
-    $current_user = wp_get_current_user();
-    $vars = array(
-        'vote_type' => likebtn_vote_title(LIKEBTN_VOTE_LIKE),
-        'domain' => likebtn_site_domain(),
-        'item_type' => _likebtn_get_entity_name_title(LIKEBTN_ENTITY_POST, true, false),
-        'item_url' => get_option('siteurl'),
-        'item_title' => __("Test non-existent post", 'likebtn-like-button'),
-        'item_likes' => 7,
-        'item_dislikes' => 1,
-        'item_admin_stats_url' => admin_url() . 'admin.php?page=likebtn_statistics',
-        'vote_ip' => _likebtn_get_ip(),
-        'vote_ip_url' => admin_url() . 'admin.php?page=likebtn_votes&likebtn_ip='._likebtn_get_ip().'&show=View',
-        'user_url' => _likebtn_get_entity_url(LIKEBTN_ENTITY_USER, $current_user->ID),
-        'user_login' => $current_user->user_login,
-        'user_votes_url' => admin_url() . 'admin.php?page=likebtn_votes&likebtn_user_id='.$current_user->ID.'&show=View',
-    );
+    if (!(bool)current_user_can( 'manage_options' )) {
+        $response['result'] = 'error';
+        $response['result_text'] = __("Not allowed", 'likebtn-like-button');
+    } else {
 
-    $result = likebtn_send_vote_notification($vars, stripslashes_deep($_POST['options']));
+        $current_user = wp_get_current_user();
+        $vars = array(
+            'vote_type' => likebtn_vote_title(LIKEBTN_VOTE_LIKE),
+            'domain' => likebtn_site_domain(),
+            'item_type' => _likebtn_get_entity_name_title(LIKEBTN_ENTITY_POST, true, false),
+            'item_url' => get_option('siteurl'),
+            'item_title' => __("Test non-existent post", 'likebtn-like-button'),
+            'item_likes' => 7,
+            'item_dislikes' => 1,
+            'item_admin_stats_url' => admin_url() . 'admin.php?page=likebtn_statistics',
+            'vote_ip' => _likebtn_get_ip(),
+            'vote_ip_url' => admin_url() . 'admin.php?page=likebtn_votes&likebtn_ip='._likebtn_get_ip().'&show=View',
+            'user_url' => _likebtn_get_entity_url(LIKEBTN_ENTITY_USER, $current_user->ID),
+            'user_login' => $current_user->user_login,
+            'user_votes_url' => admin_url() . 'admin.php?page=likebtn_votes&likebtn_user_id='.$current_user->ID.'&show=View',
+        );
 
-    if ($response['result'] != 'error') {
-        $response['result_text'] = __("Notification successfully sent, don't forget to save settings", 'likebtn-like-button');
+        $result = likebtn_send_vote_notification($vars, stripslashes_deep($_POST['options']));
+
+        if ($response['result'] != 'error') {
+            $response['result_text'] = __("Notification successfully sent, don't forget to save settings", 'likebtn-like-button');
+        }
     }
 
     if (!DOING_AJAX) {
