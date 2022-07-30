@@ -152,7 +152,7 @@ function likebtn_admin_buttons()
         var likebtn_datetime = "<?php echo date("Y/m/d H:i") ?>";
 
         jQuery(document).ready(function() {
-            likebtnScriptButtons('<?php echo esc_attr($subpage) ?>', '<?php echo get_option('likebtn_plan'); ?>');
+            likebtnScriptButtons('<?php echo esc_attr($subpage) ?>', '<?php echo (int)get_option('likebtn_plan'); ?>');
         });
     </script>
 
@@ -163,7 +163,7 @@ function likebtn_admin_buttons()
 
             <h3 class="nav-tab-wrapper" style="padding: 0" id="likebtn_subpage_tab_wrapper">
                 <?php foreach ($likebtn_entities as $tab_entity_name => $tab_entity_title): ?>
-                    <a class="nav-tab likebtn_tab_<?php echo esc_attr($tab_entity_name); ?> <?php echo ($subpage == $tab_entity_name ? 'nav-tab-active' : '') ?>" href="<?php echo admin_url().'admin.php?page=likebtn_buttons&likebtn_subpage='.$tab_entity_name; ?>"><img src="<?php echo _likebtn_get_public_url() ?>img/check.png" class="likebtn_ttip likebtn_show_marker <?php if (get_option('likebtn_show_' . $tab_entity_name) != '1'): ?>hidden<?php endif ?>" title="<?php _e('Like Button enabled', 'likebtn-like-button'); ?>"><?php _e($tab_entity_title, 'likebtn-like-button'); ?></a>
+                    <a class="nav-tab likebtn_tab_<?php echo esc_attr($tab_entity_name); ?> <?php echo ($subpage == $tab_entity_name ? 'nav-tab-active' : '') ?>" href="<?php echo admin_url().'admin.php?page=likebtn_buttons&likebtn_subpage='.esc_attr($tab_entity_name); ?>"><img src="<?php echo _likebtn_get_public_url() ?>img/check.png" class="likebtn_ttip likebtn_show_marker <?php if (get_option('likebtn_show_' . $tab_entity_name) != '1'): ?>hidden<?php endif ?>" title="<?php _e('Like Button enabled', 'likebtn-like-button'); ?>"><?php esc_html_e($tab_entity_title, 'likebtn-like-button'); ?></a>
                 <?php endforeach ?>
             </h3>
             <?php
@@ -218,7 +218,6 @@ function likebtn_admin_buttons()
                 ?>
 
                 <div id="likebtn_subpage_wrapper_<?php echo esc_attr($entity_name); ?>" class="likebtn_subpage <?php if ($subpage !== $entity_name): ?>hidden<?php endif ?>" >
-                    <?php /*<h3><?php _e($entity_title, 'likebtn-like-button'); ?></h3>*/ ?>
                     <div class="inside entity_tab_container">
 
                         <table class="form-table">
@@ -254,7 +253,7 @@ function likebtn_admin_buttons()
                                                     continue;
                                                 }
                                                 ?>
-                                                <option value="<?php echo esc_attr($use_entity_name); ?>" <?php selected($use_entity_name, get_option('likebtn_use_settings_from_' . $entity_name)); ?> ><?php _e($use_entity_title, 'likebtn-like-button'); ?></option>
+                                                <option value="<?php echo esc_attr($use_entity_name); ?>" <?php selected($use_entity_name, get_option('likebtn_use_settings_from_' . $entity_name)); ?> ><?php esc_html_e($use_entity_title, 'likebtn-like-button'); ?></option>
                                             <?php endforeach ?>
                                         </select>
                                     </td>
@@ -314,19 +313,19 @@ function likebtn_admin_buttons()
                                             <tr valign="top" class="likebtn_custom hidden">
                                                 <th scope="row"><label><?php _e('Button size', 'likebtn-like-button'); ?></label></th>
                                                 <td>
-                                                    <input type="number" name="likebtn_settings_btn_size_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_btn_size_' . $entity_name) ? get_option('likebtn_settings_btn_size_' . $entity_name) : $likebtn_settings['btn_size']['default']); ?>" class="likebtn_input likebtn_i_sm" min="5" max="500" maxlength="3"/>
+                                                    <input type="number" name="likebtn_settings_btn_size_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_btn_size_' . $entity_name) ? get_option('likebtn_settings_btn_size_' . $entity_name) : esc_attr($likebtn_settings['btn_size']['default'])); ?>" class="likebtn_input likebtn_i_sm" min="5" max="500" maxlength="3"/>
                                                 </td>
                                             </tr>
                                             <tr valign="top" class="likebtn_custom hidden">
                                                 <th scope="row"><label><?php _e('Font size', 'likebtn-like-button'); ?></label></th>
                                                 <td>
-                                                    <input type="number" name="likebtn_settings_f_size_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_f_size_' . $entity_name) ? get_option('likebtn_settings_f_size_' . $entity_name) : $likebtn_settings['f_size']['default']); ?>" class="likebtn_input likebtn_i_sm" min="5" max="500" maxlength="3"/>
+                                                    <input type="number" name="likebtn_settings_f_size_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_f_size_' . $entity_name) ? get_option('likebtn_settings_f_size_' . $entity_name) : esc_attr($likebtn_settings['f_size']['default'])); ?>" class="likebtn_input likebtn_i_sm" min="5" max="500" maxlength="3"/>
                                                 </td>
                                             </tr>
                                             <tr valign="top" class="likebtn_custom hidden param_icon">
                                                 <th scope="row"><label><?php _e('Icon size', 'likebtn-like-button'); ?></label></th>
                                                 <td>
-                                                    <input type="number" name="likebtn_settings_icon_size_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_icon_size_' . $entity_name) ? get_option('likebtn_settings_icon_size_' . $entity_name) : $likebtn_settings['icon_size']['default']); ?>" class="likebtn_input likebtn_i_sm" min="5" max="500" maxlength="3"/>
+                                                    <input type="number" name="likebtn_settings_icon_size_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_icon_size_' . $entity_name) ? get_option('likebtn_settings_icon_size_' . $entity_name) : esc_attr($likebtn_settings['icon_size']['default'])); ?>" class="likebtn_input likebtn_i_sm" min="5" max="500" maxlength="3"/>
                                                 </td>
                                             </tr>
                                             <tr valign="top" class="likebtn_custom hidden">
@@ -410,67 +409,67 @@ function likebtn_admin_buttons()
                                             <tr valign="top" class="likebtn_custom hidden param_icon_l">
                                                 <th scope="row"><label><?php _e('Like icon color', 'likebtn-like-button'); ?></label></th>
                                                 <td>
-                                                    <input type="text" name="likebtn_settings_icon_l_c_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_icon_l_c_' . $entity_name) ? get_option('likebtn_settings_icon_l_c_' . $entity_name) : $likebtn_settings['icon_l_c']['default']); ?>" data-alpha="true" class="likebtn_input likebtn_i_sm likebtn_cp"/>
+                                                    <input type="text" name="likebtn_settings_icon_l_c_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_icon_l_c_' . $entity_name) ? get_option('likebtn_settings_icon_l_c_' . $entity_name) : esc_attr($likebtn_settings['icon_l_c']['default'])); ?>" data-alpha="true" class="likebtn_input likebtn_i_sm likebtn_cp"/>
                                                 </td>
                                             </tr>
                                             <tr valign="top" class="likebtn_custom hidden param_icon_l">
                                                 <th scope="row"><label><?php _e('Color after voting', 'likebtn-like-button'); ?></label></th>
                                                 <td>
-                                                    <input type="text" name="likebtn_settings_icon_l_c_v_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_icon_l_c_v_' . $entity_name) ? get_option('likebtn_settings_icon_l_c_v_' . $entity_name) : $likebtn_settings['icon_l_c_v']['default']); ?>" data-alpha="true" class="likebtn_input likebtn_i_sm likebtn_cp"/>
+                                                    <input type="text" name="likebtn_settings_icon_l_c_v_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_icon_l_c_v_' . $entity_name) ? get_option('likebtn_settings_icon_l_c_v_' . $entity_name) : esc_attr($likebtn_settings['icon_l_c_v']['default'])); ?>" data-alpha="true" class="likebtn_input likebtn_i_sm likebtn_cp"/>
                                                 </td>
                                             </tr>
                                             <tr valign="top" class="likebtn_custom hidden param_icon_d">
                                                 <th scope="row"><label><?php _e('Dislike icon color', 'likebtn-like-button'); ?></label></th>
                                                 <td>
-                                                    <input type="text" name="likebtn_settings_icon_d_c_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_icon_d_c_' . $entity_name) ? get_option('likebtn_settings_icon_d_c_' . $entity_name) : $likebtn_settings['icon_d_c']['default']); ?>" data-alpha="true" class="likebtn_input likebtn_i_sm likebtn_cp"/>
+                                                    <input type="text" name="likebtn_settings_icon_d_c_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_icon_d_c_' . $entity_name) ? get_option('likebtn_settings_icon_d_c_' . $entity_name) : esc_attr($likebtn_settings['icon_d_c']['default'])); ?>" data-alpha="true" class="likebtn_input likebtn_i_sm likebtn_cp"/>
                                                 </td>
                                             </tr>
                                             <tr valign="top" class="likebtn_custom hidden param_icon_d">
                                                 <th scope="row"><label><?php _e('Color after voting', 'likebtn-like-button'); ?></label></th>
                                                 <td>
-                                                    <input type="text" name="likebtn_settings_icon_d_c_v_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_icon_d_c_v_' . $entity_name) ? get_option('likebtn_settings_icon_d_c_v_' . $entity_name) : $likebtn_settings['icon_d_c_v']['default']); ?>" data-alpha="true" class="likebtn_input likebtn_i_sm likebtn_cp"/>
+                                                    <input type="text" name="likebtn_settings_icon_d_c_v_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_icon_d_c_v_' . $entity_name) ? get_option('likebtn_settings_icon_d_c_v_' . $entity_name) : esc_attr($likebtn_settings['icon_d_c_v']['default'])); ?>" data-alpha="true" class="likebtn_input likebtn_i_sm likebtn_cp"/>
                                                 </td>
                                             </tr>
                                             <tr valign="top" class="likebtn_custom hidden">
                                                 <th scope="row"><label><?php _e('Label color', 'likebtn-like-button'); ?></label></th>
                                                 <td>
-                                                    <input type="text" name="likebtn_settings_label_c_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_label_c_' . $entity_name) ? get_option('likebtn_settings_label_c_' . $entity_name) : $likebtn_settings['label_c']['default']); ?>" data-alpha="true" class="likebtn_input likebtn_i_sm likebtn_cp"/>
+                                                    <input type="text" name="likebtn_settings_label_c_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_label_c_' . $entity_name) ? get_option('likebtn_settings_label_c_' . $entity_name) : esc_attr($likebtn_settings['label_c']['default'])); ?>" data-alpha="true" class="likebtn_input likebtn_i_sm likebtn_cp"/>
                                                 </td>
                                             </tr>
                                             <tr valign="top" class="likebtn_custom hidden">
                                                 <th scope="row"><label><?php _e('Color after voting', 'likebtn-like-button'); ?></label></th>
                                                 <td>
-                                                    <input type="text" name="likebtn_settings_label_c_v_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_label_c_v_' . $entity_name) ? get_option('likebtn_settings_label_c_v_' . $entity_name) : $likebtn_settings['label_c_v']['default']); ?>" data-alpha="true" class="likebtn_input likebtn_i_sm likebtn_cp"/>
+                                                    <input type="text" name="likebtn_settings_label_c_v_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_label_c_v_' . $entity_name) ? get_option('likebtn_settings_label_c_v_' . $entity_name) : esc_attr($likebtn_settings['label_c_v']['default'])); ?>" data-alpha="true" class="likebtn_input likebtn_i_sm likebtn_cp"/>
                                                 </td>
                                             </tr>
                                             <tr valign="top" class="likebtn_custom hidden">
                                                 <th scope="row"><label><?php _e('Likes counter color', 'likebtn-like-button'); ?></label></th>
                                                 <td>
-                                                    <input type="text" name="likebtn_settings_counter_l_c_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_counter_l_c_' . $entity_name) ? get_option('likebtn_settings_counter_l_c_' . $entity_name) : $likebtn_settings['counter_l_c']['default']); ?>" data-alpha="true" class="likebtn_input likebtn_i_sm likebtn_cp"/>
+                                                    <input type="text" name="likebtn_settings_counter_l_c_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_counter_l_c_' . $entity_name) ? get_option('likebtn_settings_counter_l_c_' . $entity_name) : esc_attr($likebtn_settings['counter_l_c']['default'])); ?>" data-alpha="true" class="likebtn_input likebtn_i_sm likebtn_cp"/>
                                                 </td>
                                             </tr>
                                             <tr valign="top" class="likebtn_custom hidden">
                                                 <th scope="row"><label><?php _e('Dislikes counter color', 'likebtn-like-button'); ?></label></th>
                                                 <td>
-                                                    <input type="text" name="likebtn_settings_counter_d_c_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_counter_d_c_' . $entity_name) ? get_option('likebtn_settings_counter_d_c_' . $entity_name) : $likebtn_settings['counter_d_c']['default']); ?>" data-alpha="true" class="likebtn_input likebtn_i_sm likebtn_cp"/>
+                                                    <input type="text" name="likebtn_settings_counter_d_c_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_counter_d_c_' . $entity_name) ? get_option('likebtn_settings_counter_d_c_' . $entity_name) : esc_attr($likebtn_settings['counter_d_c']['default'])); ?>" data-alpha="true" class="likebtn_input likebtn_i_sm likebtn_cp"/>
                                                 </td>
                                             </tr>
                                             <tr valign="top" class="likebtn_custom hidden">
                                                 <th scope="row"><label><?php _e('Background color', 'likebtn-like-button'); ?></label></th>
                                                 <td>
-                                                    <input type="text" name="likebtn_settings_bg_c_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_bg_c_' . $entity_name) ? get_option('likebtn_settings_bg_c_' . $entity_name) : $likebtn_settings['bg_c']['default']); ?>" data-alpha="true" class="likebtn_input likebtn_i_sm likebtn_cp"/>
+                                                    <input type="text" name="likebtn_settings_bg_c_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_bg_c_' . $entity_name) ? get_option('likebtn_settings_bg_c_' . $entity_name) : esc_attr($likebtn_settings['bg_c']['default'])); ?>" data-alpha="true" class="likebtn_input likebtn_i_sm likebtn_cp"/>
                                                 </td>
                                             </tr>
                                             <tr valign="top" class="likebtn_custom hidden">
                                                 <th scope="row"><label><?php _e('Color after voting', 'likebtn-like-button'); ?></label></th>
                                                 <td>
-                                                    <input type="text" name="likebtn_settings_bg_c_v_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_bg_c_v_' . $entity_name) ? get_option('likebtn_settings_bg_c_v_' . $entity_name) : $likebtn_settings['bg_c_v']['default']); ?>" data-alpha="true" class="likebtn_input likebtn_i_sm likebtn_cp"/>
+                                                    <input type="text" name="likebtn_settings_bg_c_v_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_bg_c_v_' . $entity_name) ? get_option('likebtn_settings_bg_c_v_' . $entity_name) : esc_attr($likebtn_settings['bg_c_v']['default'])); ?>" data-alpha="true" class="likebtn_input likebtn_i_sm likebtn_cp"/>
                                                 </td>
                                             </tr>
                                             <tr valign="top" class="likebtn_custom hidden">
                                                 <th scope="row"><label><?php _e('Border color', 'likebtn-like-button'); ?></label></th>
                                                 <td>
-                                                    <input type="text" name="likebtn_settings_brdr_c_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_brdr_c_' . $entity_name) ? get_option('likebtn_settings_brdr_c_' . $entity_name) : $likebtn_settings['brdr_c']['default']); ?>" data-alpha="true" class="likebtn_input likebtn_i_sm likebtn_cp"/>
+                                                    <input type="text" name="likebtn_settings_brdr_c_<?php echo esc_attr($entity_name); ?>" value="<?php echo (get_option('likebtn_settings_brdr_c_' . $entity_name) ? get_option('likebtn_settings_brdr_c_' . $entity_name) : esc_attr($likebtn_settings['brdr_c']['default'])); ?>" data-alpha="true" class="likebtn_input likebtn_i_sm likebtn_cp"/>
                                                 </td>
                                             </tr>
                                             <tr valign="top" class="likebtn_custom hidden">
@@ -569,13 +568,13 @@ function likebtn_admin_buttons()
                                             <tr valign="top">
                                                 <th scope="row"><label><?php _e('Like button text', 'likebtn-like-button'); ?></label></th>
                                                 <td>
-                                                    <input type="text" name="likebtn_settings_i18n_like_<?php echo esc_attr($entity_name); ?>" value="<?php echo get_option('likebtn_settings_i18n_like_' . $entity_name); ?>" class="likebtn_input likebtn_placeholder" placeholder="<?php _e('Like', 'likebtn-like-button'); ?>"/>
+                                                    <input type="text" name="likebtn_settings_i18n_like_<?php echo esc_attr($entity_name); ?>" value="<?php echo esc_attr(get_option('likebtn_settings_i18n_like_' . $entity_name)); ?>" class="likebtn_input likebtn_placeholder" placeholder="<?php _e('Like', 'likebtn-like-button'); ?>"/>
                                                 </td>
                                             </tr>
                                             <tr valign="top">
                                                 <th scope="row"><label><?php _e('Dislike button text', 'likebtn-like-button'); ?></label></th>
                                                 <td>
-                                                    <input type="text" name="likebtn_settings_i18n_dislike_<?php echo esc_attr($entity_name); ?>" value="<?php echo get_option('likebtn_settings_i18n_dislike_' . $entity_name); ?>" class="likebtn_input likebtn_placeholder" placeholder="<?php _e('Dislike', 'likebtn-like-button'); ?>" />
+                                                    <input type="text" name="likebtn_settings_i18n_dislike_<?php echo esc_attr($entity_name); ?>" value="<?php echo esc_attr(get_option('likebtn_settings_i18n_dislike_' . $entity_name)); ?>" class="likebtn_input likebtn_placeholder" placeholder="<?php _e('Dislike', 'likebtn-like-button'); ?>" />
                                                 </td>
                                             </tr>
                                             <tr valign="top">
@@ -716,8 +715,7 @@ function likebtn_admin_buttons()
                                                                 $categories = _likebtn_get_categories();
 
                                                                 foreach ($categories as $category) {
-                                                                    $selected = (in_array($category->cat_ID, $excluded_categories)) ? 'selected="selected"' : '';
-                                                                    echo '<option value="' . esc_attr($category->cat_ID) . '" ' . $selected . '>';
+                                                                    echo '<option value="' . esc_attr($category->cat_ID) . '" ' . ((in_array($category->cat_ID, $excluded_categories)) ? 'selected="selected"' : '') . '>';
                                                                     echo esc_html($category->cat_name);
                                                                     echo ' (' . (int)$category->category_count . ')';
                                                                     echo '</option>';
@@ -736,8 +734,7 @@ function likebtn_admin_buttons()
                                                                 $forums = _likebtn_get_forums();
 
                                                                 foreach ($forums as $forum) {
-                                                                    $selected = (in_array($forum->ID, $allow_forums)) ? 'selected="selected"' : '';
-                                                                    echo '<option value="' . esc_attr($forum->ID) . '" ' . $selected . '>';
+                                                                    echo '<option value="' . esc_attr($forum->ID) . '" ' . ((in_array($forum->ID, $allow_forums)) ? 'selected="selected"' : '') . '>';
                                                                     echo esc_html($forum->post_title);
                                                                     echo '</option>';
                                                                 }
@@ -878,7 +875,7 @@ function likebtn_admin_buttons()
                                                         <th scope="row"><label><?php _e('Like box text', 'likebtn-like-button'); ?></label>
                                                         </th>
                                                         <td>
-                                                            <input type="text" name="likebtn_like_box_text_<?php echo esc_attr($entity_name); ?>" value="<?php echo get_option('likebtn_like_box_text_' . $entity_name); ?>" class="likebtn_input" />
+                                                            <input type="text" name="likebtn_like_box_text_<?php echo esc_attr($entity_name); ?>" value="<?php echo esc_attr(get_option('likebtn_like_box_text_' . $entity_name)); ?>" class="likebtn_input" />
                                                         </td>
                                                     </tr>
                                                     <tr valign="top">
@@ -886,7 +883,7 @@ function likebtn_admin_buttons()
                                                             <?php /*<i class="likebtn_help" title="<?php _e('HTML code to insert before the Like Button', 'likebtn-like-button'); ?>">&nbsp;</i>*/ ?>
                                                         </th>
                                                         <td>
-                                                            <textarea name="likebtn_html_before_<?php echo esc_attr($entity_name); ?>" class="likebtn_input" rows="2"><?php echo get_option('likebtn_html_before_' . $entity_name); ?></textarea>
+                                                            <textarea name="likebtn_html_before_<?php echo esc_attr($entity_name); ?>" class="likebtn_input" rows="2"><?php echo likebtn_strip_html(get_option('likebtn_html_before_' . $entity_name)); ?></textarea>
                                                         </td>
                                                     </tr>
                                                     <tr valign="top">
@@ -894,7 +891,7 @@ function likebtn_admin_buttons()
                                                             <?php /*<i class="likebtn_help" title="<?php _e('HTML code to insert after the Like Button', 'likebtn-like-button'); ?>">&nbsp;</i>*/ ?>
                                                         </th>
                                                         <td>
-                                                            <textarea name="likebtn_html_after_<?php echo esc_attr($entity_name); ?>" class="likebtn_input" rows="2"><?php echo get_option('likebtn_html_after_' . $entity_name); ?></textarea>
+                                                            <textarea name="likebtn_html_after_<?php echo esc_attr($entity_name); ?>" class="likebtn_input" rows="2"><?php echo likebtn_strip_html(get_option('likebtn_html_after_' . $entity_name)); ?></textarea>
                                                         </td>
                                                     </tr>
                                                     <tr valign="top">
@@ -972,7 +969,7 @@ function likebtn_admin_buttons()
                                                     <tr valign="top">
                                                         <th scope="row"><label><?php _e('Popup width', 'likebtn-like-button'); ?></label></th>
                                                         <td>
-                                                            <input type="number" name="likebtn_settings_popup_width_<?php echo esc_attr($entity_name); ?>" value="<?php echo get_option('likebtn_settings_popup_width_' . $entity_name); ?>" size="8"/>
+                                                            <input type="number" name="likebtn_settings_popup_width_<?php echo esc_attr($entity_name); ?>" value="<?php echo esc_attr(get_option('likebtn_settings_popup_width_' . $entity_name)); ?>" size="8"/>
                                                         </td>
                                                     </tr>
                                                     <tr valign="top">
@@ -1002,7 +999,7 @@ function likebtn_admin_buttons()
                                                             <i class="likebtn_help" title="<?php _e("Custom HTML to insert into the popup", 'likebtn-like-button'); ?>">&nbsp;</i>
                                                         </th>
                                                         <td>
-                                                            <textarea name="likebtn_settings_popup_html_<?php echo esc_attr($entity_name); ?>" class="likebtn_input" rows="2"><?php echo get_option('likebtn_settings_popup_html_' . $entity_name); ?></textarea>
+                                                            <textarea name="likebtn_settings_popup_html_<?php echo esc_attr($entity_name); ?>" class="likebtn_input" rows="2"><?php echo esc_attr(get_option('likebtn_settings_popup_html_' . $entity_name)); ?></textarea>
                                                         </td>
                                                     </tr>
                                                     <tr valign="top">
@@ -1014,7 +1011,7 @@ function likebtn_admin_buttons()
                                                                 <option value="popup_html" ><?php _e('Custom HTML', 'likebtn-like-button'); ?></option>
                                                             </select>
 
-                                                            <input type="hidden" id="settings_popup_content_order_input" name="likebtn_settings_popup_content_order_<?php echo esc_attr($entity_name); ?>" value="<?php echo get_option('likebtn_settings_popup_content_order_' . $entity_name); ?>" />
+                                                            <input type="hidden" id="settings_popup_content_order_input" name="likebtn_settings_popup_content_order_<?php echo esc_attr($entity_name); ?>" value="<?php echo esc_attr(get_option('likebtn_settings_popup_content_order_' . $entity_name)); ?>" />
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -1084,7 +1081,7 @@ function likebtn_admin_buttons()
                                                             </select>
                                                             <div class="param_voting_period param_vp_date hidden">
                                                                 <br/>
-                                                                <?php _e('Date', 'likebtn-like-button'); ?>: <input type="text" name="likebtn_voting_date_<?php echo esc_attr($entity_name); ?>" value="<?php echo get_option('likebtn_voting_date_' . $entity_name); ?>" id="likebtn_voting_date" size="16" class="disabled" />
+                                                                <?php _e('Date', 'likebtn-like-button'); ?>: <input type="text" name="likebtn_voting_date_<?php echo esc_attr($entity_name); ?>" value="<?php echo esc_attr(get_option('likebtn_voting_date_' . $entity_name)); ?>" id="likebtn_voting_date" size="16" class="disabled" />
                                                                 <p class="description">
                                                                     <?php _e('Keep in mind that you have to specify your server date and time.', 'likebtn-like-button'); ?><br/><?php _e('Current server date and time:', 'likebtn-like-button'); ?> <?php echo date("Y/m/d H:i") ?>
                                                                 </p>
@@ -1092,7 +1089,7 @@ function likebtn_admin_buttons()
                                                             <div class="param_voting_period param_vp_created hidden">
                                                                 <br/>
                                                                 <div id="likebtn_voting_created_cntr"></div>
-                                                                <input type="number" name="likebtn_voting_created_<?php echo esc_attr($entity_name); ?>" value="<?php echo get_option('likebtn_voting_created_' . $entity_name); ?>" id="likebtn_voting_created" class="hidden disabled" />
+                                                                <input type="number" name="likebtn_voting_created_<?php echo esc_attr($entity_name); ?>" value="<?php echo esc_attr(get_option('likebtn_voting_created_' . $entity_name)); ?>" id="likebtn_voting_created" class="hidden disabled" />
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -1140,7 +1137,7 @@ function likebtn_admin_buttons()
                                                     <tr valign="top">
                                                         <th scope="row"><label><?php _e('Counter mask', 'likebtn-like-button'); ?></label></th>
                                                         <td>
-                                                            <input type="text" name="likebtn_settings_counter_padding_<?php echo esc_attr($entity_name); ?>" value="<?php echo get_option('likebtn_settings_counter_padding_' . $entity_name); ?>" class="likebtn_input" />
+                                                            <input type="text" name="likebtn_settings_counter_padding_<?php echo esc_attr($entity_name); ?>" value="<?php echo esc_attr(get_option('likebtn_settings_counter_padding_' . $entity_name)); ?>" class="likebtn_input" />
                                                             <p class="notice update-nag"><?php _e(
            __('For example set the following mask "0000000" if you need the counter to be displayed as 0000001, 0000002 after receiving first, second and so on votes. This parameter does not set value for buttons. If you need to set number of votes for buttons please do so on Statistics tab.', 'likebtn-like-button')) ?></p>
                                                         </td>
@@ -1208,7 +1205,7 @@ function likebtn_admin_buttons()
                                                             <i class="likebtn_help" title="<?php _e("Enter your AddThis Profile ID to collect sharing statistics and view it on AddThis analytics page", 'likebtn-like-button'); ?>">&nbsp;</i>
                                                         </th>
                                                         <td>
-                                                            <input type="text" name="likebtn_settings_addthis_pubid_<?php echo esc_attr($entity_name); ?>" value="<?php echo get_option('likebtn_settings_addthis_pubid_' . $entity_name); ?>" class=" likebtn_input likebtn_placeholder" placeholder="ra-511b51aa3d843ec4" />
+                                                            <input type="text" name="likebtn_settings_addthis_pubid_<?php echo esc_attr($entity_name); ?>" value="<?php echo esc_attr(get_option('likebtn_settings_addthis_pubid_' . $entity_name)); ?>" class=" likebtn_input likebtn_placeholder" placeholder="ra-511b51aa3d843ec4" />
                                                         </td>
                                                     </tr>
                                                     <?php if (empty($likebtn_entities_config['likebtn_og'][$entity_name]['hide'])): ?>
@@ -1275,7 +1272,7 @@ function likebtn_admin_buttons()
                                                             <i class="likebtn_help" title="<?php _e("URL of the image to use as loader image (leave empty to display default image)", 'likebtn-like-button'); ?>">&nbsp;</i>
                                                         </th>
                                                         <td>
-                                                            <input type="text" name="likebtn_settings_loader_image_<?php echo esc_attr($entity_name); ?>" value="<?php echo get_option('likebtn_settings_loader_image_' . $entity_name); ?>" class="likebtn_input" />
+                                                            <input type="text" name="likebtn_settings_loader_image_<?php echo esc_attr($entity_name); ?>" value="<?php echo esc_attr(get_option('likebtn_settings_loader_image_' . $entity_name)); ?>" class="likebtn_input" />
                                                         </td>
                                                     </tr>
                                                     <tr valign="top">
@@ -1319,61 +1316,61 @@ function likebtn_admin_buttons()
                                                     <tr valign="top">
                                                         <th scope="row"><label><?php _e('Like button text after liking', 'likebtn-like-button'); ?></label></th>
                                                         <td>
-                                                            <input type="text" name="likebtn_settings_i18n_after_like_<?php echo esc_attr($entity_name); ?>" value="<?php echo get_option('likebtn_settings_i18n_after_like_' . $entity_name); ?>" class="likebtn_input likebtn_placeholder" placeholder="<?php _e('Like', 'likebtn-like-button'); ?>"/>
+                                                            <input type="text" name="likebtn_settings_i18n_after_like_<?php echo esc_attr($entity_name); ?>" value="<?php echo esc_attr(get_option('likebtn_settings_i18n_after_like_' . $entity_name)); ?>" class="likebtn_input likebtn_placeholder" placeholder="<?php _e('Like', 'likebtn-like-button'); ?>"/>
                                                         </td>
                                                     </tr>
                                                     <tr valign="top">
                                                         <th scope="row"><label><?php _e('Dislike button text after disliking', 'likebtn-like-button'); ?></label></th>
                                                         <td>
-                                                            <input type="text" name="likebtn_settings_i18n_after_dislike_<?php echo esc_attr($entity_name); ?>" value="<?php echo get_option('likebtn_settings_i18n_after_dislike_' . $entity_name); ?>" class="likebtn_input likebtn_placeholder" placeholder="<?php _e('Dislike', 'likebtn-like-button'); ?>"/>
+                                                            <input type="text" name="likebtn_settings_i18n_after_dislike_<?php echo esc_attr($entity_name); ?>" value="<?php echo esc_attr(get_option('likebtn_settings_i18n_after_dislike_' . $entity_name)); ?>" class="likebtn_input likebtn_placeholder" placeholder="<?php _e('Dislike', 'likebtn-like-button'); ?>"/>
                                                         </td>
                                                     </tr>
                                                     <tr valign="top">
                                                         <th scope="row"><label><?php _e('Like button tooltip', 'likebtn-like-button'); ?></label></th>
                                                         <td>
-                                                            <input type="text" name="likebtn_settings_i18n_like_tooltip_<?php echo esc_attr($entity_name); ?>" value="<?php echo get_option('likebtn_settings_i18n_like_tooltip_' . $entity_name); ?>" class="likebtn_input likebtn_placeholder" placeholder="<?php _e('I like this', 'likebtn-like-button'); ?>"/>
+                                                            <input type="text" name="likebtn_settings_i18n_like_tooltip_<?php echo esc_attr($entity_name); ?>" value="<?php echo esc_attr(get_option('likebtn_settings_i18n_like_tooltip_' . $entity_name)); ?>" class="likebtn_input likebtn_placeholder" placeholder="<?php _e('I like this', 'likebtn-like-button'); ?>"/>
                                                         </td>
                                                     </tr>
                                                     <tr valign="top">
                                                         <th scope="row"><label><?php _e('Dislike button tooltip', 'likebtn-like-button'); ?></label></th>
                                                         <td>
-                                                            <input type="text" name="likebtn_settings_i18n_dislike_tooltip_<?php echo esc_attr($entity_name); ?>" value="<?php echo get_option('likebtn_settings_i18n_dislike_tooltip_' . $entity_name); ?>" class="likebtn_input likebtn_placeholder" placeholder="<?php _e('I dislike this', 'likebtn-like-button'); ?>"/>
+                                                            <input type="text" name="likebtn_settings_i18n_dislike_tooltip_<?php echo esc_attr($entity_name); ?>" value="<?php echo esc_attr(get_option('likebtn_settings_i18n_dislike_tooltip_' . $entity_name)); ?>" class="likebtn_input likebtn_placeholder" placeholder="<?php _e('I dislike this', 'likebtn-like-button'); ?>"/>
                                                         </td>
                                                     </tr>
                                                     <tr valign="top">
                                                         <th scope="row"><label><?php _e('Like button tooltip after liking', 'likebtn-like-button'); ?></label></th>
                                                         <td>
-                                                            <input type="text" name="likebtn_settings_i18n_unlike_tooltip_<?php echo esc_attr($entity_name); ?>" value="<?php echo get_option('likebtn_settings_i18n_unlike_tooltip_' . $entity_name); ?>" class="likebtn_input likebtn_placeholder" placeholder="<?php _e('Unlike', 'likebtn-like-button'); ?>"/>
+                                                            <input type="text" name="likebtn_settings_i18n_unlike_tooltip_<?php echo esc_attr($entity_name); ?>" value="<?php echo esc_attr(get_option('likebtn_settings_i18n_unlike_tooltip_' . $entity_name)); ?>" class="likebtn_input likebtn_placeholder" placeholder="<?php _e('Unlike', 'likebtn-like-button'); ?>"/>
                                                         </td>
                                                     </tr>
                                                     <tr valign="top">
                                                         <th scope="row"><label><?php _e('Dislike button tooltip after disliking', 'likebtn-like-button'); ?></label></th>
                                                         <td>
-                                                            <input type="text" name="likebtn_settings_i18n_undislike_tooltip_<?php echo esc_attr($entity_name); ?>" value="<?php echo get_option('likebtn_settings_i18n_undislike_tooltip_' . $entity_name); ?>" class="likebtn_input likebtn_placeholder" placeholder="<?php _e('Undislike', 'likebtn-like-button'); ?>"/>
+                                                            <input type="text" name="likebtn_settings_i18n_undislike_tooltip_<?php echo esc_attr($entity_name); ?>" value="<?php echo esc_attr(get_option('likebtn_settings_i18n_undislike_tooltip_' . $entity_name)); ?>" class="likebtn_input likebtn_placeholder" placeholder="<?php _e('Undislike', 'likebtn-like-button'); ?>"/>
                                                         </td>
                                                     </tr>
                                                     <tr valign="top">
                                                         <th scope="row"><label><?php _e('Text before share buttons', 'likebtn-like-button'); ?></label></th>
                                                         <td>
-                                                            <input type="text" name="likebtn_settings_i18n_share_text_<?php echo esc_attr($entity_name); ?>" value="<?php echo get_option('likebtn_settings_i18n_share_text_' . $entity_name); ?>" class="likebtn_input likebtn_placeholder" placeholder="<?php _e('Would you like to share?', 'likebtn-like-button'); ?>"/>
+                                                            <input type="text" name="likebtn_settings_i18n_share_text_<?php echo esc_attr($entity_name); ?>" value="<?php echo esc_attr(get_option('likebtn_settings_i18n_share_text_' . $entity_name)); ?>" class="likebtn_input likebtn_placeholder" placeholder="<?php _e('Would you like to share?', 'likebtn-like-button'); ?>"/>
                                                         </td>
                                                     </tr>
                                                     <tr valign="top">
                                                         <th scope="row"><label><?php _e('Popup close button text', 'likebtn-like-button'); ?></label></th>
                                                         <td>
-                                                            <input type="text" name="likebtn_settings_i18n_popup_close_<?php echo esc_attr($entity_name); ?>" value="<?php echo get_option('likebtn_settings_i18n_popup_close_' . $entity_name); ?>" class="likebtn_input likebtn_placeholder" placeholder="<?php _e('Close', 'likebtn-like-button'); ?>"/>
+                                                            <input type="text" name="likebtn_settings_i18n_popup_close_<?php echo esc_attr($entity_name); ?>" value="<?php echo esc_attr(get_option('likebtn_settings_i18n_popup_close_' . $entity_name)); ?>" class="likebtn_input likebtn_placeholder" placeholder="<?php _e('Close', 'likebtn-like-button'); ?>"/>
                                                         </td>
                                                     </tr>
                                                     <tr valign="top">
                                                         <th scope="row"><label><?php _e('Popup text when sharing disabled', 'likebtn-like-button'); ?></label></th>
                                                         <td>
-                                                            <input type="text" name="likebtn_settings_i18n_popup_text_<?php echo esc_attr($entity_name); ?>" value="<?php echo get_option('likebtn_settings_i18n_popup_text_' . $entity_name); ?>" class="likebtn_input likebtn_placeholder" placeholder="<?php _e('Glad you liked it!', 'likebtn-like-button'); ?>"/>
+                                                            <input type="text" name="likebtn_settings_i18n_popup_text_<?php echo esc_attr($entity_name); ?>" value="<?php echo esc_attr(get_option('likebtn_settings_i18n_popup_text_' . $entity_name)); ?>" class="likebtn_input likebtn_placeholder" placeholder="<?php _e('Glad you liked it!', 'likebtn-like-button'); ?>"/>
                                                         </td>
                                                     </tr>
                                                     <tr valign="top">
                                                         <th scope="row"><label><?php _e('Text before donate buttons', 'likebtn-like-button'); ?></label></th>
                                                         <td>
-                                                            <input type="text" name="likebtn_settings_i18n_popup_donate_<?php echo esc_attr($entity_name); ?>" value="<?php echo get_option('likebtn_settings_i18n_popup_donate_' . $entity_name); ?>" class="likebtn_input likebtn_placeholder" placeholder="<?php _e('Show gratitude in the form of a donation', 'likebtn-like-button'); ?>"/>
+                                                            <input type="text" name="likebtn_settings_i18n_popup_donate_<?php echo esc_attr($entity_name); ?>" value="<?php echo esc_attr(get_option('likebtn_settings_i18n_popup_donate_' . $entity_name)); ?>" class="likebtn_input likebtn_placeholder" placeholder="<?php _e('Show gratitude in the form of a donation', 'likebtn-like-button'); ?>"/>
                                                         </td>
                                                     </tr>
                                                     </tr>

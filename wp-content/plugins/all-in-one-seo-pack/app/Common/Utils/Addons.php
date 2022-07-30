@@ -236,7 +236,8 @@ class Addons {
 	 *
 	 * @since 4.0.0
 	 *
-	 * @return boolean Whether or not the installation was succesful.
+	 * @param  string $name The addon name/sku.
+	 * @return bool         Whether or not the installation was succesful.
 	 */
 	public function installAddon( $name ) {
 		if ( ! $this->canInstall() ) {
@@ -345,9 +346,9 @@ class Addons {
 	}
 
 	/**
-	 * Determine if addons/plugins can be updates.
+	 * Determine if addons/plugins can be updated.
 	 *
-	 * @since 4.0.0
+	 * @since 4.1.6
 	 *
 	 * @return bool True if yes, false if not.
 	 */
@@ -423,6 +424,28 @@ class Addons {
 		}
 
 		return $loadedAddonsList;
+	}
+
+	/**
+	 * Run a function through all addons that support it.
+	 *
+	 * @since 4.2.3
+	 *
+	 * @param  string $class    The class name.
+	 * @param  string $function The function name.
+	 * @param  array  $args     The args for the function.
+	 * @return array            The response from each addon.
+	 */
+	public function doFunction( $class, $function, $args = [] ) {
+		$addonResponses = [];
+
+		foreach ( $this->getLoadedAddons() as $addonSlug => $addon ) {
+			if ( isset( $addon->$class ) && method_exists( $addon->$class, $function ) ) {
+				$addonResponses[ $addonSlug ] = call_user_func_array( [ $addon->$class, $function ], $args );
+			}
+		}
+
+		return $addonResponses;
 	}
 
 	/**
@@ -671,7 +694,7 @@ class Addons {
 					'pro',
 					'elite'
 				],
-				'requiresUpgrade'    => false,
+				'requiresUpgrade'    => true,
 				'description'        => '<p>Add IndexNow support to instantly notify search engines when your content has changed. This helps the search engines to prioritize the changes on your website and helps you rank faster.</p>', // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 				'descriptionVersion' => 0,
 				'downloadUrl'        => '',
@@ -704,7 +727,7 @@ class Addons {
 					'pro',
 					'elite'
 				],
-				'requiresUpgrade'    => false,
+				'requiresUpgrade'    => true,
 				'description'        => '<p>Manage your post and term SEO meta via the WordPress REST API. This addon also works seamlessly with headless WordPress installs.</p>', // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 				'descriptionVersion' => 0,
 				'downloadUrl'        => '',

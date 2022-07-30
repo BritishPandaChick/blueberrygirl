@@ -205,12 +205,12 @@ if (class_exists('myCRED_Hook')) {
 ?>
 <h3 class="nav-tab-wrapper likebtn_mycred_tab_labels" style="padding: 0">
     <?php foreach ($likebtn_entities as $tab_entity_name => $tab_entity_title): ?>
-        <a class="nav-tab likebtn_mycred_tab_lbl_<?php echo $tab_entity_name; ?> <?php echo ('post' == $tab_entity_name ? 'nav-tab-active' : '') ?>" href="javascript:likebtnGotoTab('<?php echo $tab_entity_name ?>', '.likebtn_mycred_tab', '.likebtn_mycred_tab_', '.likebtn_mycred_tab_labels', 'likebtn_mycred_tab_lbl_');void(0);"><?php _e($tab_entity_title, 'likebtn-like-button'); ?></a>
+        <a class="nav-tab likebtn_mycred_tab_lbl_<?php echo esc_attr($tab_entity_name); ?> <?php echo ('post' == $tab_entity_name ? 'nav-tab-active' : '') ?>" href="javascript:likebtnGotoTab('<?php echo esc_attr($tab_entity_name) ?>', '.likebtn_mycred_tab', '.likebtn_mycred_tab_', '.likebtn_mycred_tab_labels', 'likebtn_mycred_tab_lbl_');void(0);"><?php esc_html_e($tab_entity_title, 'likebtn-like-button'); ?></a>
     <?php endforeach ?>
 </h3>
 
 <?php foreach ($likebtn_entities as $entity_name => $entity_title): ?>
-<div class="likebtn_mycred_tab postbox likebtn_mycred_tab_<?php echo $entity_name; ?> <?php if ($entity_name !== 'post'): ?>hidden<?php endif ?>" >
+<div class="likebtn_mycred_tab postbox likebtn_mycred_tab_<?php echo esc_attr($entity_name); ?> <?php if ($entity_name !== 'post'): ?>hidden<?php endif ?>" >
 	<div class="inside">
 		<label class="subheader"><?php echo _e( 'Points for Liking Content', 'likebtn-like-button' ); ?></label>
 		<?php
@@ -245,23 +245,23 @@ if (class_exists('myCRED_Hook')) {
 			?>
 <ol>
 	<li>
-		<div class="h2"><input type="text" name="<?php echo $this->field_name( array( $instance => 'creds' ) ); ?>" id="<?php echo $this->field_id( array( $instance => 'creds' ) ); ?>" value="<?php echo $this->core->number( $prefs[$instance]['creds'] ); ?>" size="8" autocomplete="off" /></div>
+		<div class="h2"><input type="text" name="<?php echo esc_attr($this->field_name( array( $instance => 'creds' ) )); ?>" id="<?php echo esc_attr($this->field_id( array( $instance => 'creds' ) )); ?>" value="<?php echo esc_attr($this->core->number( $prefs[$instance]['creds'] )); ?>" size="8" autocomplete="off" /></div>
 	</li>
 	<li class="empty"></li>
 	<li>
-		<label for="<?php echo $this->field_id( array( $instance => 'log' ) ); ?>"><?php _e('Percent from voter\'s points balance added on voting to the points amount above', 'likebtn-like-button'); ?></label>
-		<div class="h2"><input type="text" name="<?php echo $this->field_name( array( $instance => 'share' ) ); ?>" id="<?php echo $this->field_id( array( $instance => 'share' ) ); ?>" value="<?php echo (float)$prefs[$instance]['share']; ?>" size="8" autocomplete="off" /><small>%</small></div>
+		<label for="<?php echo esc_attr($this->field_id( array( $instance => 'log' ) )); ?>"><?php _e('Percent from voter\'s points balance added on voting to the points amount above', 'likebtn-like-button'); ?></label>
+		<div class="h2"><input type="text" name="<?php echo esc_attr($this->field_name( array( $instance => 'share' ) )); ?>" id="<?php echo esc_attr($this->field_id( array( $instance => 'share' ) )); ?>" value="<?php echo (float)$prefs[$instance]['share']; ?>" size="8" autocomplete="off" /><small>%</small></div>
 	</li>
 	<li class="empty"></li>
 	<li>
-		<label for="<?php echo $this->field_id( array( $instance => 'limit' ) ); ?>"><?php _e( 'Limit', 'likebtn-like-button' ); ?></label>
-		<?php echo $this->hook_limit_setting( $this->field_name( array( $instance => 'limit' ) ), $this->field_id( array( $instance => 'limit' ) ), $prefs[$instance]['limit'] ); ?>
+		<label for="<?php echo esc_attr($this->field_id( array( $instance => 'limit' ) )); ?>"><?php _e( 'Limit', 'likebtn-like-button' ); ?></label>
+		<?php echo esc_attr($this->hook_limit_setting( $this->field_name( array( $instance => 'limit' ) ), $this->field_id( array( $instance => 'limit' ) ), $prefs[$instance]['limit'] )); ?>
 	</li>	
 	<li class="empty"></li>
 	<li>
-		<label for="<?php echo $this->field_id( array( $instance => 'log' ) ); ?>"><?php _e( 'Log template', 'mycred' ); ?></label>
-		<div class="h2"><input type="text" name="<?php echo $this->field_name( array( $instance => 'log' ) ); ?>" id="<?php echo $this->field_id( array( $instance => 'log' ) ); ?>" value="<?php echo esc_attr( $prefs[$instance]['log'] ); ?>" class="long" autocomplete="off" /></div>
-		<span class="description"><?php echo $this->available_template_tags( array( 'general' ) ); ?></span>
+		<label for="<?php echo esc_attr($this->field_id( array( $instance => 'log' ) )); ?>"><?php _e( 'Log template', 'mycred' ); ?></label>
+		<div class="h2"><input type="text" name="<?php echo esc_attr($this->field_name( array( $instance => 'log' ) )); ?>" id="<?php echo esc_attr($this->field_id( array( $instance => 'log' ) )); ?>" value="<?php echo esc_attr( $prefs[$instance]['log'] ); ?>" class="long" autocomplete="off" /></div>
+		<span class="description"><?php echo esc_attr($this->available_template_tags( array( 'general' ) )); ?></span>
 	</li>
 </ol>
 			<?php

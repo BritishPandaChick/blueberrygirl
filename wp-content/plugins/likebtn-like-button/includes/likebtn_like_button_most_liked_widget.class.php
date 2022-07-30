@@ -53,7 +53,7 @@ class LikeBtnLikeButtonMostLikedWidget extends WP_Widget {
         }
         
         if (!empty($output)) {
-            echo $html;
+            echo wp_kses_post($html);
         } else {
             return $html;
         }
@@ -144,7 +144,7 @@ class LikeBtnLikeButtonMostLikedWidget extends WP_Widget {
         }
 
         ?>
-        <div id="likebtn_widget_<?php echo $widget_mnemonic; ?>">
+        <div id="likebtn_widget_<?php echo esc_attr($widget_mnemonic); ?>">
             <?php if (!_likebtn_is_stat_enabled()): ?>
                 <p class="likebtn_error">
                     <?php echo strtr(__('Synchronization is not enabled — widget will not be functioning. Please %a_begin%enable synchronization%a_end% in order to use the widget.', 'likebtn-like-button'), 
@@ -152,145 +152,139 @@ class LikeBtnLikeButtonMostLikedWidget extends WP_Widget {
                 </p>
             <?php endif ?>
             <p>
-                <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'likebtn-like-button'); ?>:</label>
-                <input class="widefat" type="text" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" value="<?php echo $instance['title']; ?>" data-property="title" />
+                <label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php _e('Title', 'likebtn-like-button'); ?>:</label>
+                <input class="widefat" type="text" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" value="<?php echo esc_attr($instance['title']); ?>" data-property="title" />
             </p>
             <p>
-                <label for="<?php echo $this->get_field_id('entity_name'); ?>"><?php _e('Items to show', 'likebtn-like-button'); ?>:</label><br/>
+                <label for="<?php echo esc_attr($this->get_field_id('entity_name')); ?>"><?php _e('Items to show', 'likebtn-like-button'); ?>:</label><br/>
 
                 <?php foreach ($likebtn_entities as $entity_name_value => $entity_title): ?>
-                    <input type="checkbox" name="<?php echo $this->get_field_name('entity_name'); ?>[]" id="<?php echo $this->get_field_id('entity_name'); ?>_<?php echo $entity_name_value ?>" value="<?php echo $entity_name_value; ?>" <?php echo (in_array($entity_name_value, $instance['entity_name']) ? 'checked="checked"' : ''); ?> data-property="entity_name" /> <label for="<?php echo $this->get_field_id('entity_name'); ?>_<?php echo $entity_name_value ?>"><?php _e($entity_title, 'likebtn-like-button'); ?></label><br/>
+                    <input type="checkbox" name="<?php echo esc_attr($this->get_field_name('entity_name')); ?>[]" id="<?php echo esc_attr($this->get_field_id('entity_name')); ?>_<?php echo esc_attr($entity_name_value) ?>" value="<?php echo esc_attr($entity_name_value); ?>" <?php echo (in_array($entity_name_value, $instance['entity_name']) ? 'checked="checked"' : ''); ?> data-property="entity_name" /> <label for="<?php echo esc_attr($this->get_field_id('entity_name')); ?>_<?php echo esc_attr($entity_name_value) ?>"><?php esc_attr_e($entity_title, 'likebtn-like-button'); ?></label><br/>
                 <?php endforeach ?>
             </p>
             <p>
-                <label for="<?php echo $this->get_field_id('include_categories'); ?>"><?php _e('Allow items by category', 'likebtn-like-button'); ?>:</label><br/>
-                <select multiple="multiple" id="<?php echo $this->get_field_id('include_categories'); ?>" name="<?php echo $this->get_field_name('include_categories'); ?>[]" class="likebtn_include_categories widefat" data-property="include_categories" autocomplete="off">
+                <label for="<?php echo esc_attr($this->get_field_id('include_categories')); ?>"><?php _e('Allow items by category', 'likebtn-like-button'); ?>:</label><br/>
+                <select multiple="multiple" id="<?php echo esc_attr($this->get_field_id('include_categories')); ?>" name="<?php echo esc_attr($this->get_field_name('include_categories')); ?>[]" class="likebtn_include_categories widefat" data-property="include_categories" autocomplete="off">
                     <?php
                     $categories = _likebtn_get_categories();
 
                     foreach ($categories as $category) {
-                        $selected = (in_array($category->cat_ID, $instance['include_categories'])) ? 'selected="selected"' : '';
-                        $option = '<option value="' . $category->cat_ID . '" ' . $selected . '>';
-                        $option .= $category->cat_name;
-                        $option .= ' (' . $category->category_count . ')';
-                        $option .= '</option>';
-                        echo $option;
+                        ?>
+                            <option value="<?php echo esc_attr($category->cat_ID) ?>" <?php echo ((in_array($category->cat_ID, $instance['include_categories'])) ? 'selected="selected"' : '') ?>><?php echo esc_html($category->cat_name) ?> (<?php echo (int)$category->category_count ?>)</option>
+                        <?php
                     }
                     ?>
                 </select>
             </p>
             <p>
-                <label for="<?php echo $this->get_field_id('exclude_categories'); ?>"><?php _e('Exclude items by category', 'likebtn-like-button'); ?>:</label><br/>
-                <select multiple="multiple" id="<?php echo $this->get_field_id('exclude_categories'); ?>" name="<?php echo $this->get_field_name('exclude_categories'); ?>[]" class="likebtn_exclude_categories widefat" data-property="exclude_categories" autocomplete="off">
+                <label for="<?php echo esc_attr($this->get_field_id('exclude_categories')); ?>"><?php _e('Exclude items by category', 'likebtn-like-button'); ?>:</label><br/>
+                <select multiple="multiple" id="<?php echo esc_attr($this->get_field_id('exclude_categories')); ?>" name="<?php echo esc_attr($this->get_field_name('exclude_categories')); ?>[]" class="likebtn_exclude_categories widefat" data-property="exclude_categories" autocomplete="off">
                     <?php
                     $categories = _likebtn_get_categories();
 
                     foreach ($categories as $category) {
-                        $selected = (in_array($category->cat_ID, $instance['exclude_categories'])) ? 'selected="selected"' : '';
-                        $option = '<option value="' . $category->cat_ID . '" ' . $selected . '>';
-                        $option .= $category->cat_name;
-                        $option .= ' (' . $category->category_count . ')';
-                        $option .= '</option>';
-                        echo $option;
+                        ?>
+                            <option value="<?php echo esc_attr($category->cat_ID) ?>" <?php echo ((in_array($category->cat_ID, $instance['exclude_categories'])) ? 'selected="selected"' : '') ?>><?php echo esc_html($category->cat_name) ?> (<?php echo (int)$category->category_count ?>)</option>
+                        <?php
                     }
                     ?>
                 </select>
             </p>
             <?php if (!$this->liked_by_user): ?>
                 <p>
-                    <label for="<?php echo $this->get_field_id('author'); ?>"><?php _e('Filter by author (comma separated IDs)', 'likebtn-like-button'); ?>:</label><br/>
-                    <input type="text" id="<?php echo $this->get_field_id('author'); ?>" name="<?php echo $this->get_field_name('author'); ?>" value="<?php echo $instance['author']; ?>" data-property="author" class="widefat"/>
+                    <label for="<?php echo esc_attr($this->get_field_id('author')); ?>"><?php _e('Filter by author (comma separated IDs)', 'likebtn-like-button'); ?>:</label><br/>
+                    <input type="text" id="<?php echo esc_attr($this->get_field_id('author')); ?>" name="<?php echo esc_attr($this->get_field_name('author')); ?>" value="<?php echo esc_attr($instance['author']); ?>" data-property="author" class="widefat"/>
                 </p>
             <?php endif ?>
             <p>
-                <label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of items to show:', 'likebtn-like-button'); ?></label>
-                <input type="number" id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" value="<?php echo $instance['number']; ?>" size="3" data-property="number" class="widefat" />
+                <label for="<?php echo esc_attr($this->get_field_id('number')); ?>"><?php _e('Number of items to show:', 'likebtn-like-button'); ?></label>
+                <input type="number" id="<?php echo esc_attr($this->get_field_id('number')); ?>" name="<?php echo esc_attr($this->get_field_name('number')); ?>" value="<?php echo esc_attr($instance['number']); ?>" size="3" data-property="number" class="widefat" />
             </p>
             <p>
-                <label for="<?php echo $this->get_field_id('order'); ?>"><?php _e('Order by:', 'likebtn-like-button'); ?></label>
-                <select name="<?php echo $this->get_field_name('order'); ?>" id="<?php echo $this->get_field_id('order'); ?>" data-property="order" >
+                <label for="<?php echo esc_attr($this->get_field_id('order')); ?>"><?php _e('Order by:', 'likebtn-like-button'); ?></label>
+                <select name="<?php echo esc_attr($this->get_field_name('order')); ?>" id="<?php echo esc_attr($this->get_field_id('order')); ?>" data-property="order" >
                     <?php foreach ($order_list as $order_value => $order_name): ?>
-                        <option value="<?php echo $order_value; ?>" <?php selected($order_value, $instance['order']); ?> ><?php _e($order_name, 'likebtn-like-button'); ?></option>
+                        <option value="<?php echo esc_attr($order_value); ?>" <?php selected($order_value, $instance['order']); ?> ><?php esc_html_e($order_name, 'likebtn-like-button'); ?></option>
                     <?php endforeach ?>
                 </select>
             </p>
             <p>
-                <label for="<?php echo $this->get_field_id('time_range'); ?>"><?php _e('Item publication period:', 'likebtn-like-button'); ?></label>
-                <select name="<?php echo $this->get_field_name('time_range'); ?>" id="<?php echo $this->get_field_id('time_range'); ?>" data-property="time_range" >
+                <label for="<?php echo esc_attr($this->get_field_id('time_range')); ?>"><?php _e('Item publication period:', 'likebtn-like-button'); ?></label>
+                <select name="<?php echo esc_attr($this->get_field_name('time_range')); ?>" id="<?php echo esc_attr($this->get_field_id('time_range')); ?>" data-property="time_range" >
                     <?php foreach ($time_range_list as $time_range_value => $time_range_name): ?>
-                        <option value="<?php echo $time_range_value; ?>" <?php selected($time_range_value, $instance['time_range']); ?> ><?php _e($time_range_name, 'likebtn-like-button'); ?></option>
+                        <option value="<?php echo esc_attr($time_range_value); ?>" <?php selected($time_range_value, $instance['time_range']); ?> ><?php esc_html_e($time_range_name, 'likebtn-like-button'); ?></option>
                     <?php endforeach ?>
                 </select>
             </p>
             <p>
-                <label for="<?php echo $this->get_field_id('vote_time_range'); ?>"><?php _e('Votes period:', 'likebtn-like-button'); ?></label>
-                <select name="<?php echo $this->get_field_name('vote_time_range'); ?>" id="<?php echo $this->get_field_id('vote_time_range'); ?>" data-property="vote_time_range" >
+                <label for="<?php echo esc_attr($this->get_field_id('vote_time_range')); ?>"><?php _e('Votes period:', 'likebtn-like-button'); ?></label>
+                <select name="<?php echo esc_attr($this->get_field_name('vote_time_range')); ?>" id="<?php echo esc_attr($this->get_field_id('vote_time_range')); ?>" data-property="vote_time_range" >
                     <?php foreach ($time_range_list as $time_range_value => $time_range_name): ?>
-                        <option value="<?php echo $time_range_value; ?>" <?php selected($time_range_value, $instance['vote_time_range']); ?> ><?php _e($time_range_name, 'likebtn-like-button'); ?></option>
+                        <option value="<?php echo esc_attr($time_range_value); ?>" <?php selected($time_range_value, $instance['vote_time_range']); ?> ><?php esc_html_e($time_range_name, 'likebtn-like-button'); ?></option>
                     <?php endforeach ?>
                 </select>
             </p>
             <p>
-                <label for="<?php echo $this->get_field_id('title_length'); ?>"><?php _e('Max title length', 'likebtn-like-button'); ?>:</label>
-                <input type="number" id="<?php echo $this->get_field_id('title_length'); ?>" name="<?php echo $this->get_field_name('title_length'); ?>" value="<?php echo $instance['title_length']; ?>" data-property="title_length" class="widefat" />
+                <label for="<?php echo esc_attr($this->get_field_id('title_length')); ?>"><?php _e('Max title length', 'likebtn-like-button'); ?>:</label>
+                <input type="number" id="<?php echo esc_attr($this->get_field_id('title_length')); ?>" name="<?php echo esc_attr($this->get_field_name('title_length')); ?>" value="<?php echo esc_attr($instance['title_length']); ?>" data-property="title_length" class="widefat" />
             </p>
             <p>
-                <input class="checkbox" type="checkbox" id="<?php echo $this->get_field_id('show_likes'); ?>" name="<?php echo $this->get_field_name('show_likes'); ?>" value="1" <?php checked($instance['show_likes']); ?> data-property="show_likes" />
-                <label for="<?php echo $this->get_field_id('show_likes'); ?>"><?php _e('Display likes count', 'likebtn-like-button'); ?></label>
+                <input class="checkbox" type="checkbox" id="<?php echo esc_attr($this->get_field_id('show_likes')); ?>" name="<?php echo esc_attr($this->get_field_name('show_likes')); ?>" value="1" <?php checked($instance['show_likes']); ?> data-property="show_likes" />
+                <label for="<?php echo esc_attr($this->get_field_id('show_likes')); ?>"><?php _e('Display likes count', 'likebtn-like-button'); ?></label>
             </p>
             <p>
-                <input class="checkbox" type="checkbox" id="<?php echo $this->get_field_id('show_dislikes'); ?>" name="<?php echo $this->get_field_name('show_dislikes'); ?>" value="1" <?php checked($instance['show_dislikes']); ?> data-property="show_dislikes" />
-                <label for="<?php echo $this->get_field_id('show_dislikes'); ?>"><?php _e('Display dislikes count', 'likebtn-like-button'); ?></label>
+                <input class="checkbox" type="checkbox" id="<?php echo esc_attr($this->get_field_id('show_dislikes')); ?>" name="<?php echo esc_attr($this->get_field_name('show_dislikes')); ?>" value="1" <?php checked($instance['show_dislikes']); ?> data-property="show_dislikes" />
+                <label for="<?php echo esc_attr($this->get_field_id('show_dislikes')); ?>"><?php _e('Display dislikes count', 'likebtn-like-button'); ?></label>
             </p>
             <p>
-                <input class="checkbox" type="checkbox" <?php checked($instance['show_thumbnail']); ?> id="<?php echo $this->get_field_id('show_thumbnail'); ?>" name="<?php echo $this->get_field_name('show_thumbnail'); ?>" value="1" data-property="show_thumbnail" />
-                <label for="<?php echo $this->get_field_id('show_thumbnail'); ?>"><?php _e('Display featured image', 'likebtn-like-button'); ?></label>
-                <select name="<?php echo $this->get_field_name('thumbnail_size'); ?>" id="<?php echo $this->get_field_id('thumbnail_size'); ?>" data-property="thumbnail_size" class="widefat">
+                <input class="checkbox" type="checkbox" <?php checked($instance['show_thumbnail']); ?> id="<?php echo esc_attr($this->get_field_id('show_thumbnail')); ?>" name="<?php echo esc_attr($this->get_field_name('show_thumbnail')); ?>" value="1" data-property="show_thumbnail" />
+                <label for="<?php echo esc_attr($this->get_field_id('show_thumbnail')); ?>"><?php _e('Display featured image', 'likebtn-like-button'); ?></label>
+                <select name="<?php echo esc_attr($this->get_field_name('thumbnail_size')); ?>" id="<?php echo esc_attr($this->get_field_id('thumbnail_size')); ?>" data-property="thumbnail_size" class="widefat">
                     <?php foreach ($thumbnail_size_list as $thumbnail_size_value => $thumbnail_size_name): ?>
-                        <option value="<?php echo $thumbnail_size_value; ?>" <?php selected($thumbnail_size_value, $instance['thumbnail_size']); ?> ><?php _e($thumbnail_size_name, 'likebtn-like-button'); ?></option>
+                        <option value="<?php echo esc_attr($thumbnail_size_value); ?>" <?php selected($thumbnail_size_value, $instance['thumbnail_size']); ?> ><?php esc_html_e($thumbnail_size_name, 'likebtn-like-button'); ?></option>
                     <?php endforeach ?>
                 </select>
             </p>
             <p>
-                <input class="checkbox" type="checkbox" <?php checked($instance['show_excerpt']); ?> id="<?php echo $this->get_field_id('show_excerpt'); ?>" name="<?php echo $this->get_field_name('show_excerpt'); ?>" value="1" data-property="show_excerpt" />
-                <label for="<?php echo $this->get_field_id('show_excerpt'); ?>"><?php _e('Display excerpt', 'likebtn-like-button'); ?></label>
+                <input class="checkbox" type="checkbox" <?php checked($instance['show_excerpt']); ?> id="<?php echo esc_attr($this->get_field_id('show_excerpt')); ?>" name="<?php echo esc_attr($this->get_field_name('show_excerpt')); ?>" value="1" data-property="show_excerpt" />
+                <label for="<?php echo esc_attr($this->get_field_id('show_excerpt')); ?>"><?php _e('Display excerpt', 'likebtn-like-button'); ?></label>
             </p>
             <p>
-                <input class="checkbox" type="checkbox" <?php checked($instance['show_date']); ?> id="<?php echo $this->get_field_id('show_date'); ?>" name="<?php echo $this->get_field_name('show_date'); ?>" value="1" data-property="show_date" />
-                <label for="<?php echo $this->get_field_id('show_date'); ?>"><?php _e('Display item date', 'likebtn-like-button'); ?></label>
+                <input class="checkbox" type="checkbox" <?php checked($instance['show_date']); ?> id="<?php echo esc_attr($this->get_field_id('show_date')); ?>" name="<?php echo esc_attr($this->get_field_name('show_date')); ?>" value="1" data-property="show_date" />
+                <label for="<?php echo esc_attr($this->get_field_id('show_date')); ?>"><?php _e('Display item date', 'likebtn-like-button'); ?></label>
             </p>
             <p>
-                <input class="checkbox" type="checkbox" <?php checked($instance['show_author']); ?> id="<?php echo $this->get_field_id('show_author'); ?>" name="<?php echo $this->get_field_name('show_author'); ?>" value="1" data-property="show_author" />
-                <label for="<?php echo $this->get_field_id('show_author'); ?>"><?php _e('Display author', 'likebtn-like-button'); ?></label>
+                <input class="checkbox" type="checkbox" <?php checked($instance['show_author']); ?> id="<?php echo esc_attr($this->get_field_id('show_author')); ?>" name="<?php echo esc_attr($this->get_field_name('show_author')); ?>" value="1" data-property="show_author" />
+                <label for="<?php echo esc_attr($this->get_field_id('show_author')); ?>"><?php _e('Display author', 'likebtn-like-button'); ?></label>
             </p>
             <p>
-                <input class="checkbox" type="checkbox" <?php checked($instance['show_button']); ?> id="<?php echo $this->get_field_id('show_button'); ?>" name="<?php echo $this->get_field_name('show_button'); ?>" value="1" data-property="show_button" />
-                <label for="<?php echo $this->get_field_id('show_button'); ?>"><?php _e('Display button and use settings from', 'likebtn-like-button'); ?></label>
-                <select name="<?php echo $this->get_field_name('show_button_use_entity'); ?>" id="<?php echo $this->get_field_id('show_button_use_entity'); ?>" data-property="show_button_use_entity" class="widefat">
+                <input class="checkbox" type="checkbox" <?php checked($instance['show_button']); ?> id="<?php echo esc_attr($this->get_field_id('show_button')); ?>" name="<?php echo esc_attr($this->get_field_name('show_button')); ?>" value="1" data-property="show_button" />
+                <label for="<?php echo esc_attr($this->get_field_id('show_button')); ?>"><?php _e('Display button and use settings from', 'likebtn-like-button'); ?></label>
+                <select name="<?php echo esc_attr($this->get_field_name('show_button_use_entity')); ?>" id="<?php echo esc_attr($this->get_field_id('show_button_use_entity')); ?>" data-property="show_button_use_entity" class="widefat">
                     <?php foreach ($likebtn_entities as $entity_name_value => $entity_title): ?>
-                        <option value="<?php echo $entity_name_value; ?>" <?php selected($entity_name_value, $instance['show_button_use_entity']); ?> ><?php _e($entity_title, 'likebtn-like-button'); ?></option>
+                        <option value="<?php echo esc_attr($entity_name_value); ?>" <?php selected($entity_name_value, $instance['show_button_use_entity']); ?> ><?php esc_html_e($entity_title, 'likebtn-like-button'); ?></option>
                     <?php endforeach ?>
                 </select>
             </p>
             <p>
-                <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Text when there are no items', 'likebtn-like-button'); ?>:</label>
-                <input class="widefat" type="text" id="<?php echo $this->get_field_id('empty_text'); ?>" name="<?php echo $this->get_field_name('empty_text'); ?>" value="<?php echo $instance['empty_text']; ?>" data-property="empty_text" />
+                <label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php _e('Text when there are no items', 'likebtn-like-button'); ?>:</label>
+                <input class="widefat" type="text" id="<?php echo esc_attr($this->get_field_id('empty_text')); ?>" name="<?php echo esc_attr($this->get_field_name('empty_text')); ?>" value="<?php echo esc_attr($instance['empty_text']); ?>" data-property="empty_text" />
             </p>
             <p>
                 <a href="javascript:likebtnPopup('<?php echo __('http://likebtn.com/en/', 'likebtn-like-button'); ?>wordpress-like-button-plugin#most_liked_template');void(0);"><?php _e('Need a custom template?', 'likebtn-like-button'); ?></a> | 
-                <a href="javascript:likebtnWidgetShortcode('<?php echo $widget_mnemonic; ?>', '<?php echo $this->shortcode; ?>', '<?php _e('Please save widget first', 'likebtn-like-button'); ?>')"><?php _e('Get shortcode', 'likebtn-like-button'); ?></a> <small>▼</small>
+                <a href="javascript:likebtnWidgetShortcode('<?php echo esc_attr($widget_mnemonic); ?>', '<?php echo esc_attr($this->shortcode); ?>', '<?php _e('Please save widget first', 'likebtn-like-button'); ?>')"><?php _e('Get shortcode', 'likebtn-like-button'); ?></a> <small>▼</small>
             </p>
-            <p id="likebtn_sc_wr_<?php echo $widget_mnemonic; ?>" class="likebtn_sc_wr">
-                <textarea class="likebtn_input likebtn_disabled" rows="5" id="likebtn_sc_<?php echo $widget_mnemonic; ?>" readonly="readonly"></textarea>
+            <p id="likebtn_sc_wr_<?php echo esc_attr($widget_mnemonic); ?>" class="likebtn_sc_wr">
+                <textarea class="likebtn_input likebtn_disabled" rows="5" id="likebtn_sc_<?php echo esc_attr($widget_mnemonic); ?>" readonly="readonly"></textarea>
             </p>
         </div>
         <script type="text/javascript">
             jQuery(document).ready(function() {
-                jQuery("#likebtn_widget_<?php echo $widget_mnemonic ?> :input").on("keyup change", function(event) {
-                    likebtnWidgetShortcode('<?php echo $widget_mnemonic ?>', '<?php echo $this->shortcode; ?>', '<?php _e('Please save widget first', 'likebtn-like-button'); ?>', true);
+                jQuery("#likebtn_widget_<?php echo esc_attr($widget_mnemonic) ?> :input").on("keyup change", function(event) {
+                    likebtnWidgetShortcode('<?php echo esc_attr($widget_mnemonic) ?>', '<?php echo esc_attr($this->shortcode); ?>', '<?php _e('Please save widget first', 'likebtn-like-button'); ?>', true);
                 });
-                jQuery("#likebtn_widget_<?php echo $widget_mnemonic ?> select.likebtn_include_categories:first").select2();
-                jQuery("#likebtn_widget_<?php echo $widget_mnemonic ?> select.likebtn_exclude_categories:first").select2();
+                jQuery("#likebtn_widget_<?php echo esc_attr($widget_mnemonic) ?> select.likebtn_include_categories:first").select2();
+                jQuery("#likebtn_widget_<?php echo esc_attr($widget_mnemonic) ?> select.likebtn_exclude_categories:first").select2();
             });
         </script>
         <?php

@@ -22,7 +22,7 @@
 
                                             <tr>
                                                 <td style="font-family: Arial,sans-serif; font-size: 14px; color: #202020; line-height: 1.6;">
-                                                    <?php echo $content ?>
+                                                    <?php echo likebtn_strip_html($content) ?>
                                                 </td>
                                             </tr>
                                         </table>
@@ -38,7 +38,7 @@
                             <table width="100%" border="0" cellspacing="0" cellpadding="0" style="min-width: 332px; max-width:600px; font-family: Arial,sans-serif; font-size: 12px; color: #bcbcbc; line-height: 2;">
                                 <tr height="16px">
                                     <td>
-                                        <a href="<?php echo $siteurl; ?>" style="color:#bcbcbc;text-decoration:underline"><?php echo $blogname ?></a>
+                                        <a href="<?php echo esc_attr($siteurl); ?>" style="color:#bcbcbc;text-decoration:underline"><?php echo esc_html($blogname) ?></a>
                                     </td>
                                 </tr>
                             </table>

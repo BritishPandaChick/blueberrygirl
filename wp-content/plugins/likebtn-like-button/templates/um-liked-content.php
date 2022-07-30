@@ -21,7 +21,7 @@ if ( !defined('ABSPATH') )
                 <?php else: ?>
                     <i class="um-icon-ios-paper"></i>
                 <?php endif ?>
-                <a href="<?php echo $post['link'] ?>"><?php echo $post['title'] ?></a>
+                <a href="<?php echo esc_attr($post['link']) ?>"><?php echo esc_html($post['title']) ?></a>
             </div>
             <div class="um-item-meta">
                 <span><?php echo date_i18n(get_option('date_format'), strtotime($post['vote_date'])) ?></span>

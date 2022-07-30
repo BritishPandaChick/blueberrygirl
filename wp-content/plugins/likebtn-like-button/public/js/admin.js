@@ -58,7 +58,10 @@ jQuery(document).ready(function(jQuery) {
 
     // Poll
     if (typeof(likebtn_msg_feedback_sent) != "undefined" && likebtn_msg_feedback_sent == 0) {
-        var a = jQuery(".plugins .active[data-slug='likebtn-like-button'] .deactivate a:first");
+        var a = jQuery(".plugins .active[data-slug='like-button-rating-%e2%99%a5-likebtn'] .deactivate a:first");
+        if (!a) {
+            a = jQuery(".plugins .active[data-slug='likebtn-like-button'] .deactivate a:first");
+        }
         if (!a) {
             a = jQuery(".plugins #likebtn-like-button.active .deactivate a:first");
         }
@@ -71,6 +74,7 @@ jQuery(document).ready(function(jQuery) {
 
 function deactivatePoll(event, href)
 {
+    alert('deactivatePoll');
     var dialog_exists = true;
     if (event) {
         event.preventDefault();
@@ -183,6 +187,7 @@ function deactivatePoll(event, href)
                     data.push({'name':'version', 'value':likebtn_msg_version});
                     data.push({'name':'locale', 'value':likebtn_msg_locale});
                     data.push({'name':'decision', 'value':decision});
+                    data.push({'name':'nonce', 'value':likebtn_msg_nonce});
 
                     jQuery.ajax({
                         type: 'POST',
@@ -310,7 +315,7 @@ function accountChange()
 }
 
 // test synchronization
-function testSync(loader_src)
+function testSync(loader_src, nonce)
 {
     if (jQuery(".likebtn_test_sync_container:first img").size()) {
         return;
@@ -324,6 +329,7 @@ function testSync(loader_src)
         url: ajaxurl,
         data: {
             action: 'likebtn_test_sync',
+            nonce: nonce,
             likebtn_account_email: jQuery(":input[name='likebtn_account_email']:first").val(),
             likebtn_account_api_key: jQuery(":input[name='likebtn_account_api_key']:first").val(),
             likebtn_site_id: jQuery(":input[name='likebtn_site_id']:first").val()
@@ -359,7 +365,7 @@ function testSync(loader_src)
 }
 
 // check account data
-function checkAccount(loader_src)
+function checkAccount(loader_src, nonce)
 {
     if (jQuery(".likebtn_check_account_container:first img").size()) {
         return;
@@ -373,6 +379,7 @@ function checkAccount(loader_src)
         url: ajaxurl,
         data: {
             action: 'likebtn_check_account',
+            nonce: nonce,
             likebtn_account_email: jQuery(":input[name='likebtn_account_email']:first").val(),
             likebtn_account_api_key: jQuery(":input[name='likebtn_account_api_key']:first").val(),
             likebtn_site_id: jQuery(":input[name='likebtn_site_id']:first").val()
@@ -401,7 +408,7 @@ function checkAccount(loader_src)
 }
 
 // full synchronization
-function manualSync(loader_src)
+/*function manualSync(loader_src)
 {
     jQuery(".likebtn_manual_sync_container:first").html('<img src="' + loader_src + '" />');
 
@@ -435,10 +442,10 @@ function manualSync(loader_src)
             jQuery(".likebtn_manual_sync_container:first").html(likebtn_msg_error).css('color', 'red');
         }
     });
-}
+}*/
 
 // System check
-function systemCheck(loader_src)
+function systemCheck(loader_src, nonce)
 {
     jQuery(".likebtn_sc_container:first").html('<img src="' + loader_src + '" />');
 
@@ -447,7 +454,8 @@ function systemCheck(loader_src)
         dataType: "json",
         url: ajaxurl,
         data: {
-            action: 'likebtn_system_check'
+            action: 'likebtn_system_check',
+            nonce: nonce
         },
         success: function(response) {
             var result_text = '';
@@ -473,7 +481,7 @@ function systemCheck(loader_src)
 }
 
 // Send test vote notification
-function sendTestVoteNotification(loader_src)
+function sendTestVoteNotification(loader_src, nonce)
 {
     jQuery(".likebtn_vn_message:first").html('<img src="' + loader_src + '" />');
 
@@ -483,6 +491,7 @@ function sendTestVoteNotification(loader_src)
         url: ajaxurl,
         data: {
             action: 'likebtn_test_vote_notification',
+            nonce: nonce,
             options: {
                 'likebtn_notify_to': jQuery(":input[name='likebtn_notify_to']:first").val(),
                 'likebtn_notify_from': jQuery(":input[name='likebtn_notify_from']:first").val(),
@@ -620,7 +629,7 @@ function statisticsItemsCheckbox(el)
 }
 
 // Edit statistics items
-function statisticsEdit(entity_name, entity_id, type, cur_value, plan, text_enter, text_upgrade, text_error)
+function statisticsEdit(entity_name, entity_id, type, cur_value, plan, text_enter, text_upgrade, text_error, nonce)
 {
     if (entity_name === '' || entity_id === '' || type === '') {
         return false;
@@ -656,7 +665,8 @@ function statisticsEdit(entity_name, entity_id, type, cur_value, plan, text_ente
             entity_name: entity_name,
             entity_id: entity_id,
             type: internal_type,
-            value: value
+            value: value,
+            nonce: nonce
         },
         dataType: "json",
         success: function(data) {
@@ -1088,7 +1098,7 @@ function likebtnScrollPreview()
 }
 
 // Refresh plan
-function refreshPlan(msg_error, msg_success)
+function refreshPlan(msg_error, msg_success, nonce)
 {
     jQuery('#likebtn_refresh_trgr').hide();
     jQuery('#likebtn_refresh_ldr').show();
@@ -1101,7 +1111,8 @@ function refreshPlan(msg_error, msg_success)
         dataType: "json",
         url: ajaxurl,
         data: {
-            action: 'likebtn_refresh_plan'
+            action: 'likebtn_refresh_plan',
+            nonce: nonce
         },
         success: function(response) {
             if (typeof(response.reload) != "undefined" && response.reload) {
@@ -1133,7 +1144,7 @@ function refreshPlan(msg_error, msg_success)
 }
 
 // Switch to FREE plan
-function goFree(msg_text, msg_error, msg_success)
+function goFree(msg_text, msg_error, msg_success, nonce)
 {
     var value = prompt(msg_text);
     if (!value || value.toLowerCase() != 'free') {
@@ -1151,7 +1162,8 @@ function goFree(msg_text, msg_error, msg_success)
         dataType: "json",
         url: ajaxurl,
         data: {
-            action: 'likebtn_go_free'
+            action: 'likebtn_go_free',
+            nonce: nonce
         },
         success: function(response) {
             if (typeof(response.reload) != "undefined" && response.reload) {
@@ -2211,7 +2223,7 @@ function likebtnContactUs()
     likebtnPopup(url, 'contact_us', 600, 600);
 }
 
-function ipviChange(loader_src)
+function ipviChange(loader_src, nonce)
 {
     if (jQuery(".likebtn_ipvi_change_container:first img").size()) {
         return;
@@ -2224,6 +2236,7 @@ function ipviChange(loader_src)
         url: ajaxurl,
         data: {
             action: 'likebtn_ipvi_get',
+            nonce: nonce,
             likebtn_account_email: jQuery(":input[name='likebtn_account_email']:first").val(),
             likebtn_account_api_key: jQuery(":input[name='likebtn_account_api_key']:first").val(),
             likebtn_site_id: jQuery(":input[name='likebtn_site_id']:first").val()

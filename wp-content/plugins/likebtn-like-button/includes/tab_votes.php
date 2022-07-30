@@ -65,9 +65,9 @@ function likebtn_admin_votes() {
     list($query_prepared, $blogs, $votes_blog_id, $entity_name, $post_id, $user_id, $ip, $vote_type, $country) = likebtn_votes_query($query_limit);
 
     // echo "<pre>";
-    // echo $query;
-    // echo $query_prepared;
-    // echo $wpdb->prepare($query, $query_parameters);
+    // echo query;
+    // echo query_prepared;
+    // echo wpdb->prepare($query, $query_parameters);
     // $wpdb->show_errors();
     // exit();
     // Prepare to avoid "Unescaped parameter $query_prepared"
@@ -114,24 +114,24 @@ function likebtn_admin_votes() {
                         <select name="likebtn_entity_name" >
                             <option value="">-- <?php _e('Any', 'likebtn-like-button'); ?> --</option>
                             <?php foreach ($likebtn_entities as $entity_name_value => $entity_title): ?>
-                                <option value="<?php echo $entity_name_value; ?>" <?php selected($entity_name, $entity_name_value); ?> ><?php _e($entity_title, 'likebtn-like-button'); ?></option>
+                                <option value="<?php echo esc_attr($entity_name_value); ?>" <?php selected($entity_name, $entity_name_value); ?> ><?php echo esc_html(__($entity_title, 'likebtn-like-button')); ?></option>
                             <?php endforeach ?>
                         </select>
                     </div>
 
                     <div class="likebtn-form-group">
                         <label><?php _e('Item ID', 'likebtn-like-button'); ?>:</label>
-                        <input type="text" name="likebtn_post_id" value="<?php echo htmlspecialchars($post_id) ?>" size="10" />
+                        <input type="text" name="likebtn_post_id" value="<?php echo esc_attr($post_id) ?>" size="10" />
                     </div>
                     <br/>
                     <div class="likebtn-form-group">
                         <label><?php _e('User ID', 'likebtn-like-button'); ?>:</label>
-                        <input type="text" name="likebtn_user_id" value="<?php echo htmlspecialchars($user_id) ?>" size="10" />
+                        <input type="text" name="likebtn_user_id" value="<?php echo esc_attr($user_id) ?>" size="10" />
                     </div>
                     
                     <div class="likebtn-form-group">
                         <label><?php _e('IP'); ?>:</label>
-                        <input type="text" name="likebtn_ip" value="<?php echo htmlspecialchars($ip) ?>" size="20"/>
+                        <input type="text" name="likebtn_ip" value="<?php echo esc_attr($ip) ?>" size="20"/>
                     </div>
 
                     <?php if (!empty($countries)): ?>
@@ -140,7 +140,7 @@ function likebtn_admin_votes() {
                             <select name="likebtn_country" style="width:160px">
                                 <option value=""></option>
                                 <?php foreach ($countries as $country_code => $country_name): ?>
-                                    <option value="<?php echo $country_code; ?>" <?php selected($country, $country_code); ?> ><?php echo $country_name ?> - <?php echo $country_code; ?></option>
+                                    <option value="<?php echo esc_attr($country_code); ?>" <?php selected($country, $country_code); ?> ><?php echo esc_html($country_name) ?> - <?php echo esc_html($country_code); ?></option>
                                 <?php endforeach ?>
                             </select>
                         </div>
@@ -166,7 +166,7 @@ function likebtn_admin_votes() {
                 <label><?php _e('Site', 'likebtn-like-button'); ?>:</label>
                 <select name="likebtn_blog_id" >
                     <?php foreach ($blogs as $blog_id_value => $blog_title): ?>
-                        <option value="<?php echo $blog_id_value; ?>" <?php selected($votes_blog_id, $blog_id_value); ?> ><?php echo $blog_title; ?></option>
+                        <option value="<?php echo esc_attr($blog_id_value); ?>" <?php selected($votes_blog_id, $blog_id_value); ?> ><?php echo esc_html($blog_title); ?></option>
                     <?php endforeach ?>
                 </select>&nbsp;&nbsp;
             <?php endif ?>
@@ -174,7 +174,7 @@ function likebtn_admin_votes() {
             <label><?php _e('Page Size', 'likebtn-like-button'); ?>:</label>
             <select name="likebtn_page_size" >
                 <?php foreach ($likebtn_page_sizes as $page_size_value): ?>
-                    <option value="<?php echo $page_size_value; ?>" <?php selected($page_size, $page_size_value); ?> ><?php echo $page_size_value ?></option>
+                    <option value="<?php echo esc_attr($page_size_value); ?>" <?php selected($page_size, $page_size_value); ?> ><?php echo esc_html($page_size_value) ?></option>
                 <?php endforeach ?>
 
             </select><br/><br/>
@@ -182,11 +182,11 @@ function likebtn_admin_votes() {
                 <nobr>
                     <input class="button-primary" type="submit" name="show" value="<?php _e('View', 'likebtn-like-button'); ?>" /> 
                     &nbsp;
-                    <?php _e('Votes Found', 'likebtn-like-button'); ?>: <strong><?php echo $total_found ?></strong>
+                    <?php _e('Votes Found', 'likebtn-like-button'); ?>: <strong><?php echo esc_html($total_found) ?></strong>
                 </nobr>
                 <?php if (count($votes) && $p->lastpage > 1): ?>
                     <div class="tablenav-pages">
-                        <?php echo $p->show(); ?>
+                        <?php echo wp_kses_post($p->show()); ?>
                     </div>
                 <?php endif ?>
             </div>
@@ -195,7 +195,7 @@ function likebtn_admin_votes() {
 
         <div class="tablenav">
 
-            <button type="button" class="button-secondary" onclick="likebtnVg('<?php _e('Votes Graph', 'likebtn-like-button'); ?>', '<?php echo get_option('likebtn_plan') ?>')" ><img src="<?php echo _likebtn_get_public_url(); ?>img/graph.png" class="likebtn-btn-img"/> <?php _e('Votes Graph', 'likebtn-like-button'); ?></button>
+            <button type="button" class="button-secondary" onclick="likebtnVg('<?php _e('Votes Graph', 'likebtn-like-button'); ?>', '<?php echo (int)get_option('likebtn_plan') ?>')" ><img src="<?php echo _likebtn_get_public_url(); ?>img/graph.png" class="likebtn-btn-img"/> <?php _e('Votes Graph', 'likebtn-like-button'); ?></button>
 
             <button type="button" class="button-secondary" onclick="likebtnVotesExport('<?php _e('Export to CSV', 'likebtn-like-button'); ?>')"><?php _e('Export to CSV', 'likebtn-like-button'); ?></button>
 
@@ -263,37 +263,37 @@ function likebtn_admin_votes() {
                         }
                     ?>
 
-                    <tr id="vote_<?php echo $votes_item->id; ?>">
-                        <?php /*<td><input type="checkbox" class="item_checkbox" value="<?php echo $votes_item->post_id; ?>" name="item[]" <?php if ($blogs && $votes_item->blog_id != $blog_id): ?>disabled="disabled"<?php endif ?>></td>*/ ?>
+                    <tr id="vote_<?php echo esc_attr($votes_item->id); ?>">
+                        <?php /*<td><input type="checkbox" class="item_checkbox" value="<?php echo votes_item->post_id; ?>" name="item[]" <?php if ($blogs && $votes_item->blog_id != $blog_id): ?>disabled="disabled"<?php endif ?>></td>*/ ?>
                         <?php if ($blogs && $votes_blog_id == 'all'): ?>
                             <td><?php echo get_blog_option($votes_item->blog_id, 'blogname') ?></td>
                         <?php endif ?>
                         <?php if ($avatar_url): ?>
                             <td width="32">
-                                <a href="<?php echo $user_url ?>" target="_blank"><img src="<?php echo $avatar_url; ?>" width="32" height="32" /></a>
+                                <a href="<?php echo esc_attr($user_url) ?>" target="_blank"><img src="<?php echo esc_attr($avatar_url); ?>" width="32" height="32" /></a>
                             </td>
                         <?php endif ?>
                         <td <?php if (!$avatar_url): ?>colspan="2"<?php endif ?>>
                             <?php if ($user_name): ?>
-                                <a href="<?php echo $user_url ?>" target="_blank"><?php echo $user_name; ?></a>
+                                <a href="<?php echo esc_attr($user_url) ?>" target="_blank"><?php echo esc_html($user_name); ?></a>
                             <?php else: ?>
                                 <?php echo __('Anonymous', 'likebtn-like-button'); ?>
                             <?php endif ?>
                         </td>
                         <td>
                             <?php if (likebtn_is_real_ip($votes_item->ip)): ?>
-                                <a href="javascript:likebtnIpInfo('<?php echo $votes_item->ip; ?>');" class="likebtn_ttip" title="<?php _e('View IP info', 'likebtn-like-button') ?>"><?php echo $votes_item->ip; ?></a>
+                                <a href="javascript:likebtnIpInfo('<?php echo esc_attr($votes_item->ip); ?>');" class="likebtn_ttip" title="<?php _e('View IP info', 'likebtn-like-button') ?>"><?php echo esc_html($votes_item->ip); ?></a>
                             <?php else: ?>
-                                <a href="<?php echo admin_url() ?>admin.php?page=likebtn_settings#gdpr" class="likebtn_ttip" title="<?php _e('Viewing info for this IP is not available as GDPR compliance mode is enabled (click to change)', 'likebtn-like-button') ?>" target="blank"><?php echo $votes_item->ip; ?></a>
+                                <a href="<?php echo admin_url() ?>admin.php?page=likebtn_settings#gdpr" class="likebtn_ttip" title="<?php _e('Viewing info for this IP is not available as GDPR compliance mode is enabled (click to change)', 'likebtn-like-button') ?>" target="blank"><?php echo esc_html($votes_item->ip); ?></a>
                             <?php endif ?>
                         </td>
                         <td><?php echo date("Y.m.d H:i:s", strtotime($votes_item->created_at)); ?></td>
                         <td>
-                            <img src="<?php echo _likebtn_get_public_url()?>img/thumb/<?php echo $entity_vote_type; ?>.png" alt="<?php _e(ucfirst($entity_vote_type), 'likebtn-like-button') ?>" title="<?php _e(ucfirst($entity_vote_type), 'likebtn-like-button') ?>" class="likebtn_ttip" />
+                            <img src="<?php echo _likebtn_get_public_url()?>img/thumb/<?php echo esc_attr($entity_vote_type); ?>.png" alt="<?php esc_attr_e(ucfirst($entity_vote_type), 'likebtn-like-button') ?>" title="<?php esc_attr_e(ucfirst($entity_vote_type), 'likebtn-like-button') ?>" class="likebtn_ttip" />
                         </td>
-                        <td><a href="<?php echo $item_url ?>" target="_blank"><?php echo $item_title; ?></a> 
+                        <td><a href="<?php echo esc_attr($item_url) ?>" target="_blank"><?php echo esc_html($item_title); ?></a> 
                             <?php if ($entity_type_name): ?>
-                                — <?php echo $entity_type_name ?><?php if (isset($entity_info['entity_id'])): ?> (<?php echo $entity_info['entity_id']; ?>)<?php endif ?>
+                                — <?php echo esc_html($entity_type_name) ?><?php if (isset($entity_info['entity_id'])): ?> (<?php echo esc_html($entity_info['entity_id']); ?>)<?php endif ?>
                             <?php endif ?>
                         </td>
                     </tr>
@@ -310,7 +310,7 @@ function likebtn_admin_votes() {
         <?php if (count($votes) && $p->lastpage > 1): ?>
             <div class="tablenav">
                 <div class="tablenav-pages">
-                    <?php echo $p->show(); ?>
+                    <?php echo wp_kses_post($p->show()); ?>
                 </div>
             </div>
         <?php endif ?>
@@ -331,31 +331,31 @@ function likebtn_admin_votes() {
         <table class="widefat">
             <tr>
                 <th><strong>IP</strong></th>
-                <td class="likebtn-ii-ip" width="50%"><img src="<?php echo $loader ?>" /></td>
+                <td class="likebtn-ii-ip" width="50%"><img src="<?php echo esc_attr($loader) ?>" /></td>
             </tr>
             <tr>
                 <th><strong><?php _e('Country', 'likebtn-like-button'); ?></strong></th>
-                <td class="likebtn-ii-country"><img src="<?php echo $loader ?>" /></td>
+                <td class="likebtn-ii-country"><img src="<?php echo esc_attr($loader) ?>" /></td>
             </tr>
             <tr>
                 <th><strong><?php _e('City', 'likebtn-like-button'); ?></strong></th>
-                <td class="likebtn-ii-city"><img src="<?php echo $loader ?>" /></td>
+                <td class="likebtn-ii-city"><img src="<?php echo esc_attr($loader) ?>" /></td>
             </tr>
             <tr>
                 <th><strong><?php _e('Lat/Long', 'likebtn-like-button'); ?></strong></th>
-                <td class="likebtn-ii-latlon"><img src="<?php echo $loader ?>" /></td>
+                <td class="likebtn-ii-latlon"><img src="<?php echo esc_attr($loader) ?>" /></td>
             </tr>
             <tr>
                 <th><strong><?php _e('Postal Code', 'likebtn-like-button'); ?></strong></th>
-                <td class="likebtn-ii-postal"><img src="<?php echo $loader ?>" /></td>
+                <td class="likebtn-ii-postal"><img src="<?php echo esc_attr($loader) ?>" /></td>
             </tr>
             <tr>
                 <th><strong><?php _e('Network', 'likebtn-like-button'); ?></strong></th>
-                <td class="likebtn-ii-network"><img src="<?php echo $loader ?>" /></td>
+                <td class="likebtn-ii-network"><img src="<?php echo esc_attr($loader) ?>" /></td>
             </tr>
             <tr>
                 <th><strong><?php _e('Hostname', 'likebtn-like-button'); ?></strong></th>
-                <td class="likebtn-ii-hostname"><img src="<?php echo $loader ?>" /></td>
+                <td class="likebtn-ii-hostname"><img src="<?php echo esc_attr($loader) ?>" /></td>
             </tr>
         </table>
         <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
@@ -438,7 +438,7 @@ function likebtn_admin_votes() {
                 return false;
             }
 
-            jQuery.getJSON('<?php echo admin_url('admin-ajax.php') ?>?action=likebtn_vgaph&<?php echo $_SERVER['QUERY_STRING'] ?>', function(response) {
+            jQuery.getJSON('<?php echo admin_url('admin-ajax.php') ?>?action=likebtn_vgaph&nonce=<?php echo wp_create_nonce('likebtn_vgaph'); ?>&<?php echo esc_url($_SERVER['QUERY_STRING']) ?>', function(response) {
 
                 if (!response.data) {
                     jQuery(".likebtn-vgraph:visible:first").hide();
@@ -559,7 +559,7 @@ function likebtn_admin_votes() {
             chart.showLoading();
 
             // Load data from server
-            jQuery.getJSON('<?php echo admin_url('admin-ajax.php') ?>?action=likebtn_vgaph&level='+level+'&timestamp='+timestamp+'&<?php echo $_SERVER['QUERY_STRING'] ?>', function(response) {
+            jQuery.getJSON('<?php echo admin_url('admin-ajax.php') ?>?action=likebtn_vgaph&level='+level+'&timestamp='+timestamp+'&nonce=<?php echo wp_create_nonce('likebtn_vgaph'); ?>&<?php echo esc_url($_SERVER['QUERY_STRING']) ?>', function(response) {
 
                 if (response.error_message) {
                     jQuery(".likebtn-vgraph:visible:first").hide().next().html(response.error_message).removeClass('hidden');
@@ -642,7 +642,7 @@ function likebtn_admin_votes() {
     </script>
 
     <div id="likebtn_export" class="likebtn_export hidden">
-        <form action="<?php echo admin_url('admin-ajax.php') ?>?action=likebtn_export_votes&<?php echo $_SERVER['QUERY_STRING'] ?>" method="post" target="_blank">
+        <form action="<?php echo admin_url('admin-ajax.php') ?>?action=likebtn_export_votes&<?php echo esc_url($_SERVER['QUERY_STRING']) ?>" method="post" target="_blank">
             <input type="hidden" name="export" value="1" />
             <input type="hidden" name="nonce" value="<?php echo wp_create_nonce( 'likebtn_export_votes' ); ?>" />
             <strong><?php _e('Data to export', 'likebtn-like-button'); ?>:</strong><br/>

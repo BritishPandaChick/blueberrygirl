@@ -45,11 +45,6 @@ class Updates {
 		aioseo()->access->addCapabilities();
 
 		$oldOptions = get_option( 'aioseop_options' );
-		if ( empty( $oldOptions ) && ! is_network_admin() && ! isset( $_GET['activate-multi'] ) ) {
-			// Sets 30 second transient for welcome screen redirect on activation.
-			aioseo()->core->cache->update( 'activation_redirect', true, 30 );
-		}
-
 		if ( ! empty( $oldOptions['last_active_version'] ) ) {
 			aioseo()->internalOptions->internal->lastActiveVersion = $oldOptions['last_active_version'];
 		}
@@ -150,6 +145,25 @@ class Updates {
 
 		if ( version_compare( $lastActiveVersion, '4.0.0', '>=' ) && version_compare( $lastActiveVersion, '4.2.0', '<' ) ) {
 			$this->migrateDeprecatedRunShortcodesSetting();
+		}
+
+		if ( version_compare( $lastActiveVersion, '4.2.1', '<' ) ) {
+			// Force WordPress to flush the rewrite rules.
+			aioseo()->options->flushRewriteRules();
+
+			Models\Notification::deleteNotificationByName( 'deprecated-filters' );
+			Models\Notification::deleteNotificationByName( 'deprecated-filters-v2' );
+		}
+
+		if ( version_compare( $lastActiveVersion, '4.2.2', '<' ) ) {
+			aioseo()->internalOptions->database->installedTables = '';
+
+			$this->addOptionsColumn();
+			$this->removeTabsColumn();
+			$this->migrateUserContactMethods();
+
+			// Unschedule any static sitemap regeneration actions to remove any that failed and are still in-progress as a result.
+			aioseo()->helpers->unscheduleAction( 'aioseo_static_sitemap_regeneration' );
 		}
 
 		do_action( 'aioseo_run_updates', $lastActiveVersion );
@@ -357,7 +371,7 @@ class Updates {
 	 *
 	 * @return void
 	 */
-	public function disableTwitterUseOgDefault() {
+	protected function disableTwitterUseOgDefault() {
 		if ( aioseo()->core->db->tableExists( 'aioseo_posts' ) ) {
 			$tableName = aioseo()->core->db->db->prefix . 'aioseo_posts';
 			aioseo()->core->db->execute(
@@ -374,7 +388,7 @@ class Updates {
 	 *
 	 * @return void
 	 */
-	public function updateMaxImagePreviewDefault() {
+	protected function updateMaxImagePreviewDefault() {
 		if ( aioseo()->core->db->tableExists( 'aioseo_posts' ) ) {
 			$tableName = aioseo()->core->db->db->prefix . 'aioseo_posts';
 			aioseo()->core->db->execute(
@@ -526,7 +540,7 @@ class Updates {
 	 *
 	 * @return void
 	 */
-	public function accessControlNewCapabilities() {
+	protected function accessControlNewCapabilities() {
 		aioseo()->access->addCapabilities();
 	}
 
@@ -537,7 +551,7 @@ class Updates {
 	 *
 	 * @return void
 	 */
-	public function migrateDynamicSettings() {
+	protected function migrateDynamicSettings() {
 		$rawOptions = $this->getRawOptions();
 		$options    = aioseo()->dynamicOptions->noConflict();
 
@@ -777,9 +791,9 @@ class Updates {
 	 * @return void
 	 */
 	private function removeRevisionRecords() {
-		$postsTableName       = aioseo()->db->prefix . 'posts';
-		$aioseoPostsTableName = aioseo()->db->prefix . 'aioseo_posts';
-		aioseo()->db->execute(
+		$postsTableName       = aioseo()->core->db->prefix . 'posts';
+		$aioseoPostsTableName = aioseo()->core->db->prefix . 'aioseo_posts';
+		aioseo()->core->db->execute(
 			"DELETE FROM `$aioseoPostsTableName`
 			WHERE `post_id` IN (
 				SELECT `ID`
@@ -807,5 +821,65 @@ class Updates {
 		}
 
 		aioseo()->options->searchAppearance->advanced->runShortcodes = true;
+	}
+
+	/**
+	 * Add options column.
+	 *
+	 * @since 4.2.2
+	 *
+	 * @return void
+	 */
+	private function addOptionsColumn() {
+		if ( ! aioseo()->core->db->columnExists( 'aioseo_posts', 'options' ) ) {
+			$tableName = aioseo()->core->db->db->prefix . 'aioseo_posts';
+			aioseo()->core->db->execute(
+				"ALTER TABLE {$tableName}
+				ADD `options` longtext DEFAULT NULL AFTER `limit_modified_date`"
+			);
+
+			// Reset the cache for the installed tables.
+			aioseo()->internalOptions->database->installedTables = '';
+		}
+	}
+
+	/**
+	 * Remove the tabs column as it is unnecessary.
+	 *
+	 * @since 4.2.2
+	 *
+	 * @return void
+	 */
+	protected function removeTabsColumn() {
+		if ( aioseo()->core->db->columnExists( 'aioseo_posts', 'tabs' ) ) {
+			$tableName = aioseo()->core->db->db->prefix . 'aioseo_posts';
+			aioseo()->core->db->execute(
+				"ALTER TABLE {$tableName}
+				DROP tabs"
+			);
+		}
+	}
+
+	/**
+	 * Migrates the user contact methods to the new format.
+	 *
+	 * @since 4.2.2
+	 *
+	 * @return void
+	 */
+	private function migrateUserContactMethods() {
+		$userMetaTableName = aioseo()->core->db->prefix . 'usermeta';
+
+		aioseo()->core->db->execute(
+			"UPDATE `$userMetaTableName`
+			SET `meta_key` = 'aioseo_facebook_page_url'
+			WHERE `meta_key` = 'aioseo_facebook'"
+		);
+
+		aioseo()->core->db->execute(
+			"UPDATE `$userMetaTableName`
+			SET `meta_key` = 'aioseo_twitter_url'
+			WHERE `meta_key` = 'aioseo_twitter'"
+		);
 	}
 }

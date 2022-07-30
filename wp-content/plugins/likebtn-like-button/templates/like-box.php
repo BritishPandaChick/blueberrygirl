@@ -12,13 +12,13 @@ if ( !defined('ABSPATH') )
     <div class="likebtn-likebox">
         <?php if ($text): ?>
             <div class="likebtn-likebox-txt">
-                <?php echo $text; ?>
+                <?php echo wp_kses($text, 'post'); ?>
             </div>
         <?php endif ?>
     	<div class="likebtn-likebox-list">
     	<?php foreach ($user_loop as $user): ?>
     		<div class="likebtn-likebox-user" >
-                <a href="<?php echo $user['url']?>" title="<?php echo $user['name'] ?>" class="likebtn-likebox-lnk"><img width="32" height="32" alt="<?php echo $user['name'] ?>" class="avatar avatar-32 user-<?php echo $user['user_id']?>-avatar gravatar" src="<?php echo $user['avatar']?>"></a>
+                <a href="<?php echo esc_attr($user['url']) ?>" title="<?php echo esc_attr($user['name']) ?>" class="likebtn-likebox-lnk"><img width="32" height="32" alt="<?php echo esc_attr($user['name']) ?>" class="avatar avatar-32 user-<?php echo esc_attr($user['user_id']) ?>-avatar gravatar" src="<?php echo esc_attr($user['avatar']) ?>"></a>
     		</div>
     	<?php endforeach; ?>
     	</div>

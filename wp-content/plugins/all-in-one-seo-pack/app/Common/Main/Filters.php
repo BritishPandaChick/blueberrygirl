@@ -61,7 +61,7 @@ abstract class Filters {
 		add_action( 'dp_duplicate_page', [ $this, 'duplicatePost' ], 10, 2 );
 		add_action( 'woocommerce_product_duplicate_before_save', [ $this, 'scheduleDuplicateProduct' ], 10, 2 );
 
-		add_action( 'init', [ $this, 'removeEmojiScript' ] );
+		add_action( 'admin_init', [ $this, 'removeEmojiScript' ] );
 		add_action( 'init', [ $this, 'resetUserBBPress' ], -1 );
 
 		// Bypass the JWT Auth plugin's unnecessary restrictions. https://wordpress.org/plugins/jwt-auth/
@@ -72,6 +72,11 @@ abstract class Filters {
 		add_action( 'user_register', [ $this, 'clearAuthorsCache' ] );
 
 		add_filter( 'aioseo_public_post_types', [ $this, 'removeFalsePublicPostTypes' ] );
+
+		// Disable Jetpack sitemaps module.
+		if ( aioseo()->options->sitemap->general->enable ) {
+			add_filter( 'jetpack_get_available_modules', [ $this, 'disableJetpackSitemaps' ] );
+		}
 	}
 
 	/**
@@ -300,5 +305,16 @@ abstract class Filters {
 		}
 
 		return array_values( $postTypes );
+	}
+
+	/**
+	 * Disable Jetpack sitemaps module.
+	 *
+	 * @since 4.2.2
+	 */
+	public function disableJetpackSitemaps( $active ) {
+		unset( $active['sitemaps'] );
+
+		return $active;
 	}
 }

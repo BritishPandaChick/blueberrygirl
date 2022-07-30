@@ -61,7 +61,8 @@ class PostSettings {
 			aioseo()->helpers->isScreenBase( 'event-espresso' ) ||
 			aioseo()->helpers->isScreenBase( 'post' ) ||
 			aioseo()->helpers->isScreenBase( 'term' ) ||
-			aioseo()->helpers->isScreenBase( 'edit-tags' )
+			aioseo()->helpers->isScreenBase( 'edit-tags' ) ||
+			aioseo()->helpers->isScreenBase( 'site-editor' )
 		) {
 			$page = null;
 			if (
@@ -72,6 +73,7 @@ class PostSettings {
 			}
 
 			aioseo()->core->assets->load( 'src/vue/standalone/post-settings/main.js', [], aioseo()->helpers->getVueData( $page ) );
+			aioseo()->core->assets->load( 'src/vue/standalone/link-format/main.js', [], aioseo()->helpers->getVueData( $page ) );
 		}
 
 		$screen = get_current_screen();
@@ -357,8 +359,8 @@ class PostSettings {
 				break;
 		}
 
-		$prefix            = aioseo()->db->prefix;
-		$postsTable        = aioseo()->db->db->posts;
+		$prefix            = aioseo()->core->db->prefix;
+		$postsTable        = aioseo()->core->db->db->posts;
 		$clauses['join']  .= " LEFT JOIN {$prefix}aioseo_posts AS aioseo_p ON ({$postsTable}.ID = aioseo_p.post_id) ";
 		$clauses['where'] .= $whereClause;
 

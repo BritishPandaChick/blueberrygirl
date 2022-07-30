@@ -3,7 +3,7 @@
   Plugin Name: Like Button Rating ♥ LikeBtn
   Plugin URI: https://likebtn.com/en/wordpress-like-button-plugin
   Description: Add Like button to posts, pages, comments, WooCommerce, BuddyPress, bbPress, custom post types! Sort content by likes! Get instant stats and insights!
-  Version: 2.6.43
+  Version: 2.6.46
   Text Domain: likebtn-like-button
   Author: LikeBtn
   Author URI: https://likebtn.com
@@ -14,7 +14,7 @@
 // ini_set('error_reporting', E_ALL);
 
 // Plugin version
-define('LIKEBTN_VERSION', '2.6.43');
+define('LIKEBTN_VERSION', '2.6.46');
 // Current DB version
 define('LIKEBTN_DB_VERSION', 20);
 
@@ -1776,6 +1776,7 @@ function likebtn_admin_footer_js()
             var likebtn_msg_pub_url = "<?php echo _likebtn_get_public_url(); ?>";
             var likebtn_msg_feedback_sent = <?php echo (int)get_option('likebtn_feedback_sent'); ?>;
             var likebtn_msg_locale = "<?php echo get_locale(); ?>";
+            var likebtn_msg_nonce = "<?php echo wp_create_nonce('likebtn'); ?>";
 
             var likebtn_msg_website = "<?php echo __('https://likebtn.com/en/', 'likebtn-like-button') ?>";
             var likebtn_msg_d_title = "<?php echo likebtn_esctr_msg(__('Like Button Plugin Deactivation', 'likebtn-like-button')) ?>";
@@ -1798,7 +1799,7 @@ function likebtn_admin_footer_js()
             var likebtn_msg_f_submit1 = "<?php echo likebtn_esctr_msg(__('Submit and Deactivate Plugin', 'likebtn-like-button')) ?>";
             var likebtn_msg_f_submit2 = "<?php echo likebtn_esctr_msg(__('Submit and KEEP plugin active', 'likebtn-like-button')) ?>";
             var likebtn_msg_f_tmp = "<?php echo likebtn_esctr_msg(__('Deactivating for time being', 'likebtn-like-button')) ?>";
-            var likebtn_msg_f_offer1 = "<?php echo likebtn_esctr_msg(strtr(__('Here is your personal <strong style="font-size:20px;">%discount%% OFF</strong> coupon. Enter the code on %a_start%Upgrade%a_end% page and click Apply!', 'likebtn-like-button'), array('%discount%'=>65, '%a_start%'=>'<a href="'.__("https://likebtn.com/en/customer.php/upgrade/", 'likebtn-like-button')."?site_id=".get_option('likebtn_site_id')."&engine=wordpress&add_website=".$_SERVER['SERVER_NAME'].'" target="_blank">', '%a_end%'=>'</a>'))) ?>";
+            var likebtn_msg_f_offer1 = "<?php echo likebtn_esctr_msg(strtr(__('Here is your personal <strong style="font-size:20px;">%discount%% OFF</strong> coupon. Enter the code on %a_start%Upgrade%a_end% page and click Apply!', 'likebtn-like-button'), array('%discount%'=>65, '%a_start%'=>'<a href="'.__("https://likebtn.com/en/customer.php/upgrade/", 'likebtn-like-button')."?site_id=".get_option('likebtn_site_id')."&engine=wordpress&add_website=".esc_attr($_SERVER['SERVER_NAME']).'" target="_blank">', '%a_end%'=>'</a>'))) ?>";
             var likebtn_msg_f_offer2 = "<?php echo __("Enjoy!", 'likebtn-like-button') ?>";
         </script>
     <?php
@@ -1849,11 +1850,9 @@ add_action('admin_head', 'likebtn_admin_head');
 // admin header
 function likebtn_admin_header() {
     $logo_url = _likebtn_get_public_url() . 'img/logo.png';
-    $header = <<<HEADER
-    <div class="wrap" id="likebtn">
-HEADER;
 
-    $header .= '
+    ?>
+    <div class="wrap" id="likebtn">
         <div id="poststuff">
             <div id="post-body" class="metabox-holder columns-2">
                 
@@ -1861,55 +1860,53 @@ HEADER;
                     <div class="meta-box-sortables ui-sortable">
                         <div class="postbox likebtn_logo">
                             <div class="inside likebtn_sidebar_inside">
-                                <a href="https://likebtn.com/en/wordpress-like-button-plugin" target="_blank" title="LikeBtn.com"><img alt="" src="'.$logo_url.'" /></a>
-                                <input type="submit" id="likebtn_contact" value="' . __('Contact Us', 'likebtn-like-button') . '" class="button-primary" onclick="likebtnContactUs()">
+                                <a href="https://likebtn.com/en/wordpress-like-button-plugin" target="_blank" title="LikeBtn.com"><img alt="" src="<?php echo esc_url($logo_url) ?>" /></a>
+                                <input type="submit" id="likebtn_contact" value="<?php echo __('Contact Us', 'likebtn-like-button') ?>" class="button-primary" onclick="likebtnContactUs()">
                             </div>
                         </div>
-                        '.(get_option('likebtn_acc_data_correct') == '1' ?
+                        <?php echo (get_option('likebtn_acc_data_correct') == '1' ?
                             '<div class="postbox">
                                 <h3 class="hndle ui-sortable-handle"><span>' . __('Plan & Features', 'likebtn-like-button') . '</span></h3>
                                 ' . _likebtn_sidebar_plan() . '
                             </div>'
-                            : '').
-                        '<div class="postbox">
-                            <h3 class="hndle ui-sortable-handle"><span>' . __('Synchronization', 'likebtn-like-button') . '</span></h3>
+                            : '') ?>
+                        <div class="postbox">
+                            <h3 class="hndle ui-sortable-handle"><span><?php echo __('Synchronization', 'likebtn-like-button') ?></span></h3>
                             <div class="inside likebtn_sidebar_inside">
-                                ' . _likebtn_sidebar_synchronization() . '
+                                <?php echo _likebtn_sidebar_synchronization() ?>
                             </div>
-                        </div>' .
-                        '<div class="postbox">
-                            <h3 class="hndle ui-sortable-handle"><span>' . __('GDPR Compliance', 'likebtn-like-button') . '</span></h3>
+                        </div>
+                        <div class="postbox">
+                            <h3 class="hndle ui-sortable-handle"><span><?php echo __('GDPR Compliance', 'likebtn-like-button') ?></span></h3>
                             <div class="inside likebtn_sidebar_inside">
-                                <center><a href="'.admin_url() . 'admin.php?page=likebtn_settings#gdpr" style="display:block"><img src="'._likebtn_get_public_url().'img/gdpr_ready.jpg" style="max-width:45%"/></a></center>
+                                <center><a href="<?php echo admin_url() ?>admin.php?page=likebtn_settings#gdpr" style="display:block"><img src="<?php echo _likebtn_get_public_url() ?>img/gdpr_ready.jpg" style="max-width:45%"/></a></center>
                             </div>
-                        </div>' .
-                        ($_GET['page'] == 'likebtn_buttons' ? 
+                        </div>
+                        <?php echo ($_GET['page'] == 'likebtn_buttons' ? 
                         '<div class="postbox">
                             <h3 class="hndle ui-sortable-handle"><span>' . __('Referral Program', 'likebtn-like-button') . '</span></h3>
                             <div class="inside likebtn_sidebar_inside">
                                 ' . _likebtn_sidebar_rp() . '
                             </div>
-                        </div>' : '') .
-                    '</div>
+                        </div>' : '') ?>
+                    </div>
                 </div>
                 <div id="postbox-container-2" class="postbox-container">
                     <h1 class="nav-tab-wrapper">
-                        <a class="nav-tab ' . ($_GET['page'] == 'likebtn_buttons' ? 'nav-tab-active' : '') . '" href="' . admin_url() . 'admin.php?page=likebtn_buttons">' . __('Buttons', 'likebtn-like-button') . '</a>
-                        <a class="nav-tab ' . ($_GET['page'] == 'likebtn_settings' ? 'nav-tab-active' : '') . '" href="' . admin_url() . 'admin.php?page=likebtn_settings">' . __('Settings', 'likebtn-like-button') . '</a>
-                        <a class="nav-tab ' . ($_GET['page'] == 'likebtn_statistics' ? 'nav-tab-active' : '') . '" href="' . admin_url() . 'admin.php?page=likebtn_statistics">' . __('Statistics', 'likebtn-like-button') . '</a>
-                        <a class="nav-tab ' . ($_GET['page'] == 'likebtn_votes' ? 'nav-tab-active' : '') . '" href="' . admin_url() . 'admin.php?page=likebtn_votes">' . __('Votes', 'likebtn-like-button') . '</a>
-                        <a class="nav-tab ' . ($_GET['page'] == 'likebtn_reports' ? 'nav-tab-active' : '') . '" href="' . admin_url() . 'admin.php?page=likebtn_reports">' . __('Reports', 'likebtn-like-button') . '</a>
-                        <a class="nav-tab ' . ($_GET['page'] == 'likebtn_widget' ? 'nav-tab-active' : '') . '" href="' . admin_url() . 'admin.php?page=likebtn_widget">' . __('Widgets', 'likebtn-like-button') . '</a>
-                        <a class="nav-tab ' . ($_GET['page'] == 'likebtn_help' ? 'nav-tab-active' : '') . '" href="' . admin_url() . 'admin.php?page=likebtn_help">' . __('Help') . '</a>';
+                        <a class="nav-tab <?php echo ($_GET['page'] == 'likebtn_buttons' ? 'nav-tab-active' : '') ?>" href="<?php echo admin_url() ?>admin.php?page=likebtn_buttons"><?php echo __('Buttons', 'likebtn-like-button') ?></a>
+                        <a class="nav-tab <?php echo ($_GET['page'] == 'likebtn_settings' ? 'nav-tab-active' : '') ?>" href="<?php echo admin_url() ?>admin.php?page=likebtn_settings"><?php echo __('Settings', 'likebtn-like-button') ?></a>
+                        <a class="nav-tab <?php echo ($_GET['page'] == 'likebtn_statistics' ? 'nav-tab-active' : '') ?>" href="<?php echo admin_url() ?>admin.php?page=likebtn_statistics"><?php echo __('Statistics', 'likebtn-like-button') ?></a>
+                        <a class="nav-tab <?php echo ($_GET['page'] == 'likebtn_votes' ? 'nav-tab-active' : '') ?>" href="<?php echo admin_url() ?>admin.php?page=likebtn_votes"><?php echo __('Votes', 'likebtn-like-button') ?></a>
+                        <a class="nav-tab <?php echo ($_GET['page'] == 'likebtn_reports' ? 'nav-tab-active' : '') ?>" href="<?php echo admin_url() ?>admin.php?page=likebtn_reports"><?php echo __('Reports', 'likebtn-like-button') ?></a>
+                        <a class="nav-tab <?php echo ($_GET['page'] == 'likebtn_widget' ? 'nav-tab-active' : '') ?>" href="<?php echo admin_url() ?>admin.php?page=likebtn_widget"><?php echo __('Widgets', 'likebtn-like-button') ?></a>
+                        <a class="nav-tab <?php echo ($_GET['page'] == 'likebtn_help' ? 'nav-tab-active' : '') ?>" href="<?php echo admin_url() ?>admin.php?page=likebtn_help"><?php echo __('Help') ?></a>
+    </h1>
+    <div id="likebtn_content">
 
-    $header .= '</h1>';
-    $header .= '<div id="likebtn_content">';
-
-    if (get_option('likebtn_acc_data_correct') != '1' && $_GET['page'] != 'likebtn_settings' && $_GET['page'] != 'likebtn_help') {
-        $header .= '<div class="likebtn_overlay"></div>';
-    }
-
-    echo $header;
+    <?php if (get_option('likebtn_acc_data_correct') != '1' && $_GET['page'] != 'likebtn_settings' && $_GET['page'] != 'likebtn_help'): ?>
+        <div class="likebtn_overlay"></div>
+    <?php endif ?>
+    <?php
 }
 
 // admin side panel and footer
@@ -1926,14 +1923,14 @@ function _likebtn_admin_footer()
         <?php if (get_option('likebtn_js')): ?>
             <!-- LikeBtn.com Custom JS BEGIN -->
             <script type="text/javascript">
-                <?php echo get_option('likebtn_js'); ?>
+                <?php echo likebtn_strip_js(get_option('likebtn_js')); ?>
             </script>
             <!-- LikeBtn.com Custom JS END -->
         <?php endif ?>
         <?php if (get_option('likebtn_css')): ?>
             <!-- LikeBtn.com Custom CSS BEGIN -->
             <style type="text/css">
-                <?php echo get_option('likebtn_css'); ?>
+                <?php echo likebtn_strip_css(get_option('likebtn_css')); ?>
             </style>
             <!-- LikeBtn.com Custom CSS END -->
         <?php endif ?>
@@ -1958,7 +1955,7 @@ function _likebtn_sidebar_plan()
                 '._likebtn_plan_html();
 
     if ($plan_synced && $likebtn_plan == LIKEBTN_PLAN_TRIAL) {
-        $html .= ' <a href="javascript:goFree(\''.__('If you want to finish your TRIAL now please type «FREE» to switch to the FREE plan', 'likebtn-like-button').'\', \''.__('Error occured, please try again later.', 'likebtn-like-button').'\', \''.__('Plan data refreshed', 'likebtn-like-button').'\');void(0);">'.__('Switch to FREE now', 'likebtn-like-button').'</a>';
+        $html .= ' <a href="javascript:goFree(\''.__('If you want to finish your TRIAL now please type «FREE» to switch to the FREE plan', 'likebtn-like-button').'\', \''.__('Error occured, please try again later.', 'likebtn-like-button').'\', \''.__('Plan data refreshed', 'likebtn-like-button').'\', \''.wp_create_nonce('likebtn_go_free').'\');void(0);">'.__('Switch to FREE now', 'likebtn-like-button').'</a>';
     }
 
     $html .= '
@@ -1974,7 +1971,7 @@ function _likebtn_sidebar_plan()
             <div class="likebtn_sidebar_div"></div>
             <div id="likebtn_trial_info" class="likebtn_sidebar_section">
                 <a href="javascript:jQuery(\'#likebtn_trial_help\').toggle();void(0);">'.__('What is TRIAL?', 'likebtn-like-button').'</a>
-                <div id="likebtn_trial_help" style="display:none"><br/>'.strtr(__('During the TRIAL period you can enjoy ULTRA features for 7 days. After TRIAL expires your website is switched to the %a_begin%FREE%a_end% plan (all the votes will be kept!) and you can continue using FREE plan or go Premium.', 'likebtn-like-button'), array('%a_begin%'=>'<a href="javascript:likebtnPopup(\''.__('https://likebtn.com/en/customer.php/upgrade/', 'likebtn-like-button').'?site_id='.get_option('likebtn_site_id').'&engine=wordpress&add_website='.$_SERVER['SERVER_NAME'].'\');void(0);">', '%a_end%'=>'</a>')).'</div>
+                <div id="likebtn_trial_help" style="display:none"><br/>'.strtr(__('During the TRIAL period you can enjoy ULTRA features for 7 days. After TRIAL expires your website is switched to the %a_begin%FREE%a_end% plan (all the votes will be kept!) and you can continue using FREE plan or go Premium.', 'likebtn-like-button'), array('%a_begin%'=>'<a href="javascript:likebtnPopup(\''.__('https://likebtn.com/en/customer.php/upgrade/', 'likebtn-like-button').'?site_id='.get_option('likebtn_site_id').'&engine=wordpress&add_website='.esc_attr($_SERVER['SERVER_NAME']).'\');void(0);">', '%a_end%'=>'</a>')).'</div>
             </div>';
     }
 
@@ -2017,12 +2014,12 @@ function _likebtn_sidebar_plan()
     <div class="likebtn_upgrade_container">';
 
     //if ($plan_synced && $likebtn_plan != LIKEBTN_PLAN_ULTRA) {
-        $html .= '<input class="button-secondary likebtn_button_upgrade" type="button" value="'.__('Upgrade', 'likebtn-like-button').'" onclick="likebtnPopup(\''.__('https://likebtn.com/en/customer.php/upgrade/', 'likebtn-like-button').'?site_id='.get_option('likebtn_site_id').'&engine=wordpress&add_website='.$_SERVER['SERVER_NAME'].'\')" /> &nbsp;';
+        $html .= '<input class="button-secondary likebtn_button_upgrade" type="button" value="'.__('Upgrade', 'likebtn-like-button').'" onclick="likebtnPopup(\''.__('https://likebtn.com/en/customer.php/upgrade/', 'likebtn-like-button').'?site_id='.get_option('likebtn_site_id').'&engine=wordpress&add_website='.esc_attr($_SERVER['SERVER_NAME']).'\')" /> &nbsp;';
     //}
     if ($plan_synced && $likebtn_plan != LIKEBTN_PLAN_FREE && $likebtn_plan != LIKEBTN_PLAN_TRIAL) {
-        $html .= '<small><a href="javascript:likebtnPopup(\''.__('https://likebtn.com/en/customer.php/upgrade/', 'likebtn-like-button').'?site_id='.get_option('likebtn_site_id').'&prolong=1&engine=wordpress&add_website='.$_SERVER['SERVER_NAME'].'\');void(0);">'.__('Renew Plan', 'likebtn-like-button').'</a></small>';
+        $html .= '<small><a href="javascript:likebtnPopup(\''.__('https://likebtn.com/en/customer.php/upgrade/', 'likebtn-like-button').'?site_id='.get_option('likebtn_site_id').'&prolong=1&engine=wordpress&add_website='.esc_attr($_SERVER['SERVER_NAME']).'\');void(0);">'.__('Renew Plan', 'likebtn-like-button').'</a></small>';
     } else {
-        $html .= '<small><a href="javascript:likebtnPopup(\''.__('https://likebtn.com/en/customer.php/upgrade/', 'likebtn-like-button').'?site_id='.get_option('likebtn_site_id').'&engine=wordpress&add_website='.$_SERVER['SERVER_NAME'].'\');void(0);">'.__('Plans & Pricing', 'likebtn-like-button').'</a></small>';
+        $html .= '<small><a href="javascript:likebtnPopup(\''.__('https://likebtn.com/en/customer.php/upgrade/', 'likebtn-like-button').'?site_id='.get_option('likebtn_site_id').'&engine=wordpress&add_website='.esc_attr($_SERVER['SERVER_NAME']).'\');void(0);">'.__('Plans & Pricing', 'likebtn-like-button').'</a></small>';
     }
     $html .= '</div>';
 
@@ -2066,32 +2063,10 @@ function _likebtn_sidebar_synchronization()
     return $html;
 }
 
-// sidebar social
-function _likebtn_sidebar_social()
-{
-    $html =<<<HTML
-<div class="likebtn_social">
-    <iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2FLikeBtn.LikeButton&amp;width&amp;layout=button_count&amp;action=like&amp;show_faces=false&amp;share=false&amp;height=21&amp;appId=192115980991078" scrolling="no" frameborder="0" style="border:none; overflow:hidden; height:21px; width:110px;" allowTransparency="true"></iframe>
-</div>
-<div class="likebtn_social">
-    <a href="https://twitter.com/likebtn" class="twitter-follow-button" data-show-count="true" data-show-screen-name="false" data-width="144px"></a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-</div>
-HTML;
-
-    return $html;
-}
-
 // sidebar Referral Program
 function _likebtn_sidebar_rp()
 {
-    $public_url = _likebtn_get_public_url();
-    $title = __('Earn Money With LikeBtn!', 'likebtn-like-button');
-    $href = "javascript:likebtnPopup('".__('https://likebtn.com/en/', 'likebtn-like-button')."referral-program');void(0)";
-
-    $html =<<<HTML
-<center><a href="{$href}" class="likebtn_ttip" title="{$title}" style="display:block"><img src="{$public_url}img/rp.png" style="max-width:60%"/></a></center>
-HTML;
+    $html = '<center><a href="javascript:likebtnPopup(\''.__('https://likebtn.com/en/', 'likebtn-like-button').'referral-program\');void(0)" class="likebtn_ttip" title="'.__('Earn Money With LikeBtn!', 'likebtn-like-button').'" style="display:block"><img src="'._likebtn_get_public_url().'img/rp.png" style="max-width:60%"/></a></center>';
 
     return $html;
 }
@@ -2109,12 +2084,12 @@ function _likebtn_plan_html() {
 
     $likebtn_plan = get_option('likebtn_plan');
 
-    $refresh_html = ' <img src="'._likebtn_get_public_url().'img/refresh.gif" class="likebtn_refresh likebtn_ttip" onclick="refreshPlan(\''.__('Error occured, please try again later.', 'likebtn-like-button').__('Disable WP HTTP Compression plugin if you have it enabled.', 'likebtn-like-button').'\', \''.__('Plan data refreshed', 'likebtn-like-button').'\')" title="'.__('Sync Plan', 'likebtn-like-button').'" id="likebtn_refresh_trgr"/>
+    $refresh_html = ' <img src="'._likebtn_get_public_url().'img/refresh.gif" class="likebtn_refresh likebtn_ttip" onclick="refreshPlan(\''.__('Error occured, please try again later.', 'likebtn-like-button').__('Disable WP HTTP Compression plugin if you have it enabled.', 'likebtn-like-button').'\', \''.__('Plan data refreshed', 'likebtn-like-button').'\', \''.wp_create_nonce('likebtn_refresh_plan').'\')" title="'.__('Sync Plan', 'likebtn-like-button').'" id="likebtn_refresh_trgr"/>
             <img src="'._likebtn_get_public_url().'img/refresh_loader.gif" class="likebtn_refresh likebtn_refresh_loader likebtn_ttip" style="display:none" title="'.__('Please wait...', 'likebtn-like-button').'" id="likebtn_refresh_ldr"/> 
             <small class="likebtn_success" id="likebtn_refresh_success" style="display:none"></small>';
 
     if (isset($likebtn_plans[$likebtn_plan]) && $plan_synced) {
-        // <a href="javascript: likebtnPopup(\''.__('http://likebtn.com/en/', 'likebtn-like-button').'?add_website='.$_SERVER['SERVER_NAME'].'#plans_pricing\'); void(0)" class="likebtn_ttip" title="'.__('Plans & Pricing', 'likebtn-like-button').'"><strong>'.$likebtn_plans[$likebtn_plan].'</strong></a>
+        // <a href="javascript: likebtnPopup(\''.__('http://likebtn.com/en/', 'likebtn-like-button').'?add_website='.esc_attr($_SERVER['SERVER_NAME']).'#plans_pricing\'); void(0)" class="likebtn_ttip" title="'.__('Plans & Pricing', 'likebtn-like-button').'"><strong>'.$likebtn_plans[$likebtn_plan].'</strong></a>
         $plan_html = '<strong>'.$likebtn_plans[$likebtn_plan].'</strong>'.$refresh_html;
 
         if ($likebtn_plan != LIKEBTN_PLAN_FREE) {
@@ -2196,7 +2171,7 @@ function _likebtn_notice($msg, $class = 'updated')
     // wp_kses($msg, 'post') does not work, as this should be able to output JS.
     ?>
     <div class="<?php echo esc_attr($class); ?> notice likebtn_notice">
-        <p><?php echo $msg; ?></p>
+        <p><?php echo likebtn_strip_html($msg); ?></p>
     </div>
     <?php
 }
@@ -2571,12 +2546,12 @@ function likebtn_admin_init()
     }
 
     // Poll
-    $script = basename($_SERVER['REQUEST_URI']);
+    $script = basename(sanitize_text_field($_SERVER['REQUEST_URI']));
     if (!$script) {
-        $script = basename($_SERVER['SCRIPT_NAME']);
+        $script = basename(sanitize_text_field($_SERVER['SCRIPT_NAME']));
     }
     if (!$script) {
-        $script = basename($_SERVER['SCRIPT_FILENAME']);
+        $script = basename(sanitize_text_field($_SERVER['SCRIPT_FILENAME']));
     }
     $script = preg_replace("/\?.*/", '', $script);
 
@@ -2659,7 +2634,7 @@ function likebtn_admin_statistics() {
             <nobr><label><?php _e('Item Type', 'likebtn-like-button'); ?>:</label>
             <select name="likebtn_entity_name" >
                 <?php foreach ($likebtn_entities as $entity_name_value => $entity_title): ?>
-                    <option value="<?php echo esc_attr($entity_name_value); ?>" <?php selected($entity_name, $entity_name_value); ?> ><?php _e($entity_title, 'likebtn-like-button'); ?></option>
+                    <option value="<?php echo esc_attr($entity_name_value); ?>" <?php selected($entity_name, $entity_name_value); ?> ><?php echo esc_html(__($entity_title, 'likebtn-like-button')); ?></option>
                 <?php endforeach ?>
             </select></nobr>
 
@@ -2676,16 +2651,16 @@ function likebtn_admin_statistics() {
                 <?php /*<h3><?php _e('Filter', 'likebtn-like-button'); ?></h3>*/ ?>
                 <div class="inside">
                     <label><?php _e('ID', 'likebtn-like-button'); ?>:</label>
-                    <input type="text" name="likebtn_post_id" value="<?php echo htmlspecialchars($post_id) ?>" size="5" />
+                    <input type="text" name="likebtn_post_id" value="<?php echo esc_attr($post_id) ?>" size="5" />
                     &nbsp;&nbsp;
                     <label><?php _e('Title'); ?>:</label>
-                    <input type="text" name="likebtn_post_title" value="<?php echo htmlspecialchars($post_title) ?>" size="25"/>
+                    <input type="text" name="likebtn_post_title" value="<?php echo esc_attr($post_title) ?>" size="25"/>
                     &nbsp;&nbsp;
                     <label><?php _e('Status', 'likebtn-like-button'); ?>:</label>
                     <select name="likebtn_post_status" >
                         <option value=""></option>
                         <?php foreach ($likebtn_post_statuses as $post_status_value => $post_status_title): ?>
-                            <option value="<?php echo esc_attr($post_status_value); ?>" <?php selected($post_status, $post_status_value); ?> ><?php echo _e($post_status_title) ?></option>
+                            <option value="<?php echo esc_attr($post_status_value); ?>" <?php selected($post_status, $post_status_value); ?> ><?php echo esc_html(__($post_status_title)) ?></option>
                         <?php endforeach ?>
                     </select>
 
@@ -2704,11 +2679,11 @@ function likebtn_admin_statistics() {
             <input type="hidden" name="bulk_action" value="" id="stats_bulk_action" />
         <?php if (count($statistics) && $p->total_pages > 0): ?>
             <div class="tablenav">
-                <input type="button" class="button-secondary likebtn_ttip" onclick="likebtnStatsBulkAction('reset', '<?php echo get_option('likebtn_plan') ?>', '<?php _e("The votes count can not be recovered after resetting. Are you sure you want to reset likes and dislikes for the selected item(s)?", 'likebtn-like-button'); ?>')" value="<?php _e('Reset', 'likebtn-like-button'); ?>" title="<?php _e('Set to zero number of likes and dislikes for selected items', 'likebtn-like-button'); ?>">
+                <input type="button" class="button-secondary likebtn_ttip" onclick="likebtnStatsBulkAction('reset', '<?php echo (int)get_option('likebtn_plan') ?>', '<?php _e("The votes count can not be recovered after resetting. Are you sure you want to reset likes and dislikes for the selected item(s)?", 'likebtn-like-button'); ?>')" value="<?php _e('Reset', 'likebtn-like-button'); ?>" title="<?php _e('Set to zero number of likes and dislikes for selected items', 'likebtn-like-button'); ?>">
                 
-                <input type="button" class="button-secondary likebtn_ttip" onclick="likebtnStatsBulkAction('delete', '<?php echo get_option('likebtn_plan') ?>', '<?php _e("The votes count can not be recovered after deleting. Are you sure you want to delete selected item(s) from statistics?", 'likebtn-like-button'); ?>')" value="<?php _e('Delete', 'likebtn-like-button'); ?>" title="<?php _e('Delete selected items from statistics: no posts, pages, comments, etc will be deleted, just their votes will be deleted from statistics', 'likebtn-like-button'); ?>">
+                <input type="button" class="button-secondary likebtn_ttip" onclick="likebtnStatsBulkAction('delete', '<?php echo (int)get_option('likebtn_plan') ?>', '<?php _e("The votes count can not be recovered after deleting. Are you sure you want to delete selected item(s) from statistics?", 'likebtn-like-button'); ?>')" value="<?php _e('Delete', 'likebtn-like-button'); ?>" title="<?php _e('Delete selected items from statistics: no posts, pages, comments, etc will be deleted, just their votes will be deleted from statistics', 'likebtn-like-button'); ?>">
 
-                <input type="button" class="button-secondary likebtn_ttip" onclick="likebtnStatsExport('<?php echo get_option('likebtn_plan') ?>')" value="<?php _e('Export to CSV', 'likebtn-like-button'); ?>" title="<?php _e('Export current statistics to CSV', 'likebtn-like-button'); ?>">
+                <input type="button" class="button-secondary likebtn_ttip" onclick="likebtnStatsExport('<?php echo (int)get_option('likebtn_plan') ?>')" value="<?php _e('Export to CSV', 'likebtn-like-button'); ?>" title="<?php _e('Export current statistics to CSV', 'likebtn-like-button'); ?>">
 
                 <div class="tablenav-pages">
                     <?php echo esc_html($p->show()); ?>
@@ -2838,14 +2813,14 @@ function likebtn_admin_statistics() {
                             <?php if ($blogs && (int)$statistics_item->blog_id != 0 && $statistics_item->blog_id != $blog_id): ?>
                                 <?php echo esc_html($statistics_item->likes); ?>
                             <?php else: ?>
-                                <a href="javascript:statisticsEdit('<?php echo esc_attr($entity_name) ?>', '<?php echo esc_attr($statistics_item->post_id); ?>', 'like', '<?php echo esc_attr($statistics_item->likes); ?>', '<?php echo esc_attr(get_option('likebtn_plan')); ?>', '<?php _e('Enter new value:', 'likebtn-like-button') ?>', '<?php _e('Upgrade your website plan to the ULTRA plan to use the feature', 'likebtn-like-button') ?>', '<?php _e('Error occured. Please, try again later.', 'likebtn-like-button') ?>');void(0);" title="<?php _e('Click to change', 'likebtn-like-button') ?>" class="item_like likebtn_ttip"><?php echo esc_attr($statistics_item->likes); ?></a>
+                                <a href="javascript:statisticsEdit('<?php echo esc_attr($entity_name) ?>', '<?php echo esc_attr($statistics_item->post_id); ?>', 'like', '<?php echo esc_attr($statistics_item->likes); ?>', '<?php echo esc_attr(get_option('likebtn_plan')); ?>', '<?php _e('Enter new value:', 'likebtn-like-button') ?>', '<?php _e('Upgrade your website plan to the ULTRA plan to use the feature', 'likebtn-like-button') ?>', '<?php _e('Error occured. Please, try again later.', 'likebtn-like-button') ?>', '<?php echo  wp_create_nonce('likebtn_edit_item'); ?>');void(0);" title="<?php _e('Click to change', 'likebtn-like-button') ?>" class="item_like likebtn_ttip"><?php echo esc_attr($statistics_item->likes); ?></a>
                             <?php endif ?>
                         </td>
                         <td>
                             <?php if ($blogs && (int)$statistics_item->blog_id != 0 && $statistics_item->blog_id != $blog_id): ?>
                                 <?php echo esc_html($statistics_item->dislikes); ?>
                             <?php else: ?>
-                                <a href="javascript:statisticsEdit('<?php echo esc_attr($entity_name) ?>', '<?php echo esc_attr($statistics_item->post_id); ?>', 'dislike', '<?php echo esc_attr($statistics_item->dislikes); ?>', '<?php echo esc_attr(get_option('likebtn_plan')); ?>', '<?php _e('Enter new value:', 'likebtn-like-button') ?>', '<?php _e('Upgrade your website plan to the ULTRA plan to use the feature', 'likebtn-like-button') ?>', '<?php _e('Error occured. Please, try again later.', 'likebtn-like-button') ?>');void(0);" title="<?php _e('Click to change', 'likebtn-like-button') ?>" class="item_dislike likebtn_ttip"><?php echo esc_attr($statistics_item->dislikes); ?></a>
+                                <a href="javascript:statisticsEdit('<?php echo esc_attr($entity_name) ?>', '<?php echo esc_attr($statistics_item->post_id); ?>', 'dislike', '<?php echo esc_attr($statistics_item->dislikes); ?>', '<?php echo esc_attr(get_option('likebtn_plan')); ?>', '<?php _e('Enter new value:', 'likebtn-like-button') ?>', '<?php _e('Upgrade your website plan to the ULTRA plan to use the feature', 'likebtn-like-button') ?>', '<?php _e('Error occured. Please, try again later.', 'likebtn-like-button') ?>', '<?php echo  wp_create_nonce('likebtn_edit_item'); ?>');void(0);" title="<?php _e('Click to change', 'likebtn-like-button') ?>" class="item_dislike likebtn_ttip"><?php echo esc_attr($statistics_item->dislikes); ?></a>
                             <?php endif ?>
                         </td>
                         <td><?php echo esc_html($statistics_item->likes_minus_dislikes); ?></td>
@@ -3577,10 +3552,15 @@ function _likebtn_bulk_actions()
         return false;
     }
 
+    $items = array();
+    foreach ($_POST['item'] as $item) {
+        $items[] = sanitize_text_field($item);
+    }
+
     switch ($_POST['bulk_action']) {
         case 'reset':
             // $_POST['item'] must be able to contain any symbols
-            $reseted = _likebtn_reset($entity_name, sanitize_text_field($_POST['item']));
+            $reseted = _likebtn_reset($entity_name, $items);
             _likebtn_add_notice(array(
                 'msg' => __('Likes and dislikes for the following number of items have been successfully reseted:', 'likebtn-like-button').' '.$reseted,
             ));
@@ -3588,7 +3568,7 @@ function _likebtn_bulk_actions()
 
         case 'delete':
             // $_POST['item'] must be able to contain any symbols
-            $reseted = _likebtn_delete($entity_name, sanitize_text_field($_POST['item']));
+            $reseted = _likebtn_delete($entity_name, $items);
             _likebtn_add_notice(array(
                 'msg' => __('The following number of items have been successfully deleted:', 'likebtn-like-button').' '.$reseted,
             ));
@@ -3599,7 +3579,7 @@ function _likebtn_bulk_actions()
             break;
     }
 
-    wp_redirect($_SERVER['REQUEST_URI']);
+    wp_redirect(sanitize_url($_SERVER['REQUEST_URI']));
     exit();
 }
 
@@ -4164,17 +4144,17 @@ function _likebtn_get_markup($entity_name, $entity_id, $values = null, $use_enti
     } else {
         $identifier = _likebtn_entity_to_identifier($entity_name, $entity_id);
     }
-    $data = ' data-identifier="' . $identifier . '" ';
+    $data = ' data-identifier="' . esc_attr($identifier) . '" ';
 
     // Site ID
     if (get_option('likebtn_site_id')) {
-        $data .= ' data-site_id="' . get_option('likebtn_site_id') . '" ';
+        $data .= ' data-site_id="' . esc_attr(get_option('likebtn_site_id')) . '" ';
     }
 
     // Authorization check
     if (_likebtn_get_option($use_entity_name, 'likebtn_user_logged_in', $values) == LIKEBTN_USER_LOGGED_IN_MODAL && !is_user_logged_in()) {
         $values['voting_enabled'] = '0';
-        $data .= ' data-clk_modal="' . htmlspecialchars(_likebtn_get_user_logged_in_alert($use_entity_name)) . '" ';
+        $data .= ' data-clk_modal="' . esc_attr(htmlspecialchars(_likebtn_get_user_logged_in_alert($use_entity_name))) . '" ';
     }
 
     if (_likebtn_get_option($use_entity_name, 'likebtn_voting_author', $values) == '1' && get_current_user_id()) {
@@ -4260,7 +4240,6 @@ function _likebtn_get_markup($entity_name, $entity_id, $values = null, $use_enti
     if (!isset($values['group_identifier']) && _likebtn_get_option($use_entity_name, 'likebtn_voting_one', $values)) {
         $values['group_identifier'] = $entity_name;
     }
-    
 
     $likebtn_settings = _likebtn_get_all_settings();
     foreach ($likebtn_settings as $option_name => $option_info) {
@@ -4292,33 +4271,33 @@ function _likebtn_get_markup($entity_name, $entity_id, $values = null, $use_enti
             if ($option_name == 'lang' && $option_value_prepared == 'auto') {
                 $option_value_prepared = likebtn_cur_lang();
             }
-            $data .= ' data-' . $option_name . '="' . $option_value_prepared . '" ';
+            $data .= ' data-' . $option_name . '="' . esc_attr($option_value_prepared) . '" ';
         }
     }
 
     // Add item options
     if ($entity_url && !$prepared_settings['item_url']) {
-        $data .= ' data-item_url="' . $entity_url . '" ';
+        $data .= ' data-item_url="' . esc_attr($entity_url) . '" ';
     }
     if ($entity_title && !$prepared_settings['item_title']) {
         $entity_title = strip_shortcodes($entity_title);
         $entity_title = preg_replace('/\s+/', ' ', $entity_title);
         $entity_title = htmlspecialchars($entity_title);
 
-        $data .= ' data-item_title="' . $entity_title . '" ';
+        $data .= ' data-item_title="' . esc_attr($entity_title) . '" ';
     }
     if ($entity_image && !$prepared_settings['item_image']) {
-        $data .= ' data-item_image="' . $entity_image . '" ';
+        $data .= ' data-item_image="' . esc_attr($entity_image) . '" ';
     }
     if ($entity_date && !$prepared_settings['item_date']) {
-        $data .= ' data-item_date="' . $entity_date . '" ';
+        $data .= ' data-item_date="' . esc_attr($entity_date) . '" ';
     }
 
     // User vote type
     if (_likebtn_get_option($use_entity_name, 'likebtn_voter_by', $values) == LIKEBTN_VOTER_BY_USER) {
         $vt = _likebtn_get_vote_type($identifier, $prepared_settings['voting_frequency']);
         if ($vt) {
-            $data .= ' data-vt="'.$vt.'" ';
+            $data .= ' data-vt="'.esc_attr($vt).'" ';
         }
     }
 
@@ -4327,7 +4306,7 @@ function _likebtn_get_markup($entity_name, $entity_id, $values = null, $use_enti
     //$data .= ' data-engine_v="' . $wp_version . '" ';
     $plugin_v = LIKEBTN_VERSION;
     if ($plugin_v) {
-        $data .= ' data-plugin_v="' . $plugin_v . '" ';
+        $data .= ' data-plugin_v="' . esc_attr($plugin_v) . '" ';
     }
 
     if (get_option('likebtn_acc_data_correct') == '1') {
@@ -4339,7 +4318,7 @@ function _likebtn_get_markup($entity_name, $entity_id, $values = null, $use_enti
             $prx .= '&wpen=' . $entity_name;
         }
 
-        $data .= ' data-prx="' . $prx . '" ';
+        $data .= ' data-prx="' . esc_attr($prx) . '" ';
     }
     // Event handler
     $data .= ' data-event_handler="likebtn_eh" ';
@@ -4353,13 +4332,11 @@ function _likebtn_get_markup($entity_name, $entity_id, $values = null, $use_enti
 
     $widget_url = LIKEBTN_WIDGET_URL;
     if ($include_script) {
-        $markup = <<<MARKUP
-<!-- LikeBtn.com BEGIN --><span class="likebtn-wrapper" {$data}></span><script>(function(d, e, s) {a = d.createElement(e);m = d.getElementsByTagName(e)[0];a.async = 1;a.src = s;m.parentNode.insertBefore(a, m)})(document, 'script', '//{$widget_url}'); if (typeof(LikeBtn) != "undefined") { LikeBtn.init(); }</script><!-- LikeBtn.com END -->
-MARKUP;
+        // $data is prepared and escaped above
+        $markup = '<!-- LikeBtn.com BEGIN --><span class="likebtn-wrapper" '.$data.'></span><script>(function(d, e, s) {a = d.createElement(e);m = d.getElementsByTagName(e)[0];a.async = 1;a.src = s;m.parentNode.insertBefore(a, m)})(document, \'script\', \'//'.esc_attr($widget_url).'\'); if (typeof(LikeBtn) != "undefined") { LikeBtn.init(); }</script><!-- LikeBtn.com END -->';
     } else {
-        $markup = <<<MARKUP
-<!-- LikeBtn.com BEGIN --><span class="likebtn-wrapper" {$data}></span><!-- LikeBtn.com END -->
-MARKUP;
+        // $data is prepared and escaped above
+        $markup = '<!-- LikeBtn.com BEGIN --><span class="likebtn-wrapper" '.$data.'></span><!-- LikeBtn.com END -->';
     }
 
     // HTML before
@@ -4370,7 +4347,7 @@ MARKUP;
         $html_before = get_option('likebtn_html_before_' . $use_entity_name);
     }
     $html_before = apply_filters('likebtn_html_before', $html_before, $entity_name, $entity_id, $values);
-    $markup = $html_before . $markup;
+    $markup = wp_kses($html_before, 'post') . $markup;
 
 
     // HTML after
@@ -4382,7 +4359,7 @@ MARKUP;
     }
 
     $html_after = apply_filters('likebtn_html_after', $html_after, $entity_name, $entity_id, $values);
-    $markup = $markup . $html_after;
+    $markup = $markup . wp_kses($html_after, 'post');
 
     if (($wrap || !empty($values['wrap']) || !empty($values['alignment']) || !empty($values['newline'])) && !is_admin()) {
 
@@ -4400,12 +4377,12 @@ MARKUP;
 
             if ($alignment == LIKEBTN_ALIGNMENT_RIGHT) {
                 $style .= 'text-align:right;';
-                $markup = '<div class="likebtn_container" style="'.$style.'">' . $markup . '</div>';
+                $markup = '<div class="likebtn_container" style="'.esc_attr($style).'">' . $markup . '</div>';
             } elseif ($alignment == LIKEBTN_ALIGNMENT_CENTER) {
                 $style .= 'text-align:center;';
-                $markup = '<div class="likebtn_container" style="'.$style.'">' . $markup . '</div>';
+                $markup = '<div class="likebtn_container" style="'.esc_attr($style).'">' . $markup . '</div>';
             } else {
-                $markup = '<div class="likebtn_container" style="'.$style.'">' . $markup . '</div>';
+                $markup = '<div class="likebtn_container" style="'.esc_attr($style).'">' . $markup . '</div>';
             }
         }
     }
@@ -5028,7 +5005,7 @@ function likebtn_woocommerce($post_id = NULL, $values = null) {
 }
 
 // test synchronization callback
-function likebtn_manual_sync_callback() {
+/*function likebtn_manual_sync_callback() {
 
     if (!(bool)current_user_can('manage_options')) {
         return;
@@ -5074,7 +5051,7 @@ function likebtn_manual_sync_callback() {
     _likebtn_send_json($response);
 }
 
-add_action('wp_ajax_likebtn_manual_sync', 'likebtn_manual_sync_callback');
+add_action('wp_ajax_likebtn_manual_sync', 'likebtn_manual_sync_callback');*/
 
 // System check
 function likebtn_system_check() {
@@ -5085,40 +5062,49 @@ function likebtn_system_check() {
         'result_text' => ''
     );
 
-    require_once(dirname(__FILE__) . '/likebtn_like_button.class.php');
-    $likebtn = new LikeBtnLikeButton();
+    if (!(bool)current_user_can( 'manage_options' )
+        || !isset($_POST['nonce'])
+        || !wp_verify_nonce($_POST['nonce'], 'likebtn_system_check')
+    ) {
+        $response['result'] = 'error';
+        $response['result_text'] = __("Not allowed", 'likebtn-like-button');
+    } else {
 
-    $index = 1;
-    foreach ($likebtn_system_check as $addr) {
-        $add_response = $likebtn->curl($addr);
-        $addr_result = json_decode($add_response, true);
+        require_once(dirname(__FILE__) . '/likebtn_like_button.class.php');
+        $likebtn = new LikeBtnLikeButton();
 
-        if (is_array($addr_result)) {
-            if ($addr_result['result'] == 'error' && !isset($addr_result['response'])) {
-                $response['result'] = 'error';
-                $response['result_text'] .= ' '.$index.') '.strtr(
-                    __('%addr% is not available from your server', 'likebtn-like-button'), 
-                    array(
-                        '%addr%' => $addr
-                    )
-                );
-                if ($addr_result['message']) {
-                    $response['result_text'] .= ': '.$addr_result['message'];
+        $index = 1;
+        foreach ($likebtn_system_check as $addr) {
+            $add_response = $likebtn->curl($addr);
+            $addr_result = json_decode($add_response, true);
+
+            if (is_array($addr_result)) {
+                if ($addr_result['result'] == 'error' && !isset($addr_result['response'])) {
+                    $response['result'] = 'error';
+                    $response['result_text'] .= ' '.$index.') '.strtr(
+                        __('%addr% is not available from your server', 'likebtn-like-button'), 
+                        array(
+                            '%addr%' => $addr
+                        )
+                    );
+                    if ($addr_result['message']) {
+                        $response['result_text'] .= ': '.$addr_result['message'];
+                    }
+                    //$response['result_text'] .= "<br/>";
+                    $index++;
                 }
-                //$response['result_text'] .= "<br/>";
-                $index++;
-            }
-        } else {
-            // Proxy error for example
-            if (is_string($add_response) && strstr($add_response, '<html>')) {
-                $response['result_html'] = $add_response;
-                $response['result'] = 'error';
-                $response['result_text'] .= ' '.$index.') '.strtr(
-                    __('%addr% is not available from your server', 'likebtn-like-button'), 
-                    array(
-                        '%addr%' => $addr
-                    )
-                );
+            } else {
+                // Proxy error for example
+                if (is_string($add_response) && strstr($add_response, '<html>')) {
+                    $response['result_html'] = $add_response;
+                    $response['result'] = 'error';
+                    $response['result_text'] .= ' '.$index.') '.strtr(
+                        __('%addr% is not available from your server', 'likebtn-like-button'), 
+                        array(
+                            '%addr%' => $addr
+                        )
+                    );
+                }
             }
         }
     }
@@ -5146,7 +5132,10 @@ function likebtn_test_vote_notification() {
         'result_text' => ''
     );
 
-    if (!(bool)current_user_can( 'manage_options' )) {
+    if (!(bool)current_user_can( 'manage_options' )
+        || !isset($_POST['nonce'])
+        || !wp_verify_nonce($_POST['nonce'], 'likebtn_vn_message')
+    ) {
         $response['result'] = 'error';
         $response['result_text'] = __("Not allowed", 'likebtn-like-button');
     } else {
@@ -5168,10 +5157,32 @@ function likebtn_test_vote_notification() {
             'user_votes_url' => admin_url() . 'admin.php?page=likebtn_votes&likebtn_user_id='.$current_user->ID.'&show=View',
         );
 
-        $result = likebtn_send_vote_notification($vars, stripslashes_deep($_POST['options']));
+        $post_options = $_POST['options'];
+        $options = array();
+        if (!empty($post_options['likebtn_notify_to'])) {
+            $options['likebtn_notify_to'] = sanitize_text_field($post_options['likebtn_notify_to']);
+        }
+        if (!empty($post_options['likebtn_notify_from'])) {
+            $options['likebtn_notify_from'] = sanitize_email($post_options['likebtn_notify_from']);
+        }
+        if (!empty($post_options['likebtn_notify_subject'])) {
+            $options['likebtn_notify_subject'] = sanitize_text_field($post_options['likebtn_notify_subject']);
+        }
+        if (!empty($post_options['likebtn_notify_text'])) {
+            $options['likebtn_notify_text'] = sanitize_textarea_field($post_options['likebtn_notify_text']);
+        }
+        // Options sanitizing is done in likebtn_send_vote_notification() function
+        $result = likebtn_send_vote_notification($vars, stripslashes_deep($options));
 
-        if ($response['result'] != 'error') {
+        if ($result['result'] != 'error') {
             $response['result_text'] = __("Notification successfully sent, don't forget to save settings", 'likebtn-like-button');
+        } else {
+            $response['result'] = $result['result'];
+            if (!empty($result['error_message'])) {
+                $response['result_text'] = $result['error_message'];
+            } else {
+                $response['result_text'] = __("Unknow error occurred", 'likebtn-like-button');
+            }
         }
     }
 
@@ -5188,7 +5199,10 @@ add_action('wp_ajax_likebtn_test_vote_notification', 'likebtn_test_vote_notifica
 // test synchronization callback
 function likebtn_test_sync_callback() {
 
-    if (!(bool)current_user_can('manage_options')) {
+    if (!(bool)current_user_can('manage_options')
+        || !isset($_POST['nonce'])
+        || !wp_verify_nonce($_POST['nonce'], 'likebtn_test_sync')
+    ) {
         return;
     }
 
@@ -5243,7 +5257,10 @@ add_action('wp_ajax_likebtn_test_sync', 'likebtn_test_sync_callback');
 // test synchronization callback
 function likebtn_check_account_callback() {
 
-    if (!(bool)current_user_can('manage_options')) {
+    if (!(bool)current_user_can('manage_options')
+        || !isset($_POST['nonce'])
+        || !wp_verify_nonce($_POST['nonce'], 'likebtn_check_account')
+    ) {
         return;
     }
 
@@ -5294,6 +5311,8 @@ function likebtn_force_plan_sync_callback() {
 
     update_option('likebtn_last_plan_sync_time', 0);
 
+    // Nonce check can't be added here this ajax endpoint is called from an external system
+
     $response = array(
         'result' => 'success'
     );
@@ -5312,7 +5331,10 @@ add_action('wp_ajax_nopriv_likebtn_force_plan_sync', 'likebtn_force_plan_sync_ca
 // edit item callback
 function likebtn_edit_item_callback()
 {
-    if (!(bool)current_user_can('manage_options')) {
+    if (!(bool)current_user_can('manage_options')
+        || !isset($_POST['nonce'])
+        || !wp_verify_nonce($_POST['nonce'], 'likebtn_edit_item')
+    ) {
         return;
     }
 
@@ -5387,7 +5409,10 @@ add_action('wp_ajax_likebtn_edit_item', 'likebtn_edit_item_callback');
 // Refresh plan callback
 function likebtn_refresh_plan_callback() {
 
-    if (!(bool)current_user_can('manage_options')) {
+    if (!(bool)current_user_can('manage_options')
+        || !isset($_POST['nonce'])
+        || !wp_verify_nonce($_POST['nonce'], 'likebtn_refresh_plan')
+    ) {
         return;
     }
 
@@ -5426,7 +5451,10 @@ add_action('wp_ajax_likebtn_refresh_plan', 'likebtn_refresh_plan_callback');
 
 // Refresh plan callback
 function likebtn_go_free_callback() {
-    if (!(bool)current_user_can('manage_options')) {
+    if (!(bool)current_user_can('manage_options')
+        || !isset($_POST['nonce'])
+        || !wp_verify_nonce($_POST['nonce'], 'likebtn_go_free')
+    ) {
         return;
     }
 
@@ -5465,7 +5493,10 @@ add_action('wp_ajax_likebtn_go_free', 'likebtn_go_free_callback');
 
 // Get IP vote interval
 function likebtn_ipvi_get_callback() {
-    if (!(bool)current_user_can('manage_options')) {
+    if (!(bool)current_user_can('manage_options')
+        || !isset($_POST['nonce'])
+        || !wp_verify_nonce($_POST['nonce'], 'likebtn_ipvi_get')
+    ) {
         return;
     }
 
@@ -5522,6 +5553,13 @@ function likebtn_plugin_feedback_callback() {
         'result' => 'error',
         'error_message' => '',
     );
+
+    if (!(bool)current_user_can('manage_options')
+        || !isset($_POST['nonce'])
+        || !wp_verify_nonce($_POST['nonce'], 'likebtn')
+    ) {
+        return;
+    }
 
     try {
         $http = new WP_Http();
@@ -5761,7 +5799,10 @@ function likebtn_vgaph_callback() {
     
     global $wpdb;
 
-    if (!(bool)current_user_can('manage_options')) {
+    if (!(bool)current_user_can('manage_options')
+        || !isset($_GET['nonce'])
+        || !wp_verify_nonce($_GET['nonce'], 'likebtn_vgaph')
+    ) {
         return;
     }
 
@@ -5826,7 +5867,7 @@ function likebtn_vgaph_callback() {
 
     } catch (\Exception $e) {
         // Return empty JSON
-        //echo $e->getMessage();
+        //echo e->getMessage();
     }
 
     // Build intermediate array
@@ -6293,18 +6334,15 @@ function likebtn_bp_activity_comment_ajax($content) {
     global $activities_template;
 
     if (!empty($_POST['action']) && $_POST['action'] == 'get_single_activity_content' && !empty($_POST['activity_id'])) {
+        $entity_id = (int)$_POST['activity_id'];
         // Ajax - read more
-        // http://oik-plugins.eu/buddypress-a2z/oik_api/bp_activity_get_specific/
-        // $_POST['activity_id'] i sanitized and used inside bp_activity_get_specific()
         $activity_array = bp_activity_get_specific( array(
-            'activity_ids'     => $_POST['activity_id'],
+            'activity_ids'     => $entity_id,
             'display_comments' => 'stream'
         ) );
         $activity = ! empty( $activity_array['activities'][0] ) ? $activity_array['activities'][0] : false;
         
         if (!empty($activity) && !empty($activity->type) && $activity->type == 'activity_comment') {
-            $entity_id = (int)$_POST['activity_id'];
-
             return _likebtn_get_content_universal(LIKEBTN_ENTITY_BP_ACTIVITY_COMMENT, $entity_id, $content, true, LIKEBTN_POSITION_TOP);
         }
     }
@@ -6743,7 +6781,7 @@ function _likebtn_send_json( $response, $callback = '' ) {
     //@header( 'Content-Type: application/json; charset=' . get_option( 'blog_charset' ) );
     @header( 'Content-Type: application/javascript; charset=' . get_option( 'blog_charset' ) );
     if ($callback) {
-        echo $callback.'(';
+        echo likebtn_strip_html($callback).'(';
     }
     echo json_encode( $response );
     if ($callback) {
@@ -6781,6 +6819,12 @@ function likebtn_event_handler()
     );
 
     $response['result'] = 'success';
+
+    if (!isset($_POST['security'])
+        || !wp_verify_nonce($_POST['security'], 'likebtn_event_handler')
+    ) {
+        $response['result'] = 'error';
+    }
 
     @header( 'Content-Type: application/javascript; charset=' . get_option( 'blog_charset' ) );
     echo json_encode( $response );
@@ -6821,6 +6865,7 @@ function _likebtn_save_vote($identifier, $type, $old_type = 0, $act = 'u', $wpen
     if ($voter_by_user) {
         $client_identifier = $user_id;
     } else {
+        // $_SERVER do not need sanitizing here, we need them intact in md5 function();
         $client_identifier = md5($ip.$_SERVER['HTTP_USER_AGENT'].$_SERVER['HTTP_ACCEPT'].$_SERVER['HTTP_ACCEPT_LANGUAGE']);
     }
 
@@ -7067,7 +7112,7 @@ function likebtn_prx()
         if (empty($_GET['likebtn_q'])) {
             // If suhosin.get.max_value_length is set
             $_GET = array();
-            $params = explode('&', $_SERVER['QUERY_STRING']);
+            $params = explode('&', sanitize_text_field($_SERVER['QUERY_STRING']));
             foreach ($params as $pair) {
                 list($key, $value) = explode('=', $pair);
                 $_GET[urldecode($key)] = urldecode($value);
@@ -7124,10 +7169,11 @@ function likebtn_prx()
                     } else {
                         try {
                             $http = new WP_Http();
+                            // S_SERVER vars do not need sanitizing here - we pass them as is to the external system
                             $headers = array(
-                                "User-Agent" => $_SERVER['HTTP_USER_AGENT'],
-                                "Accept-Encoding" => $_SERVER['HTTP_ACCEPT'],
-                                "Accept-Language" => $_SERVER['HTTP_ACCEPT_LANGUAGE'],
+                                "User-Agent" => likebtn_sanitize_header($_SERVER['HTTP_USER_AGENT']),
+                                "Accept-Encoding" => likebtn_sanitize_header($_SERVER['HTTP_ACCEPT']),
+                                "Accept-Language" => likebtn_sanitize_header($_SERVER['HTTP_ACCEPT_LANGUAGE']),
                                 "Likebtn-Site-Id" => $site_id,
                                 "Likebtn-Api-Key" => $api_key,
                                 "Likebtn-Ip"      => _likebtn_get_ip(true),
@@ -7157,7 +7203,7 @@ function likebtn_prx()
 
     @header( 'Content-Type: application/javascript; charset=' . get_option( 'blog_charset' ) );
     if (is_array($likebtn_response) && !empty($likebtn_response['body'])) {
-        echo $likebtn_response['body'];
+        echo likebtn_strip_raw($likebtn_response['body']);
     } else {
         // Error
         echo json_encode($response);
@@ -7226,6 +7272,11 @@ function likebtn_prx()
 }
 add_action('wp_ajax_likebtn_prx', 'likebtn_prx' );
 add_action('wp_ajax_nopriv_likebtn_prx', 'likebtn_prx');
+
+function likebtn_sanitize_header($header)
+{
+    return str_replace("\r\n",'', $header);
+}
 
 // Get IP info
 function _likebtn_ipinfo($ip)
@@ -7329,14 +7380,14 @@ function likebtn_footer()
     <?php if (get_option('likebtn_js')): ?>
         <!-- LikeBtn.com Custom JS BEGIN -->
         <script type="text/javascript">
-            <?php echo get_option('likebtn_js'); ?>
+            <?php echo likebtn_strip_js(get_option('likebtn_js')); ?>
         </script>
         <!-- LikeBtn.com Custom JS END -->
     <?php endif ?>
     <?php if (get_option('likebtn_css')): ?>
         <!-- LikeBtn.com Custom CSS BEGIN -->
         <style type="text/css">
-            <?php echo get_option('likebtn_css'); ?>
+            <?php echo likebtn_strip_css(get_option('likebtn_css')); ?>
         </style>
         <!-- LikeBtn.com Custom CSS END -->
     <?php endif ?>
@@ -7674,7 +7725,7 @@ function _likebtn_get_ip($disable_hashing = false)
     // global $likebtn_cf_ip_ranges;
     // global $likebtn_cf_ip_ranges_ipv6;
 
-    $ip = $_SERVER['REMOTE_ADDR'];
+    $ip = sanitize_text_field($_SERVER['REMOTE_ADDR']);
 
     // Behind CloudFlare
     if (!empty($_SERVER['HTTP_CF_CONNECTING_IP'])) {
@@ -7683,7 +7734,7 @@ function _likebtn_get_ip($disable_hashing = false)
             $likebtn_cf_ip_ranges_ipv6 = likebtnGetCfRangesIpv6();
             foreach ($likebtn_cf_ip_ranges_ipv6 as $range) {
                 if (_likebtn_ip_in_range_ipv6($ip, $range)) {
-                    return $_SERVER['HTTP_CF_CONNECTING_IP'];
+                    return sanitize_text_field($_SERVER['HTTP_CF_CONNECTING_IP']);
                 }
             }
         } else {
@@ -7691,7 +7742,7 @@ function _likebtn_get_ip($disable_hashing = false)
             $likebtn_cf_ip_ranges = likebtnGetCfRanges();
             foreach ($likebtn_cf_ip_ranges as $range) {
                 if (_likebtn_ip_in_range($ip, $range)) {
-                    return $_SERVER['HTTP_CF_CONNECTING_IP'];
+                    return sanitize_text_field($_SERVER['HTTP_CF_CONNECTING_IP']);
                 }
             }
         }
@@ -7701,16 +7752,16 @@ function _likebtn_get_ip($disable_hashing = false)
         $ip = $_SERVER['HTTP_CLIENT_IP'];
     } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
         if (strpos($_SERVER['HTTP_X_FORWARDED_FOR'], ',') > 0) {
-            $addr = explode(",", $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $addr = explode(",", sanitize_text_field($_SERVER['HTTP_X_FORWARDED_FOR']));
             $x_ip = trim($addr[0]);
         } else {
-            $x_ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            $x_ip = sanitize_text_field($_SERVER['HTTP_X_FORWARDED_FOR']);
         }
         if ($x_ip != $_SERVER['SERVER_ADDR']) {
             $ip = $x_ip;
         }
     } else {
-        $ip = $_SERVER['REMOTE_ADDR'];
+        $ip = sanitize_text_field($_SERVER['REMOTE_ADDR']);
     }
 
     if (get_option('likebtn_gdpr') == '1' && !$disable_hashing) {
@@ -7897,7 +7948,7 @@ function likebtn_to_csv($results = array(), $filename = '', $fields = array(), $
     //header("Content-type: text/csv");
     header("Content-type: application/csv; charset=UCS-2LE");
     header("Content-Disposition: attachment; filename=$filename");
-    echo $out;
+    echo likebtn_strip_raw($out);
     exit;
 }
 
@@ -7929,7 +7980,7 @@ function likebtn_get_voters_ips($entity_name, $entity_id)
 
 function likebtn_build_sort_by($sort_by, $order)
 {
-    parse_str($_SERVER['QUERY_STRING'], $args);
+    parse_str(sanitize_text_field($_SERVER['QUERY_STRING']), $args);
     $args['likebtn_sort_by'] = $sort_by;
     $args['likebtn_sort_by_order'] = $order;
 
@@ -7938,12 +7989,12 @@ function likebtn_build_sort_by($sort_by, $order)
 
 function likebtn_get_script_name()
 {
-    $script_name = $_SERVER['SCRIPT_NAME'];
+    $script_name = sanitize_text_field($_SERVER['SCRIPT_NAME']);
     if (!$script_name) {
-        $script_name = $_SERVER['SCRIPT_URL'];
+        $script_name = sanitize_text_field($_SERVER['SCRIPT_URL']);
     }
     if (!$script_name) {
-        $script_name = $_SERVER['PHP_SELF'];
+        $script_name = sanitize_text_field($_SERVER['PHP_SELF']);
     }
     return $script_name;
 }
@@ -8387,7 +8438,7 @@ function likebtn_site_domain()
 
 function likebtn_default_notify_text()
 {
-    $text = <<<TEXT
+    $text = '
 New {vote_type} on {domain}
 
 <strong>Item info</strong>
@@ -8398,7 +8449,7 @@ Dislikes: {item_dislikes}
 <strong>Voter info</strong>
 IP address: <a href="{vote_ip_url}">{vote_ip}</a>
 User: <a href="{user_url}">{user_login}</a> <small>(<a href="{user_votes_url}">view user votes</a>)</small>
-TEXT;
+';
     return $text;
 }
 
@@ -8419,8 +8470,12 @@ function likebtn_send_vote_notification($vars, $options = array())
         'error_message' => ''
     );
 
+    if (!is_array($options)) {
+        $options = array();
+    }
+
     if (!empty($options['likebtn_notify_to'])) {
-        $notify_to = $options['likebtn_notify_to'];
+        $notify_to = sanitize_text_field($options['likebtn_notify_to']);
     } else {
         $notify_to = get_option('likebtn_notify_to');
     }
@@ -8431,9 +8486,13 @@ function likebtn_send_vote_notification($vars, $options = array())
         $return['error_message'] = __('Please specify email recipient(s)', 'likebtn-like-button');
         return $return;
     }
+    // Sanitize emails.
+    foreach ($to_emails as $i => $email) {
+        $to_emails[$i] = sanitize_email($email);
+    }
 
     if (!empty($options['likebtn_notify_from'])) {
-        $from = $options['likebtn_notify_from'];
+        $from = sanitize_email($options['likebtn_notify_from']);
     } else {
         $from = get_option('likebtn_notify_from');
     }
@@ -8443,7 +8502,7 @@ function likebtn_send_vote_notification($vars, $options = array())
     }
 
     if (!empty($options['likebtn_notify_subject'])) {
-        $subject = $options['likebtn_notify_subject'];
+        $subject = sanitize_text_field($options['likebtn_notify_subject']);
     } else {
         $subject = get_option('likebtn_notify_subject');
     }
@@ -8453,7 +8512,7 @@ function likebtn_send_vote_notification($vars, $options = array())
     }
 
     if (!empty($options['likebtn_notify_text'])) {
-        $template = $options['likebtn_notify_text'];
+        $template = sanitize_textarea_field($options['likebtn_notify_text']);
     } else {
         $template = get_option('likebtn_notify_text');
     }
@@ -8517,6 +8576,11 @@ function likebtn_vote_title($vote_type)
     }
 }
 
+function likebtn_strip_raw($text)
+{
+    return $text;
+}
+
 function likebtn_is_real_ip($ip)
 {
     if (strstr($ip, '.') || strstr($ip, ':')) {
@@ -8546,6 +8610,21 @@ function likebtn_comment_post_id($comment_id)
         return $comment->comment_post_ID;
     }
     return null;
+}
+
+function likebtn_strip_js($text)
+{
+    return preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', "$1", $text);
+}
+
+function likebtn_strip_css($text)
+{
+    return preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', "$1", $text);
+}
+
+function likebtn_strip_html($text)
+{
+    return preg_replace('/<html\b[^>]*>(.*?)<\/html>/is', "$1", $text);
 }
 
 /**

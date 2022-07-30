@@ -165,7 +165,7 @@ function likebtn_admin_settings() {
                         <tr valign="middle">
                             <th scope="row">&nbsp;</th>
                             <td class="likebtn_mid_row">
-                                <input class="button-primary likebtn_s_btn" type="button" value="<?php _e('Check Account Data', 'likebtn-like-button'); ?>" onclick="checkAccount('<?php echo _likebtn_get_public_url() ?>img/ajax_loader.gif')" /> &nbsp;<strong class="likebtn_check_account_container"></strong>
+                                <input class="button-primary likebtn_s_btn" type="button" value="<?php _e('Check Account Data', 'likebtn-like-button'); ?>" onclick="checkAccount('<?php echo _likebtn_get_public_url() ?>img/ajax_loader.gif', '<?php echo  wp_create_nonce('likebtn_check_account'); ?>')" /> &nbsp;<strong class="likebtn_check_account_container"></strong>
                             </td>
                         </tr>
                     </table>
@@ -202,7 +202,7 @@ function likebtn_admin_settings() {
 
                             </th>
                             <td class="likebtn_sync_cntr <?php if (_likebtn_is_stat_enabled()): ?>likebtn_sync_ena_flag<?php else: ?>likebtn_sync_dis_flag<?php endif ?> likebtn_mid_row">
-                                <input type="hidden" name="likebtn_sync_inerval" value="<?php echo get_option('likebtn_sync_inerval'); ?>" />
+                                <input type="hidden" name="likebtn_sync_inerval" value="<?php echo (int)get_option('likebtn_sync_inerval'); ?>" />
                                 <p>
                                     <strong class="likebtn_success likebtn_sync_ena"><?php _e('Enabled', 'likebtn-like-button'); ?></strong>
                                     <strong class="likebtn_error likebtn_sync_dis"><?php _e('Disabled', 'likebtn-like-button'); ?></strong> 
@@ -212,15 +212,15 @@ function likebtn_admin_settings() {
                                 <?php endif ?>
                                 <div <?php if (!get_option('likebtn_account_email') || !get_option('likebtn_account_api_key') || !get_option('likebtn_site_id')): ?>style="display:none"<?php endif ?>>
                                     <br/>
-                                    <input class="button-primary likebtn_button_green likebtn_sync_dis" type="button" value="<?php _e('Enable Sync', 'likebtn-like-button'); ?>" onclick="testSync('<?php echo _likebtn_get_public_url() ?>img/ajax_loader.gif')" />
+                                    <input class="button-primary likebtn_button_green likebtn_sync_dis" type="button" value="<?php _e('Enable Sync', 'likebtn-like-button'); ?>" onclick="testSync('<?php echo _likebtn_get_public_url() ?>img/ajax_loader.gif', '<?php echo  wp_create_nonce('likebtn_test_sync'); ?>')" />
 
-                                    <input class="button-primary likebtn_sync_ena likebtn_s_btn" type="button" value="<?php _e('Test Sync', 'likebtn-like-button'); ?>" onclick="testSync('<?php echo _likebtn_get_public_url() ?>img/ajax_loader.gif')" /> 
+                                    <input class="button-primary likebtn_sync_ena likebtn_s_btn" type="button" value="<?php _e('Test Sync', 'likebtn-like-button'); ?>" onclick="testSync('<?php echo _likebtn_get_public_url() ?>img/ajax_loader.gif', '<?php echo  wp_create_nonce('likebtn_test_sync'); ?>')" /> 
                                     &nbsp;<strong class="likebtn_test_sync_container"></strong>
                                     
-                                    <div class="liketbtn_mansync_wr" style="display:none">
+                                    <?php /*<div class="liketbtn_mansync_wr" style="display:none">
                                         <br/><br/>
                                         <input class="button-secondary likebtn_ttip" type="button" value="<?php _e('Run Full Sync Manually', 'likebtn-like-button'); ?>" onclick="manualSync('<?php echo _likebtn_get_public_url() ?>img/ajax_loader.gif')" title="<?php _e("ATTENTION: Use this feature carefully since full synchronization may affect your website performance. If you don't experience any problems with likes synchronization better to avoid using this feature.", 'likebtn-like-button') ?>" /> &nbsp;<strong class="likebtn_manual_sync_container"><img src="<?php echo _likebtn_get_public_url() ?>img/ajax_loader.gif" class="hidden"/></strong>
-                                    </div>
+                                    </div>*/ ?>
                                 </div>
                             </td>
                         </tr>
@@ -229,7 +229,7 @@ function likebtn_admin_settings() {
                                 <i class="likebtn_help" title="​<?php _e('Check if your server configuration satisfies the Like button plugin requirements.', 'likebtn-like-button'); ?>">&nbsp;</i>
                             </th>
                             <td class="likebtn_mid_row">
-                                <input class="button-secondary likebtn_ttip" type="button" value="<?php _e('Check the System', 'likebtn-like-button'); ?>" onclick="systemCheck('<?php echo _likebtn_get_public_url() ?>img/ajax_loader.gif')" /> &nbsp;<strong class="likebtn_sc_container"></strong>
+                                <input class="button-secondary likebtn_ttip" type="button" value="<?php _e('Check the System', 'likebtn-like-button'); ?>" onclick="systemCheck('<?php echo _likebtn_get_public_url() ?>img/ajax_loader.gif', '<?php echo  wp_create_nonce('likebtn_system_check'); ?>')" /> &nbsp;<strong class="likebtn_sc_container"></strong>
                             </td>
                         </tr>
                     </table>
@@ -283,7 +283,7 @@ function likebtn_admin_settings() {
                         <tr valign="top" id="likebtn_ipvi_change">
                             <th scope="row"></th>
                             <td class="likebtn_mid_row">
-                                <input class="button-secondary" type="button" value="<?php _e('Change', 'likebtn-like-button'); ?>" onclick="ipviChange('<?php echo _likebtn_get_public_url() ?>img/ajax_loader.gif')" /> &nbsp;<strong class="likebtn_ipvi_change_container"></strong>
+                                <input class="button-secondary" type="button" value="<?php _e('Change', 'likebtn-like-button'); ?>" onclick="ipviChange('<?php echo _likebtn_get_public_url() ?>img/ajax_loader.gif', '<?php echo  wp_create_nonce('likebtn_ipvi_get'); ?>')" /> &nbsp;<strong class="likebtn_ipvi_change_container"></strong>
                             </td>
                         </tr>
                     </table>
@@ -406,7 +406,7 @@ function likebtn_admin_settings() {
                         <tr valign="top">
                             <th scope="row">&nbsp;</th>
                             <td class="likebtn_mid_row">
-                                <input class="button-secondary" type="button" value="<?php _e('Send Test Notification', 'likebtn-like-button'); ?>" onclick="sendTestVoteNotification('<?php echo _likebtn_get_public_url() ?>img/ajax_loader.gif')" />&nbsp; <strong class="likebtn_vn_message"></strong>
+                                <input class="button-secondary" type="button" value="<?php _e('Send Test Notification', 'likebtn-like-button'); ?>" onclick="sendTestVoteNotification('<?php echo _likebtn_get_public_url() ?>img/ajax_loader.gif', '<?php echo  wp_create_nonce('likebtn_vn_message'); ?>')" />&nbsp; <strong class="likebtn_vn_message"></strong>
                                     <div class="likebtn_vn_container margin-top"></div>
                             </td>
                         </tr>

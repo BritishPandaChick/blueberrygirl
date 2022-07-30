@@ -41,7 +41,7 @@ function likebtn_um_liked_default($args) {
         'number' => 1000,
     );
 
-    echo $widget->widget(array(), $instance);
+    echo wp_kses_post($widget->widget(array(), $instance));
 }
 
 add_action('um_profile_content_likebtn-liked-content_default', 'likebtn_um_liked_default');
