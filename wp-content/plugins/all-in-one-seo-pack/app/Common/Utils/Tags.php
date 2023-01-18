@@ -270,6 +270,32 @@ class Tags {
 		],
 		'pagedFormat'         => [
 			'page_number'
+		],
+		'schema'              => [
+			'author_first_name',
+			'author_last_name',
+			'author_name',
+			'author_url',
+			'taxonomy_title',
+			'categories',
+			'current_date',
+			'current_day',
+			'current_month',
+			'current_year',
+			'custom_field',
+			'tax_name',
+			'permalink',
+			'post_content',
+			'post_date',
+			'post_day',
+			'post_excerpt',
+			'post_excerpt_only',
+			'post_month',
+			'post_title',
+			'post_year',
+			'separator_sa',
+			'site_title',
+			'tagline'
 		]
 	];
 
@@ -324,6 +350,11 @@ class Tags {
 				'id'          => 'author_last_name',
 				'name'        => __( 'Author Last Name', 'all-in-one-seo-pack' ),
 				'description' => __( 'The last name of the post author.', 'all-in-one-seo-pack' )
+			],
+			[
+				'id'          => 'author_url',
+				'name'        => __( 'Author URL', 'all-in-one-seo-pack' ),
+				'description' => __( 'The URL of the author page.', 'all-in-one-seo-pack' )
 			],
 			[
 				'id'          => 'archive_title',
@@ -774,7 +805,7 @@ class Tags {
 		$string = $this->parseTaxonomyNames( $string, $id );
 
 		// Custom fields are parsed separately.
-		$string = $this->parseCustomFields( $string, $id );
+		$string = $this->parseCustomFields( $string );
 
 		return preg_replace( '/%\|%/im', '', $string );
 	}
@@ -962,6 +993,10 @@ class Tags {
 				$name = $author->last_name;
 
 				return empty( $name ) && $sampleData ? wp_get_current_user()->last_name : $author->last_name;
+			case 'author_url':
+				$authorUrl = get_author_posts_url( $author->ID );
+
+				return ! empty( $authorUrl ) ? $authorUrl : '';
 			case 'separator_sa':
 				return aioseo()->helpers->decodeHtmlEntities( aioseo()->options->searchAppearance->global->separator );
 			case 'search_term':
@@ -1065,9 +1100,9 @@ class Tags {
 	 * @return mixed          The new title.
 	 */
 	private function parseTaxonomyNames( $string, $id ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
-		$pattern = '/' . $this->denotationChar . 'tax_name-([a-zA-Z0-9_]+)/im';
+		$pattern = '/' . $this->denotationChar . 'tax_name-([a-zA-Z0-9_-]+)/im';
 		$string  = preg_replace_callback( $pattern, [ $this, 'replaceTaxonomyName' ], $string );
-		$pattern = '/' . $this->denotationChar . 'tax_name(?![a-zA-Z0-9_])/im';
+		$pattern = '/' . $this->denotationChar . 'tax_name(?![a-zA-Z0-9_-])/im';
 
 		return preg_replace( $pattern, '', $string );
 	}

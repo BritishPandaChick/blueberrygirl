@@ -3,13 +3,15 @@ Contributors: f1logic
 Donate link: https://xyzscripts.com/donate/
 Tags:  twitter, wp twitter auto publish, twitter auto publish, publish post to twitter, add link to twitter, twitter publishing, post to twitter, social media auto publish, social media publishing, social network auto publish, social media, social network
 Requires at least: 3.0
-Tested up to: 5.7
-Stable tag: 1.4.2
+Tested up to: 6.0.1
+Stable tag: 1.5
 License: GPLv2 or later
 
 Publish posts automatically to Twitter.
 
 == Description ==
+
+Try it out on your free dummy site: Click here => <a href="https://tastewp.com/new/?pre-installed-plugin-slug=twitter-auto-publish">https://tastewp.com/new/?pre-installed-plugin-slug=twitter-auto-publish</a>
 
 A quick look into WP Twitter Auto Publish :
 
@@ -118,6 +120,14 @@ SSL peer verification may not be functioning in your server. Please turn off SSL
 4. Auto publish logs.
 
 == Changelog ==
+
+= WP Twitter Auto Publish 1.5 =
+* Added Twitter authorization and publishing using SMAPSolutions.com
+* Added page for managing authorizations of smapsolutions app and package upgrade
+* Minor bugs fixed
+* Compatibility with latest version of wordpress
+* Multilingual support added
+* Option to configure auto publish settings while creating posts
 
 = WP Twitter Auto Publish 1.4.2 =
 * Minor bugs fixed

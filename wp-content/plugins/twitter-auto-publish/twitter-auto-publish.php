@@ -3,10 +3,12 @@
  Plugin Name: WP Twitter Auto Publish
 Plugin URI: https://xyzscripts.com/wordpress-plugins/twitter-auto-publish/
 Description:   Publish posts automatically from your blog to Twitter social media. You can publish your posts to Twitter as simple text message or as text message with image. The plugin supports filtering posts by post-types and categories.
-Version: 1.4.2
+Version: 1.5
 Author: xyzscripts.com
 Author URI: https://xyzscripts.com/
 License: GPLv2 or later
+Text Domain: twitter-auto-publish
+Domain Path: /languages/
 */
 
 /*
@@ -26,9 +28,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 if( !defined('ABSPATH') ){ exit();}
 if ( !function_exists( 'add_action' ) ) {
-	echo "Hi there!  I'm just a plugin, not much I can do when called directly.";
+	_e('Hi there! I'.'m just a plugin, not much I can do when called directly.','twitter-auto-publish');
 	exit;
 }
+function plugin_load_twaptextdomain() {
+    load_plugin_textdomain( 'twitter-auto-publish', false, basename( dirname( __FILE__ ) ) . '/languages/' );
+}
+add_action( 'init', 'plugin_load_twaptextdomain' );
 //ob_start();
 //error_reporting(E_ALL);
 define('XYZ_TWAP_PLUGIN_FILE',__FILE__);
@@ -37,6 +43,10 @@ global $wpdb;
 include_once(ABSPATH.'wp-includes/version.php');
 global $wp_version;
 define('XYZ_TWAP_WP_VERSION',$wp_version);
+if (!defined('XYZ_TWAP_SMAPSOLUTION_AUTH_URL'))
+	define('XYZ_TWAP_SMAPSOLUTION_AUTH_URL','https://authorize.smapsolutions.com/');
+if (!defined('XYZ_TWAP_SMAPSOLUTION_PUBLISH_URL'))
+	define('XYZ_TWAP_SMAPSOLUTION_PUBLISH_URL','https://tw-publish.smapsolutions.com/');
 
 require_once( dirname( __FILE__ ) . '/admin/install.php' );
 require_once( dirname( __FILE__ ) . '/xyz-functions.php' );
@@ -48,7 +58,8 @@ require_once( dirname( __FILE__ ) . '/admin/ajax-backlink.php' );
 require_once( dirname( __FILE__ ) . '/admin/metabox.php' );
 require_once( dirname( __FILE__ ) . '/admin/publish.php' );
 require_once( dirname( __FILE__ ) . '/admin/admin-notices.php' );
-if(isset($_GET['page']) && ($_GET['page']=='twitter-auto-publish-suggest-features')){
+if((isset($_GET['page']) && ($_GET['page']=='twitter-auto-publish-suggest-features') ) || (isset($_GET['page']) && ($_GET['page']=='twitter-auto-publish-settings') ))
+{
 	ob_start();
 }
 if(get_option('xyz_credit_link')=="twap"){

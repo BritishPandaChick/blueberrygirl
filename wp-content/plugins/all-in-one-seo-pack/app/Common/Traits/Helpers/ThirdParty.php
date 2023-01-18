@@ -294,6 +294,24 @@ trait ThirdParty {
 	}
 
 	/**
+	 * Check if is a BBpress post type.
+	 *
+	 * @since 4.2.8
+	 *
+	 * @param  string $postType The post type to check.
+	 * @return bool             Whether this is a bbPress post type.
+	 */
+	public function isBBPressPostType( $postType ) {
+		if ( ! class_exists( 'bbPress' ) ) {
+			return false;
+		}
+
+		$bbPressPostTypes = [ 'forum', 'topic', 'reply' ];
+
+		return in_array( $postType, $bbPressPostTypes, true );
+	}
+
+	/**
 	 * Returns ACF fields as an array of meta keys and values.
 	 *
 	 * @since 4.0.6
@@ -326,37 +344,44 @@ trait ThirdParty {
 			// 'taxonomy',
 		];
 
-		$types     = wp_parse_args( $types, $allowedTypes );
-		$acfFields = [];
-
+		$types        = wp_parse_args( $types, $allowedTypes );
 		$fieldObjects = get_field_objects( $post->ID );
-		if ( ! empty( $fieldObjects ) ) {
-			foreach ( $fieldObjects as $field ) {
-				if ( empty( $field['value'] ) ) {
-					continue;
-				}
 
-				if ( ! in_array( $field['type'], $types, true ) ) {
-					continue;
-				}
+		if ( empty( $fieldObjects ) ) {
+			return [];
+		}
 
-				if ( 'url' === $field['type'] ) {
-					// Url field
-					$value = "<a href='{$field['value']}'>{$field['value']}</a>";
-				} elseif ( 'image' === $field['type'] ) {
-					// Image field
-					$value = "<img src='{$field['value']['url']}'>";
-				} elseif ( 'gallery' === $field['type'] ) {
-					// Image field
-					$value = "<img src='{$field['value'][0]['url']}'>";
-				} else {
-					// Other fields
-					$value = $field['value'];
-				}
+		// Filter out any fields that are not in our allowed types.
+		$fields = array_filter( $fieldObjects, function( $object ) use ( $types ) {
+			return ! empty( $object['value'] ) && in_array( $object['type'], $types, true );
+		});
 
-				if ( $value ) {
-					$acfFields[ $field['name'] ] = $value;
-				}
+		// Create an array with the field names and values with added HTML markup.
+		$acfFields = [];
+		foreach ( $fields as $field ) {
+			if ( 'url' === $field['type'] ) {
+
+				// Url field
+				$value = "<a href='{$field['value']}'>{$field['value']}</a>";
+			} elseif ( 'image' === $field['type'] ) {
+
+				// Image format options are array, URL (string), id (int).
+				$imageUrl = is_array( $field['value'] ) ? $field['value']['url'] : $field['value'];
+				$imageUrl = is_numeric( $imageUrl ) ? wp_get_attachment_image_url( $imageUrl ) : $imageUrl;
+
+				$value = "<img src='{$imageUrl}'>";
+			} elseif ( 'gallery' === $field['type'] ) {
+
+				// Image field
+				$value = "<img src='{$field['value'][0]['url']}'>";
+			} else {
+
+				// Other fields
+				$value = $field['value'];
+			}
+
+			if ( $value ) {
+				$acfFields[ $field['name'] ] = $value;
 			}
 		}
 
@@ -482,6 +507,39 @@ trait ThirdParty {
 	}
 
 	/**
+	 * Returns the WPML url format.
+	 *
+	 * @since 4.2.8
+	 *
+	 * @return string The format.
+	 */
+	public function getWpmlUrlFormat() {
+		global $sitepress;
+
+		if (
+			! $this->isWpmlActive() ||
+			empty( $sitepress ) ||
+			! method_exists( $sitepress, 'get_setting' )
+		) {
+			return '';
+		}
+
+		switch ( $sitepress->get_setting( 'language_negotiation_type' ) ) {
+			case WPML_LANGUAGE_NEGOTIATION_TYPE_DIRECTORY:
+			case 1:
+				return 'directory';
+			case WPML_LANGUAGE_NEGOTIATION_TYPE_DOMAIN:
+			case 2:
+				return 'domain';
+			case WPML_LANGUAGE_NEGOTIATION_TYPE_PARAMETER:
+			case 3:
+				return 'parameter';
+			default:
+				return '';
+		}
+	}
+
+	/**
 	 * Checks whether the WooCommerce Follow Up Emails plugin is active.
 	 *
 	 * @since 4.2.2
@@ -499,16 +557,16 @@ trait ThirdParty {
 	 *
 	 * @since 4.2.3
 	 *
-	 * @return bool Whether the page is an AMP page (optional).
+	 * @param  string $pluginName The name of the AMP plugin to check for (optional).
+	 * @return bool               Whether the current page is an AMP page.
 	 */
 	public function isAmpPage( $pluginName = '' ) {
-		// AMP
-		if (
-			( ! $pluginName || 'amp' === $pluginName ) &&
-			defined( 'AMP__VERSION' )
-		) {
-			if ( isset( $_GET['amp'] ) ) {
-				return true;
+		// Official AMP plugin.
+		if ( 'amp' === $pluginName ) {
+			// If we're checking for the AMP page plugin specifically, return early if it's not active.
+			// Otherwise, we'll return true if AMP for WP is enabled because the helper method doesn't distinguish between the two.
+			if ( ! defined( 'AMP__VERSION' ) ) {
+				return false;
 			}
 
 			$options = get_option( 'amp-options' );
@@ -517,22 +575,26 @@ trait ThirdParty {
 			}
 		}
 
-		// AMP for WP
-		if (
-			( ! $pluginName || 'amp-for-wp' === $pluginName ) &&
-			defined( 'AMPFORWP_VERSION' )
-		) {
-			// This URL param is set when using plain permalinks.
-			if ( isset( $_GET['amp'] ) ) {
-				return true;
-			}
+		return $this->isAmpPageHelper();
+	}
 
-			global $wp;
-			if ( preg_match( '/amp$/', untrailingslashit( $wp->request ) ) ) {
-				return true;
-			}
+	/**
+	 * Checks if the current page is an AMP page.
+	 * Helper function for isAmpPage(). Contains common logic that applies to both AMP and AMP for WP.
+	 *
+	 * @since 4.2.4
+	 *
+	 * @return bool Whether the current page is an AMP page.
+	 */
+	private function isAmpPageHelper() {
+		// Check if the AMP or AMP for WP plugin is active.
+		if ( ! function_exists( 'is_amp_endpoint' ) ) {
+			return false;
 		}
 
-		return false;
+		global $wp;
+
+		// This URL param is set when using plain permalinks.
+		return isset( $_GET['amp'] ) || preg_match( '/amp$/', untrailingslashit( $wp->request ) );
 	}
 }

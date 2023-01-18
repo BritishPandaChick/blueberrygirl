@@ -54,8 +54,9 @@ if(isset($_GET['action']) && $_GET['action']=="edit" && !empty($_GET['post'])) /
 			return;
 
 	}
-	
-	if(get_option('xyz_twap_twconsumer_id')!="" && get_option('xyz_twap_twconsumer_secret')!="" && get_option('xyz_twap_tw_id')!="" && get_option('xyz_twap_current_twappln_token')!="" && get_option('xyz_twap_twaccestok_secret')!="" && get_option('xyz_twap_twpost_permission')==1)
+	$xyz_twap_tw_app_sel_mode=get_option('xyz_twap_tw_app_sel_mode');
+	$xyz_twap_smapsoln_userid=get_option('xyz_twap_smapsoln_userid');
+	if(((get_option('xyz_twap_twconsumer_id')!="" && get_option('xyz_twap_twconsumer_secret')!="" && get_option('xyz_twap_tw_id')!="" && get_option('xyz_twap_current_twappln_token')!="" && get_option('xyz_twap_twaccestok_secret')!="" && $xyz_twap_tw_app_sel_mode==0 )|| ( $xyz_twap_tw_app_sel_mode==1 && !empty($xyz_twap_smapsoln_userid))) && get_option('xyz_twap_twpost_permission')==1)
 	add_meta_box( "xyz_twap", '<strong>WP Twitter Auto Publish </strong>', 'xyz_twap_addpostmetatags') ;
 }
 function xyz_twap_addpostmetatags()
@@ -206,7 +207,11 @@ function inArray(needle, haystack) {
 <input type="hidden" name="cat_list" id="cat_list" value="">
 <input type="hidden" name="xyz_twap_post" id="xyz_twap_post" value="0" >
 	<tr id="xyz_twMetabox"><td colspan="2" >
-<?php  if(get_option('xyz_twap_twpost_permission')==1) {
+<?php 
+$taccess_token_secret=get_option('xyz_twap_twaccestok_secret');
+$xyz_twap_tw_app_sel_mode=get_option('xyz_twap_tw_app_sel_mode');
+$xyz_twap_smapsoln_userid=get_option('xyz_twap_smapsoln_userid');
+if(get_option('xyz_twap_twpost_permission')==1 && ( ($xyz_twap_tw_app_sel_mode==1 && !empty($xyz_twap_smapsoln_userid)) || ($xyz_twap_tw_app_sel_mode==0 && !empty($taccess_token_secret)))) {
 	$postid=0;
 if (isset($_GET['post']))
 	$postid=intval($_GET['post']);
@@ -229,52 +234,52 @@ if (get_option('xyz_twap_default_selection_edit')==2 && isset($GLOBALS['edit_fla
 
 
 <tr>
-		<td colspan="2" class="xyz_twap_pleft15 xyz_twap_meta_acclist_table_td"><strong>Twitter</strong>
+		<td colspan="2" class="xyz_twap_pleft15 xyz_twap_meta_acclist_table_td"><strong><?php _e('Twitter','twitter-auto-publish'); ?></strong>
 		</td>
 </tr>
 
 <tr><td colspan="2" valign="top">&nbsp;</td></tr>
 
 	<tr valign="top">
-		<td class="xyz_twap_pleft15" width="60%">Enable auto publish posts to my twitter account
+		<td class="xyz_twap_pleft15" width="60%"><?php _e('Enable auto publish posts to my twitter account','twitter-auto-publish'); ?>
 		</td>
 		<td  class="switch-field">
-		<label id="xyz_twap_twpost_permission_yes"><input type="radio" name="xyz_twap_twpost_permission" id="xyz_twap_twpost_permission_1" value="1" <?php  if($post_permission==1) echo 'checked';?>/>Yes</label>
-		<label id="xyz_twap_twpost_permission_no"><input type="radio" name="xyz_twap_twpost_permission" id="xyz_twap_twpost_permission_0" value="0" <?php  if($post_permission==0) echo 'checked';?>/>No</label>
+		<label id="xyz_twap_twpost_permission_yes"><input type="radio" name="xyz_twap_twpost_permission" id="xyz_twap_twpost_permission_1" value="1" <?php  if($post_permission==1) echo 'checked';?>/><?php _e('Yes','twitter-auto-publish'); ?></label>
+		<label id="xyz_twap_twpost_permission_no"><input type="radio" name="xyz_twap_twpost_permission" id="xyz_twap_twpost_permission_0" value="0" <?php  if($post_permission==0) echo 'checked';?>/><?php _e('No','twitter-auto-publish'); ?></label>
 	</td>
 	</tr>
 	
 	<tr valign="top" id="twai_twap">
-		<td class="xyz_twap_pleft15">Attach image to twitter post
+		<td class="xyz_twap_pleft15"> <?php _e('Attach image to twitter post','twitter-auto-publish'); ?>
 		</td>
 		<td><select id="xyz_twap_twpost_image_permission" name="xyz_twap_twpost_image_permission">
 				<option value="0"
 				<?php  if($post_twitter_image_permission==0) echo 'selected';?>>
-					No</option>
+					<?php _e('No','twitter-auto-publish'); ?></option>
 				<option value="1"
-				<?php  if($post_twitter_image_permission==1) echo 'selected';?>>Yes</option>
+				<?php  if($post_twitter_image_permission==1) echo 'selected';?>><?php _e('Yes','twitter-auto-publish'); ?></option>
 		</select>
 		</td>
 	</tr>
 	
 	<tr valign="top" id="twmf_twap">
-		<td class="xyz_twap_pleft15">Message format for posting <img src="<?php echo $heimg?>"
+		<td class="xyz_twap_pleft15"> <?php _e('Message format for posting','twitter-auto-publish'); ?><img src="<?php echo $heimg?>"
 						onmouseover="detdisplay_twap('xyz_twap_informationdiv')" onmouseout="dethide_twap('xyz_twap_informationdiv')" style="width:13px;height:auto;">
 						<div id="xyz_twap_informationdiv" class="twap_informationdiv"
 							style="display: none; font-weight: normal;">
-							{POST_TITLE} - Insert the title of your post.<br />{PERMALINK} -
-							Insert the URL where your post is displayed.<br />{POST_EXCERPT}
-							- Insert the excerpt of your post.<br />{POST_CONTENT} - Insert
-							the description of your post.<br />{BLOG_TITLE} - Insert the name
-							of your blog.<br />{USER_NICENAME} - Insert the nicename
-							of the author.<br />{POST_ID} - Insert the ID of your post.
-							<br />{POST_PUBLISH_DATE} - Insert the publish date of your post.
-							<br />{USER_DISPLAY_NAME} - Insert the display name of the author.
-						</div>
-		</td>
+							{POST_TITLE} - <?php _e('Insert the title of your post.','twitter-auto-publish'); ?><br/>
+							{PERMALINK} - <?php _e('Insert the URL where your post is displayed.','twitter-auto-publish'); ?><br/>
+							{POST_EXCERPT} - <?php _e('Insert the excerpt of your post.','twitter-auto-publish'); ?><br/>
+							{POST_CONTENT} - <?php _e('Insert the description of your post.','twitter-auto-publish'); ?><br/>
+							{BLOG_TITLE} - <?php _e('Insert the name of your blog.','twitter-auto-publish'); ?><br/>
+							{USER_NICENAME} - <?php _e('Insert the nicename of the author.','twitter-auto-publish'); ?><br/>
+							{POST_ID} - <?php _e('Insert the ID of your post.','twitter-auto-publish'); ?><br/>
+							{POST_PUBLISH_DATE} - <?php _e('Insert the publish date of your post.','twitter-auto-publish'); ?><br/>
+							{USER_DISPLAY_NAME} - <?php _e('Insert the display name of the author.','twitter-auto-publish'); ?>
+						</div></td>
 	<td>
 	<select name="xyz_twap_info" id="xyz_twap_info" onchange="xyz_twap_info_insert(this)">
-		<option value ="0" selected="selected">--Select--</option>
+		<option value ="0" selected="selected"> --<?php _e('Select','twitter-auto-publish'); ?>-- </option>
 		<option value ="1">{POST_TITLE}  </option>
 		<option value ="2">{PERMALINK} </option>
 		<option value ="3">{POST_EXCERPT}  </option>
@@ -301,7 +306,8 @@ if (get_option('xyz_twap_default_selection_edit')==2 && isset($GLOBALS['edit_fla
 	var edit_flag="<?php echo $GLOBALS['edit_flag'];?>";
 	if(edit_flag==1)
 		load_edit_action();
-	
+	if(edit_flag!=1)
+		load_create_action();
 	function load_edit_action()
 	{
 		document.getElementById("xyz_twap_post").value=1;
@@ -315,7 +321,17 @@ if (get_option('xyz_twap_default_selection_edit')==2 && isset($GLOBALS['edit_fla
 
 
 	}
-	
+	function load_create_action()
+	{
+		document.getElementById("xyz_twap_post").value=1;
+		var xyz_twap_default_selection_create="<?php echo esc_html(get_option('xyz_twap_default_selection_create'));?>";
+		if(xyz_twap_default_selection_create=="")
+			xyz_twap_default_selection_create=0;
+		if(xyz_twap_default_selection_create==1)
+			return;
+		jQuery('#xyz_twap_twpost_permission_0').attr('checked',true);
+		displaycheck_twap();
+	}
 	function xyz_twap_info_insert(inf){
 		
 	    var e = document.getElementById("xyz_twap_info");

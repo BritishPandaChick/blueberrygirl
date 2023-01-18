@@ -5,32 +5,34 @@ if( !defined('ABSPATH') ){ exit();}
 
 <div style="width: 99%">
 <p style="text-align: justify">
-WP Twitter Auto Publish automatically publishes posts from your blog to your  Twitter pages. It allows you to filter posts based on post-types and categories.
-WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscripts.com">xyzscripts</a>.</p>
+<?php $wp_twap="WP Twitter Auto Publish";
+$twap_pub_msg=sprintf( __('%s automatically publishes posts from your blog to your Twitter pages. It allows you to filter posts based on post-types and categories. %s is developed and maintained by','twitter-auto-publish'),$wp_twap,$wp_twap);
+      echo $twap_pub_msg; ?> <a href="http://xyzscripts.com">XYZScripts</a>.</p>
 
 
 
 <p style="text-align: justify">
-	If you would like to have more features , please try <a
-		href="https://xyzscripts.com/wordpress-plugins/social-media-auto-publish/features"
-		target="_blank">XYZ Social Media Auto Publish</a> which is a premium version of this
-	plugin. We have included a quick comparison of the free and premium
-	plugins for your reference.
+	<?php $twap_smap_url="https://xyzscripts.com/wordpress-plugins/social-media-auto-publish/features";
+	$twap_smap_plugin = "XYZ Social Media Auto Publish";
+	$twap_feature_msg=sprintf( __('If you would like to have more features , please try <a href="%s" target="_blank">%s</a> which is a premium version of this plugin. We have included a quick comparison of the free and premium plugins for your reference.','twitter-auto-publish'),$twap_smap_url,$twap_smap_plugin); 
+	echo $twap_feature_msg; ?>
 </p>
  </div>
  <table class="xyz-premium-comparison" cellspacing=0 style="width: 99%;">
 	<tr style="background-color: #EDEDED">
-		<td><h2>Feature group</h2></td>
-		<td><h2>Feature</h2></td>
-		<td><h2>Free</h2>
+		<td><h2><?php _e('Feature group','twitter-auto-publish');?></h2></td>
+		<td><h2><?php _e('Feature','twitter-auto-publish');?></h2></td>
+		<td><h2><?php _e('Free','twitter-auto-publish');?></h2>
 		</td>
-		<td><h2>Premium</h2></td>
-		<td><h2>SMAP Premium+</h2></td>
+		<td><h2><?php _e('Premium','twitter-auto-publish');?></h2></td>
+		<td><h2>  <?php $twap_smap="SMAP";
+		                $twap_premium_msg=sprintf( __('%s Premium','twitter-auto-publish'),$twap_smap);
+		                echo $twap_premium_msg; ?>+</h2></td>
 	</tr>
 	<!-- Supported Media  -->
 	<tr>
-		<td rowspan="5"><h4>Supported Media</h4></td>
-		<td>Facebook</td>
+		<td rowspan="6"><h4><?php _e('Supported Media','twitter-auto-publish');?></h4></td>
+		<td> <?php _e('Facebook','twitter-auto-publish'); ?> </td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -40,7 +42,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Twitter</td>
+		<td> <?php _e('Twitter','twitter-auto-publish'); ?> </td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -49,7 +51,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 		</td>
 	</tr>
 	<tr>
-		<td>LinkedIn</td>
+		<td> <?php _e('LinkedIn','twitter-auto-publish'); ?> </td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -58,7 +60,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 		</td>
 	</tr>
 	<tr>
-		<td>Tumblr</td>
+		<td> <?php _e('Instagram','twitter-auto-publish'); ?> </td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -67,7 +69,16 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 		</td>
 	</tr>
 	<tr>
-		<td>Pinterest<span style="color: #FF8000;font-size: 14px;font-weight: bold;">*</span></td>
+		<td> <?php _e('Tumblr','twitter-auto-publish'); ?> </td>
+		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
+		</td>
+		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
+		</td>
+		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
+		</td>
+	</tr>
+	<tr>
+		<td> <?php _e('Pinterest','twitter-auto-publish'); ?> <span style="color: #FF8000;font-size: 14px;font-weight: bold;">*</span></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -78,8 +89,8 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 
 	<!-- Posting Options  -->
 	<tr>
-		<td rowspan="14"><h4>Posting Options</h4></td>
-		<td>Publish to facebook pages</td>
+		<td rowspan="15"><h4><?php _e('Posting Options','twitter-auto-publish');?></h4></td>
+		<td><?php _e('Publish to facebook pages','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -89,7 +100,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 		<tr>
-		<td>Publish to facebook groups</td>
+		<td><?php _e('Publish to facebook groups','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -99,7 +110,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Publish to twitter profile</td>
+		<td><?php _e('Publish to twitter profile','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -109,7 +120,16 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Publish to linkedin profile/company pages</td>
+		<td><?php _e('Publish to linkedin profile/company pages','twitter-auto-publish');?></td>
+		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
+		</td>
+		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
+		</td>
+		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
+		</td>
+	</tr>
+	<tr>
+		<td> <?php _e('Publish to instagram Business accounts','twitter-auto-publish'); ?> </td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -119,7 +139,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 		<tr>
-		<td>Publish to tumblr profile</td>
+		<td><?php _e('Publish to tumblr profile','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -129,7 +149,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Publish to pinterest boards</td>
+		<td><?php _e('Publish to pinterest boards','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -139,7 +159,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Option to add twitter image description for visually impaired people</td>
+		<td><?php _e('Option to add twitter image description for visually impaired people','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -149,7 +169,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Option to republish existing posts</td>
+		<td><?php _e('Option to republish existing posts','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -159,7 +179,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Publish to multiple social media accounts</td>
+		<td><?php _e('Publish to multiple social media accounts','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -169,7 +189,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Seperate message formats for publishing to multiple social media accounts</td>
+		<td><?php _e('Seperate message formats for publishing to multiple social media accounts','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -179,7 +199,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Save auto publish settings of individual posts</td>
+		<td><?php _e('Save auto publish settings of individual posts','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -189,7 +209,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Hash Tags support for Facebook, Twitter, Linkedin, Pinterest and Tumblr</td>
+		<td><?php _e('Hash Tags support for Facebook, Twitter, Linkedin, Instagram, Pinterest and Tumblr','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -199,7 +219,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Option to use post tags as hash tags</td>
+		<td><?php _e('Option to use post tags as hash tags','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -209,7 +229,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Enable/Disable SSL peer verification</td>
+		<td><?php _e('Enable/Disable SSL peer verification','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -221,8 +241,8 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	<!-- Image Options  -->
 
 	<tr>
-	<td rowspan="5"><h4>Image Options</h4></td>
-		<td>Publish images along with post content</td>
+	<td rowspan="5"><h4><?php _e('Image Options','twitter-auto-publish');?></h4></td>
+		<td><?php _e('Publish images along with post content','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -233,7 +253,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 
 
 	<tr>
-		<td>Separate default image url for publishing to multiple social media accounts</td>
+		<td><?php _e('Separate default image url for publishing to multiple social media accounts','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -243,7 +263,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 		<tr>
-		<td>Option to specify preference from featured image, post content, post meta and open graph tags</td>
+		<td><?php _e('Option to specify preference from featured image, post content, post meta and open graph tags','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -253,7 +273,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Publish multiple images to facebook, tumblr, linkedin and twitter along with post content</td>
+		<td><?php _e('Publish multiple images to facebook, tumblr, linkedin and twitter along with post content','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -263,7 +283,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Option to specify multiphoto preference from post content and post meta</td>
+		<td><?php _e('Option to specify multiphoto preference from post content and post meta','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -275,8 +295,8 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	<!-- Video Options  -->
 
 	<tr>
-	<td rowspan="4"><h4>Video/Audio Options</h4></td>
-		<td>Publish video to facebook, tumblr and twitter along with post content</td>
+	<td rowspan="4"><h4><?php _e('Video/Audio Options','twitter-auto-publish');?></h4></td>
+		<td><?php _e('Publish video to facebook, tumblr, Linkedin, Instagram and twitter along with post content','twitter-auto-publish');?> </td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -286,7 +306,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Option to specify preference from post content, post meta and open graph tags</td>
+		<td><?php _e('Option to specify preference from post content, post meta and open graph tags','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -296,7 +316,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Publish audio to tumblr along with post content</td>
+		<td><?php _e('Publish audio to tumblr along with post content','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -305,7 +325,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 		</td>
 	</tr>
 	<tr>
-		<td>Option to specify audio preference from  post content, post meta and open graph tags</td>
+		<td><?php _e('Option to specify audio preference from  post content, post meta and open graph tags','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -316,8 +336,8 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	<!-- Filter Options  -->
 
 	<tr>
-	<td rowspan="9"><h4>Filter Options</h4></td>
-		<td>Filter posts to publish based on categories</td>
+	<td rowspan="9"><h4><?php _e('Filter Options','twitter-auto-publish');?></h4></td>
+		<td><?php _e('Filter posts to publish based on categories','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -327,7 +347,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Filter posts to publish based on custom post types</td>
+		<td><?php _e('Filter posts to publish based on custom post types','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -336,7 +356,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 		</td>
 	</tr>
 	<tr>
-		<td>Filter posts to publish based on sticky posts</td>
+		<td><?php _e('Filter posts to publish based on sticky posts','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -345,7 +365,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 		</td>
 	</tr>
 	<tr>
-		<td>Configuration to enable/disable page publishing</td>
+		<td><?php _e('Configuration to enable/disable page publishing','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -355,7 +375,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Category filter for individual accounts</td>
+		<td><?php _e('Category filter for individual accounts','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -365,7 +385,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Custom post type filter for individual accounts</td>
+		<td><?php _e('Custom post type filter for individual accounts','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -375,7 +395,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Enable/Disable page publishing for individual accounts</td>
+		<td><?php _e('Enable/Disable page publishing for individual accounts','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -385,7 +405,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Override auto publish scheduling for individual accounts</td>
+		<td><?php _e('Override auto publish scheduling for individual accounts','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -394,7 +414,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 		</td>
 	</tr>
 	<tr>
-		<td>Override auto publish based on sticky posts for individual accounts</td>
+		<td><?php _e('Override auto publish based on sticky posts for individual accounts','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -405,8 +425,8 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	<!-- Scheduling  -->
 
 	<tr>
-	<td rowspan="4"><h4>Scheduling</h4></td>
-		<td>Instantaneous post publishing</td>
+	<td rowspan="4"><h4><?php _e('Scheduling','twitter-auto-publish');?></h4></td>
+		<td><?php _e('Instantaneous post publishing','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -416,7 +436,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Scheduled post publishing using cron</td>
+		<td><?php _e('Scheduled post publishing using cron','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -426,7 +446,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Status summary of auto publish tasks by mail</td>
+		<td><?php _e('Status summary of auto publish tasks by mail','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -436,7 +456,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Configurable auto publishing time interval</td>
+		<td><?php _e('Configurable auto publishing time interval','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -450,8 +470,8 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 
 	<!-- Publishing History  -->
 	<tr>
-		<td rowspan="4"><h4>Publishing History</h4></td>
-		<td>View auto publish history</td>
+		<td rowspan="4"><h4><?php _e('Publishing History','twitter-auto-publish');?></h4></td>
+		<td><?php _e('View auto publish history','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -460,7 +480,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 		</td>
 	</tr>
 	<tr>
-		<td>View auto publish error logs</td>
+		<td><?php _e('View auto publish error logs','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -470,7 +490,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Option to republish post</td>
+		<td><?php _e('Option to republish post','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -480,7 +500,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 	</tr>
 
 	<tr>
-		<td>Option to reschedule publishing</td>
+		<td><?php _e('Option to reschedule publishing','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -491,8 +511,8 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 
 	<!-- Installation and Support -->
 	<tr>
-		<td rowspan="2"><h4>Installation and Support</h4></td>
-		<td>Free Installation</td>
+		<td rowspan="2"><h4><?php _e('Installation and Support','twitter-auto-publish');?></h4></td>
+		<td> <?php _e('Free Installation','twitter-auto-publish');?> </td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -501,7 +521,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 		</td>
 	</tr>
 	<tr>
-		<td>Privilege customer support</td>
+		<td><?php _e('Privilege customer support','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -512,8 +532,8 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 
 	<!-- Addons and Support -->
 	<tr>
-		<td rowspan="3"><h4>Addon Features</h4></td>
-		<td>Advanced Autopublish Scheduler</td>
+		<td rowspan="3"><h4><?php _e('Addon Features','twitter-auto-publish');?></h4></td>
+		<td><?php _e('Advanced Autopublish Scheduler','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -522,7 +542,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 		</td>
 		</tr>
 		<tr>
-		<td>URL-Shortener</td>
+		<td><?php _e('URL-Shortener','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -531,7 +551,7 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 		</td>
 	</tr>
 	<tr>
-		<td>Privilege Management</td>
+		<td><?php _e('Privilege Management','twitter-auto-publish');?></td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/cross.png",XYZ_TWAP_PLUGIN_FILE);?>">
@@ -540,20 +560,27 @@ WP Twitter Auto Publish is developed and maintained by <a href="http://xyzscript
 		</td>
 	</tr>
 	<tr>
-		<td rowspan="2"><h4>Other</h4></td>
-		<td>Price</td>
-		<td>FREE</td>
-		<td>Starts from 39 USD</td>
-		<td>Starts from 69 USD</td>
+		<td rowspan="3"><h4><?php _e('Other','twitter-auto-publish');?></h4></td>
+		<td><?php _e('Price','twitter-auto-publish');?></td>
+		<td><?php _e('FREE','twitter-auto-publish');?></td>
+		<td><?php _e('Starts from 39 USD','twitter-auto-publish');?></td>
+		<td><?php _e('Starts from 69 USD','twitter-auto-publish');?></td>
+	</tr>
+		<tr>
+		<td><?php $twap_smapsolution="SMAPSOLUTIONS"; 
+		$twap_package_msg=sprintf(__('%s API package for 1 year, worth 10 USD(1 twitter account ,10 api calls per hour)','twitter-auto-publish'),$twap_smapsolution);
+		echo $twap_package_msg; ?></td>
+		<td><?php _e('1 month free subscription','twitter-auto-publish');?></td>
+		<td colspan="2"><?php _e('1 year free subscription','twitter-auto-publish');?></td>
 	</tr>
 	<tr>
-		<td>Purchase</td>
+		<td><?php _e('Purchase','twitter-auto-publish');?></td>
 		<td></td>
-		<td style="padding: 2px" colspan='2' ><a target="_blank"href="https://xyzscripts.com/wordpress-plugins/social-media-auto-publish/purchase"  class="xyz-twap-buy-button">Buy Now</a>
+		<td style="padding: 2px" colspan='2' ><a target="_blank"href="https://xyzscripts.com/wordpress-plugins/social-media-auto-publish/purchase"  class="xyz-twap-buy-button"><?php _e('Buy Now','twitter-auto-publish');?></a>
 		</td>
 	</tr>
 
 </table>
 <br/>
 <div style="clear: both;"></div>
-<span style="color: #FF8000;font-size: 14px;font-weight: bold;"> * </span> Pinterest is added on experimental basis.
+<span style="color: #FF8000;font-size: 14px;font-weight: bold;"> * </span> <?php _e('Pinterest is added on experimental basis.','twitter-auto-publish');?>

@@ -89,26 +89,46 @@ function xyz_twap_getimage($post_ID,$description_org)
 {
 	$attachmenturl="";
 	$post_thumbnail_id = get_post_thumbnail_id( $post_ID );
-	if($post_thumbnail_id!="")
-	{
+	if(!empty($post_thumbnail_id))
 		$attachmenturl=wp_get_attachment_url($post_thumbnail_id);
-	}
 	else {
 		preg_match_all('/< *img[^>]*src *= *["\']?([^"\']*)/is', $description_org, $matches);
 		if(isset($matches[1][0]))
 			$attachmenturl = $matches[1][0];
 		else
 		{
+		    $matches=array();
 			$description_org=apply_filters('the_content', $description_org);
 			preg_match_all('/< *img[^>]*src *= *["\']?([^"\']*)/is', $description_org, $matches);
 			if(isset($matches[1][0]))
 				$attachmenturl = $matches[1][0];
+	        else
+	            $attachmenturl=xyz_twap_get_post_gallery_images_with_info($description_org,1);
 		}
 	}
 	return $attachmenturl;
 }
 }
 
+if(!function_exists('xyz_twap_get_post_gallery_images_with_info'))
+{
+    function xyz_twap_get_post_gallery_images_with_info($post_content,$single=1) {
+        $ids=$images_id=array();
+        preg_match('/\[gallery.*ids=.(.*).\]/', $post_content, $ids);
+        if (isset($ids[1]))
+            $images_id = explode(",", $ids[1]);
+            $image_gallery_with_info = array();
+            foreach ($images_id as $image_id) {
+                $attachment = get_post($image_id);
+                $img_src=$attachment->guid;
+                if($single==1)
+                    return $img_src;
+                    else
+                        $image_gallery_with_info[]=$img_src;
+            }
+            return $image_gallery_with_info;
+    }
+}
 /* Local time formating */
 if(!function_exists('xyz_twap_local_date_time')){
 	function xyz_twap_local_date_time($format,$timestamp){
@@ -158,4 +178,28 @@ if (!function_exists("xyz_twap_split_replace"))
 
 add_filter( 'plugin_row_meta','xyz_twap_links',10,2);
 
+if(!function_exists('xyz_twap_post_to_smap_api'))
+{
+	function xyz_twap_post_to_smap_api($post_details,$url,$xyzscripts_hash_val='') {
+		if (function_exists('curl_init'))
+		{
+			$post_parameters['post_params'] = serialize($post_details);
+			$post_parameters['request_hash'] = md5($post_parameters['post_params'].$xyzscripts_hash_val);
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_POST, true);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $post_parameters);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER,(get_option('xyz_twap_peer_verification')=='1') ? true : false);
+			$content = curl_exec($ch);
+			curl_close($ch);
+			if (empty($content))
+			{
+					$response=array('status'=>0,'tw_api_count'=>0,'msg'=>'Error:unable to connect');
+					$content=json_encode($response);
+			}
+			return $content;
+		}
+	}
+}
 ?>

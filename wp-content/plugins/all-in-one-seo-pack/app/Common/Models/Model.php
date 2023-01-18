@@ -76,6 +76,15 @@ class Model implements \JsonSerializable {
 	protected $pk = 'id';
 
 	/**
+	 * The ID of the model.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @var int
+	 */
+	public $id = 0;
+
+	/**
 	 * An array of columns from the DB that we can use.
 	 *
 	 * @since 4.0.0
@@ -304,6 +313,10 @@ class Model implements \JsonSerializable {
 	 * @return null
 	 */
 	public function delete() {
+		if ( ! $this->exists() ) {
+			return;
+		}
+
 		aioseo()->core->db
 			->delete( $this->table )
 			->where( $this->pk, $this->id )

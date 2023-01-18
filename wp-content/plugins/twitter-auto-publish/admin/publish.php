@@ -103,6 +103,11 @@ function xyz_twap_link_publish($post_ID) {
 	$twid=get_option('xyz_twap_tw_id');
 	$taccess_token=get_option('xyz_twap_current_twappln_token');
 	$taccess_token_secret=get_option('xyz_twap_twaccestok_secret');
+	$xyz_twap_tw_app_sel_mode=get_option('xyz_twap_tw_app_sel_mode');
+	$xyz_twap_smapsoln_userid=get_option('xyz_twap_smapsoln_userid');
+	$xyz_twap_smapsoln_secret_key=get_option('xyz_twap_smapsoln_secret_key');
+	$xyz_twap_xyzscripts_user_id=get_option('xyz_twap_xyzscripts_user_id');
+	$xyz_twap_xyzscripts_hash_val=get_option('xyz_twap_xyzscripts_hash_val');
 	if ($messagetopost=='')
 	$messagetopost=get_option('xyz_twap_twmessage');
 	if(isset($_POST['xyz_twap_twmessage']))
@@ -238,7 +243,7 @@ function xyz_twap_link_publish($post_ID) {
 		
 		$description_org=$description;
 		$attachmenturl=xyz_twap_getimage($post_ID, $postpp->post_content);
-		if($attachmenturl!="")
+		if(!empty($attachmenturl))
 			$image_found=1;
 		else
 			$image_found=0;
@@ -261,18 +266,18 @@ function xyz_twap_link_publish($post_ID) {
 		$excerpt=str_replace("&nbsp;","",$excerpt);
 
 
-		if($taccess_token!="" && $taccess_token_secret!="" && $tappid!="" && $tappsecret!="" && $post_twitter_permission==1)
+		if((($xyz_twap_tw_app_sel_mode==1 && !empty($xyz_twap_smapsoln_userid) && !empty($xyz_twap_smapsoln_secret_key) ) || ($taccess_token!="" && $taccess_token_secret!="" && $tappid!="" && $tappsecret!="" && $xyz_twap_tw_app_sel_mode==0) ) && $post_twitter_permission==1)
 		{
 			
 			////image up start///
-
+			$api_exceed_err=0;$remaining_tw_api_count=0;$tw_api_count=0;
 			$img_status="";
 			if($post_twitter_image_permission==1)
 			{
-				
+			    update_post_meta($post_ID, "xyz_twap_insert_twitter_card", "1");
 				
 				$img=array();
-				if($attachmenturl!="")
+				if(!empty($attachmenturl))
 					$img = wp_remote_get($attachmenturl,array('sslverify'=> (get_option('xyz_twap_peer_verification')=='1') ? true : false));
 					
 				if(is_array($img))
@@ -424,21 +429,26 @@ function xyz_twap_link_publish($post_ID) {
  		 /* if (strlen($substring)>$tw_max_len)
                 	$substring=substr($substring, 0, $tw_max_len-3)."...";*/
 
+ 				 if($xyz_twap_tw_app_sel_mode==0)
 			$twobj = new TWAPTwitterOAuth(array( 'consumer_key' => $tappid, 'consumer_secret' => $tappsecret, 'user_token' => $taccess_token, 'user_secret' => $taccess_token_secret,'curl_ssl_verifypeer'   => false));
+
 			$tw_publish_status='';
-			if($image_found==1 && $post_twitter_image_permission==1)
+			if($image_found==1 && $post_twitter_image_permission==1 && $xyz_twap_tw_app_sel_mode==0)
 			{
+			
 				$url = 'https://upload.twitter.com/1.1/media/upload.json';
 				$img_response = wp_remote_get($attachmenturl,array('sslverify'=> (get_option('xyz_twap_peer_verification')=='1') ? true : false) );
 				if ( is_array( $img_response ) ) {
 					$img_body = $img_response['body'];
 					$params=array('media_data' =>base64_encode($img_body));
 				$code = $twobj->request('POST', $url, $params, true,true);
+					$tw_api_count++;
 				if ($code == 200)
 				{
 					$response = json_decode($twobj->response['response']);
 					 $media_ids_str = $response->media_id_string;
 					$resultfrtw = $twobj->request('POST', $twobj->url('1.1/statuses/update'), array( 'media_ids' => $media_ids_str, 'status' => $substring));
+					$tw_api_count++;
 					if($resultfrtw==200)
 					{
 						if ( $media_ids_str !='')
@@ -458,37 +468,92 @@ function xyz_twap_link_publish($post_ID) {
 			}
 			else
 			{
-			$resultfrtw = $twobj->request('POST', $twobj->url('1.1/statuses/update'), array('status' =>$substring));
-			if($resultfrtw==200)
-				{
-					$tw_publish_status="<span style=\"color:green\">statuses/update : Success.</span>";
-				}
-				elseif($resultfrtw!=200){
-					if($twobj->response['response']!="")
-					$tw_publish_status="<span style=\"color:red\">".$twobj->response['response'].".</span>";
-					else
-						$tw_publish_status=$resultfrtw;
-				}
-				else if($img_status!="")
-					$tw_publish_status="<span style=\"color:red\">".$img_status.".</span>";
-					
+			    if($xyz_twap_tw_app_sel_mode==0)
+			    {
+        			$resultfrtw = $twobj->request('POST', $twobj->url('1.1/statuses/update'), array('status' =>$substring));
+        			$tw_api_count++;
+        			if($resultfrtw==200)
+    				{
+    					$tw_publish_status="<span style=\"color:green\">statuses/update : Success.</span>";
+    				}
+    				elseif($resultfrtw!=200){
+    					if($twobj->response['response']!="")
+    					$tw_publish_status="<span style=\"color:red\">".$twobj->response['response'].".</span>";
+    					else
+    						$tw_publish_status=$resultfrtw;
+    				}
+    				else if($img_status!="")
+    					$tw_publish_status="<span style=\"color:red\">".$img_status.".</span>";
+			     }
 			}
 			$tweet_id_string='';
-			$resp = json_decode($twobj->response['response']);
-			if (isset($resp->id_str) && !empty($resp->id_str)){
-				$tweet_link="https://twitter.com/".$twid."/status/".$resp->id_str;
-				$tweet_id_string="<br/><span style=\"color:#21759B;text-decoration:underline;\"><a target=\"_blank\" href=".$tweet_link.">View Tweet</a></span>";
-					
-			}
-			elseif (isset($resp->id) && !empty($resp->id)){
-				$tweet_link="https://twitter.com/".$twid."/status/".$resp->id;
-				$tweet_id_string="<br/><span style=\"color:#21759B;text-decoration:underline;\"><a target=\"_blank\" href=".$tweet_link.">View Tweet</a></span>";
-					
-			}
-			
-			
-			$tw_publish_status_insert=serialize($tw_publish_status.$tweet_id_string);
-			
+			if ($xyz_twap_tw_app_sel_mode==0) 
+			{
+    			$resp = json_decode($twobj->response['response']);
+    			if (isset($resp->id_str) && !empty($resp->id_str)){
+    				$tweet_link="https://twitter.com/".$twid."/status/".$resp->id_str;
+    				$tweet_id_string="<br/><span style=\"color:#21759B;text-decoration:underline;\"><a target=\"_blank\" href=".$tweet_link.">View Tweet</a></span>";
+    					
+    			}
+    			elseif (isset($resp->id) && !empty($resp->id)){
+    				$tweet_link="https://twitter.com/".$twid."/status/".$resp->id;
+    				$tweet_id_string="<br/><span style=\"color:#21759B;text-decoration:underline;\"><a target=\"_blank\" href=".$tweet_link.">View Tweet</a></span>";
+    					
+    			}
+    			else 
+    			{
+    				$tweet_id_string="<br/><span style=\"color:red\">Not available.</span>";
+    			}
+    			
+    			$tw_publish_status_insert=serialize($tw_publish_status.$tweet_id_string);
+	       	}
+			/*api_exceed_err:
+			if($api_exceed_err==1){
+				$tw_publish_status= "<span style=\"color:red\"> Daily API count limit exceeded,only '.$remaining_tw_api_count.' api calls left.</span>";//1;
+			}*/
+	       	if($xyz_twap_tw_app_sel_mode==1){
+       	    
+       	    $video=$tweet_id_string="";
+       	    $xyz_twap_publish_video_tw=$supported_urls_count=$xyz_twap_multiphoto_tweet=$count_tw=$xyz_twap_use_tw_img_desc=0;
+       	    $multiphoto_urls_tw=$desc_array=array();
+       	    
+       	    $post_details=array('xyz_smap_userid'=>$xyz_twap_smapsoln_userid,
+       	        'xyz_use_tw_img_desc'=>$xyz_twap_use_tw_img_desc,
+       	        'alt_text'=>$desc_array,
+       	        'tw_username'=>$twid,
+       	        'video_length_total_bytes'=>$count_tw,
+       	        'xyz_smap_posting_method'=>$post_twitter_image_permission,
+       	        'xyz_smap_multiphoto_enable'=>$xyz_twap_multiphoto_tweet,
+       	        'multiphoto_count'=>$supported_urls_count,
+       	        'xyz_smap_multiphoto_urls'=>$multiphoto_urls_tw,
+       	        'xyz_smap_video_url'=>$video,
+       	        'xyz_smap_xyzscripts_userid'=>$xyz_twap_xyzscripts_user_id,
+       	        'xyz_smap_premium_publish_video'=>$xyz_twap_publish_video_tw,
+       	        'message'=>$substring,
+       	        'tw_image_url'=>$attachmenturl
+       	    );
+       	    $url=XYZ_TWAP_SMAPSOLUTION_PUBLISH_URL.'api/publish.php';
+       	    $result=xyz_twap_post_to_smap_api($post_details,$url,$xyz_twap_smapsoln_secret_key);
+       	    
+       	    $result=json_decode($result);
+       	    if(!empty($result))
+       	    {
+       	        $tw_api_count=$result->tw_api_count;
+       	        if ($result->status==1)
+       	            $tw_publish_status_insert=serialize("<span style=\"color:green\"> ".$result->msg."</span>");
+   	            elseif ($result->status==0)
+   	            {
+   	                if(isset($result->msg) && !empty($result->msg))
+   	                    $tw_publish_status_insert=serialize("<span style=\"color:red\"> ".$result->msg."</span>");
+   	                    else
+   	                        $tw_publish_status_insert= serialize("<span style=\"color:red\"> Response Not Available.</span>");//1;
+   	            }
+       	    }
+       	    else
+       	        $tw_publish_status_insert= serialize("<span style=\"color:red\"> Response Not Available.</span>");//1;
+       	        
+	       	}
+		
 			$time=time();
 			$post_tw_options=array(
 					'postid'	=>	$post_ID,

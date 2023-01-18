@@ -56,9 +56,9 @@ class Ping {
 		}
 
 		// First, unschedule any ping actions that might already be enqueued.
-		aioseo()->helpers->unscheduleAction( 'aioseo_sitemap_ping' );
+		aioseo()->actionScheduler->unschedule( 'aioseo_sitemap_ping' );
 		// Then, schedule the new ping.
-		aioseo()->helpers->scheduleSingleAction( 'aioseo_sitemap_ping', 30 );
+		aioseo()->actionScheduler->scheduleSingle( 'aioseo_sitemap_ping', 30 );
 	}
 
 	/**
@@ -109,7 +109,6 @@ class Ping {
 		foreach ( $endpoints as $endpoint ) {
 			foreach ( $sitemapUrls as $url ) {
 				wp_remote_get( $endpoint . urlencode( $url ) );
-				// @TODO: [V4+] Log bad responses using dedicated logger class once available.
 			}
 		}
 	}

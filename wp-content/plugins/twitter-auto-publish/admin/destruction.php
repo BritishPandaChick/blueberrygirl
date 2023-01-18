@@ -51,6 +51,7 @@ function twap_free_destroy()
 	delete_option('xyz_twap_post_logs');
 	delete_option('xyz_twap_premium_version_ads');
 	delete_option('xyz_twap_default_selection_edit');
+	delete_option('xyz_twap_default_selection_create');
 	delete_option('twap_installed_date');
 	delete_option('xyz_twap_dnt_shw_notice');
 	delete_option('xyz_twap_tw_char_limit');

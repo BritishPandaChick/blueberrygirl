@@ -1,11 +1,11 @@
 === Custom Twitter Feeds (Tweets Widget) ===
 Author: Smash Balloon
-Contributors: smashballoon, craig-at-smash-balloon
+Contributors: smashballoon, craig-at-smash-balloon, am, smub
 Support Website: http://smashballoon/custom-twitter-feeds/
 Tags: Twitter, Twitter feed, Twitter Tweets, Twitter widget, Custom Twitter Feed
 Requires at least: 4.1
-Tested up to: 6.0
-Stable tag: 2.0.2
+Tested up to: 6.1
+Stable tag: 2.0.3
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -225,15 +225,19 @@ If you're still having trouble displaying your Tweets after trying the common is
 
 == Screenshots ==
 
-1. By default the Custom Twitter Feeds plugin inherits styles from your theme
-2. Display multiple Twitter feeds and customize each one
-3. Custom Twitter Feeds Settings pages
-4. Built in customization settings make customizing your Twitter feed widget easy
-5. Additional styling options are built into the Custom Twitter Feeds plugin
-6. Use handy shortcode options to customize individual Twitter feeds
-7. To display a Twitter feed just copy and paste the shortcode into a Twitter widget or page
+1. Completely customize your feed
+2. Easily display multiple feeds from different Twitter accounts across your site
+3. Edit and manage multiple feeds
+4. Responsive by design
+5. Quick and easy setup
+6. Customize with a live preview
+7. Translation and custom text support
+8. Embed it anywhere
 
 == Changelog ==
+= 2.0.3 =
+* Fix: For GDPR plugins that Custom Twitter Feeds integrates with, other plugins that also integrate with those GDPR plugins would not work properly when Custom Twitter Feeds was active.
+
 = 2.0.2 =
 * Fix: Added code to help with debugging issues.
 * Fix: The descriptions of feed types were incorrect.
