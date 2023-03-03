@@ -185,6 +185,13 @@ class WPCode_Snippet {
 	public $device_type;
 
 	/**
+	 * Schedule parameters for this snippet.
+	 *
+	 * @var array
+	 */
+	public $schedule;
+
+	/**
 	 * Constructor. If the post passed is not the correct post type
 	 * the object will clear itself.
 	 *
@@ -200,6 +207,7 @@ class WPCode_Snippet {
 		}
 		if ( isset( $this->post_data ) && $this->post_type !== $this->post_data->post_type ) {
 			unset( $this->post_data );
+			unset( $this->id );
 		}
 	}
 
@@ -512,6 +520,9 @@ class WPCode_Snippet {
 		if ( isset( $this->device_type ) ) {
 			update_post_meta( $this->id, '_wpcode_device_type', $this->device_type );
 		}
+		if ( isset( $this->schedule ) ) {
+			update_post_meta( $this->id, '_wpcode_schedule', $this->schedule );
+		}
 
 		/**
 		 * Run extra logic after the snippet is saved.
@@ -822,5 +833,72 @@ class WPCode_Snippet {
 		}
 
 		return $this->device_type;
+	}
+
+	/**
+	 * Get the schedule data for this snippet.
+	 *
+	 * @return array
+	 */
+	public function get_schedule() {
+		if ( ! isset( $this->schedule ) ) {
+			$this->schedule = wp_parse_args(
+				get_post_meta( $this->get_id(), '_wpcode_schedule', true ),
+				array(
+					'start' => '',
+					'end'   => '',
+				)
+			);
+		}
+
+		return $this->schedule;
+	}
+
+	/**
+	 * Get the generator data for this snippet, if any.
+	 *
+	 * @return array|false
+	 */
+	public function get_generator_data() {
+		if ( ! isset( $this->generator_data ) ) {
+			$generator_data       = get_post_meta( $this->get_id(), '_wpcode_generator_data', true );
+			$this->generator_data = empty( $generator_data ) ? false : $generator_data;
+		}
+
+		return $this->generator_data;
+	}
+
+	/**
+	 * Get the generator name for this snippet.
+	 *
+	 * @return array|false
+	 */
+	public function get_generator() {
+		if ( ! isset( $this->generator ) ) {
+			$generator_name  = get_post_meta( $this->get_id(), '_wpcode_generator', true );
+			$this->generator = empty( $generator_name ) ? false : $generator_name;
+		}
+
+		return $this->generator;
+	}
+
+	/**
+	 * Check if the snippet is generated using a WPCode generator..
+	 *
+	 * @return bool
+	 */
+	public function is_generated() {
+		return ! empty( $this->get_generator() );
+	}
+
+	/**
+	 * Is this snippet scheduled?
+	 *
+	 * @return bool
+	 */
+	public function is_scheduled() {
+		$schedule = $this->get_schedule();
+
+		return ! empty( $schedule['start'] ) || ! empty( $schedule['end'] );
 	}
 }

@@ -72,7 +72,7 @@ abstract class WPCode_Conditional_Type {
 	 *
 	 * @return void
 	 */
-	abstract protected function load_type_options();
+	abstract public function load_type_options();
 
 	/**
 	 * Get the label.
@@ -185,6 +185,9 @@ abstract class WPCode_Conditional_Type {
 			}
 
 			return in_array( $value2, $value1 );
+		}
+		if ( is_array( $value2 ) ) {
+			return in_array( $value1, $value2 );
 		}
 
 		return $value1 == $value2;
