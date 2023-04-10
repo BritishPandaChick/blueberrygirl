@@ -1,19 +1,19 @@
 === Custom Twitter Feeds (Tweets Widget) ===
 Author: Smash Balloon
-Contributors: smashballoon, craig-at-smash-balloon, am, smub
+Contributors: smashballoon, craig-at-smash-balloon
 Support Website: http://smashballoon/custom-twitter-feeds/
 Tags: Twitter, Twitter feed, Twitter Tweets, Twitter widget, Custom Twitter Feed
 Requires at least: 4.1
-Tested up to: 6.1
-Stable tag: 2.0.5
+Tested up to: 6.2
+Stable tag: 2.0.6
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Custom Twitter Feeds allows you to display completely customizable Twitter Tweets from any user timeline, Twitter hashtag, or home timeline on your website.
+As of April 3rd, 2023 this plugin is not able to retrieve Tweets from Twitter's API. We are considering and testing some solutions to allow our free plugin to continue to work. Stay tuned!
 
 == Description ==
-Display **completely customizable**, **responsive** and **search engine crawlable** Twitter feeds on your website. The Custom Twitter Feeds plugin will display Tweets that completely match the look and feel of your site and includes tons of customization options! As of February 13th, 2023 you may experience changes in how tweets are displayed due to major changes in Twitter's API which our plugin uses.
+Display **completely customizable**, **responsive** and **search engine crawlable** Twitter feeds on your website. The Custom Twitter Feeds plugin will display Tweets that completely match the look and feel of your site and includes tons of customization options!
 
 = Features =
 * **Completely Customizable** - by default the Twitter feeds will inherit your theme's styles
@@ -234,6 +234,11 @@ If you're still having trouble displaying your Tweets after trying the common is
 7. To display a Twitter feed just copy and paste the shortcode into a Twitter widget or page
 
 == Changelog ==
+= 2.0.6 =
+* Fix: Fixed a conflict with Autoptimize that would cause a PHP error when clearing the Twitter cache.
+* Fix: Fixed a PHP notice that would occur when bulk deleting feeds.
+* Fix: When using the "boxed" layout, there would be no space between the header and the first tweet in the list.
+
 = 2.0.5 =
 * Tweak: API calls are prevented in the event that the Twitter API returns an error.
 * Fix: The feature for using your own Twitter App credentials was not working.
