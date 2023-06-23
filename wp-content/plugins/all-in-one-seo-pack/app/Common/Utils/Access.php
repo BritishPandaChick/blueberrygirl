@@ -38,7 +38,8 @@ class Access {
 		'aioseo_local_seo_settings',
 		'aioseo_page_local_seo_settings',
 		'aioseo_about_us_page',
-		'aioseo_setup_wizard'
+		'aioseo_setup_wizard',
+		'aioseo_page_seo_revisions_settings'
 	];
 
 	/**
@@ -116,7 +117,7 @@ class Access {
 				$roleObject->add_cap( 'aioseo_manage_seo' );
 			}
 
-			if ( current_user_can( 'edit_posts' ) ) {
+			if ( function_exists( 'wp_get_current_user' ) && current_user_can( 'edit_posts' ) ) {
 				$postCapabilities = [
 					'aioseo_page_analysis',
 					'aioseo_page_general_settings',

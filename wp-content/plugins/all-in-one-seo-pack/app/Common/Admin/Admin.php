@@ -142,7 +142,7 @@ class Admin {
 			add_action( 'admin_init', [ $this, 'addPluginScripts' ] );
 
 			// Add redirects messages to trashed posts.
-			add_filter( 'bulk_post_updated_messages', [ $this, 'appendTrashedMessage' ], 10, 2 );
+			add_filter( 'bulk_post_updated_messages', [ $this, 'appendTrashedMessage' ] );
 
 			$this->registerLinkFormatHooks();
 
@@ -221,13 +221,19 @@ class Admin {
 				'parent'     => $this->pageSlug
 			],
 			'aioseo-monsterinsights'   => [
-				'menu_title' => esc_html__( 'Analytics', 'all-in-one-seo-pack' ),
-				'parent'     => 'aioseo-monsterinsights'
+				'menu_title'          => esc_html__( 'Analytics', 'all-in-one-seo-pack' ),
+				'parent'              => 'aioseo-monsterinsights',
+				'hide_admin_bar_menu' => true,
 			],
 			'aioseo-about'             => [
 				'menu_title' => esc_html__( 'About Us', 'all-in-one-seo-pack' ),
 				'parent'     => $this->pageSlug
-			]
+			],
+			'aioseo-seo-revisions'     => [
+				'menu_title'          => esc_html__( 'SEO Revisions', 'all-in-one-seo-pack' ),
+				'parent'              => 'aioseo-seo-revisions',
+				'hide_admin_bar_menu' => true,
+			],
 		];
 	}
 
@@ -316,7 +322,7 @@ class Admin {
 				'title'          => esc_html__( 'Insert/edit link', 'all-in-one-seo-pack' ),
 				'update'         => esc_html__( 'Update', 'all-in-one-seo-pack' ),
 				'save'           => esc_html__( 'Add Link', 'all-in-one-seo-pack' ),
-				'noTitle'        => esc_html__( '(no title)', 'all-in-one-seo-pack' ),
+				'noTitle'        => esc_html__( '(no title)' ), // phpcs:ignore AIOSEO.Wp.I18n.MissingArgDomain
 				'labelTitle'     => esc_html__( 'Title', 'all-in-one-seo-pack' ),
 				'noMatchesFound' => esc_html__( 'No results found.', 'all-in-one-seo-pack' ),
 				'linkSelected'   => esc_html__( 'Link selected.', 'all-in-one-seo-pack' ),
@@ -584,8 +590,8 @@ class Admin {
 
 		$parent = is_admin() ? 'aioseo-main' : 'aioseo-settings-main';
 		foreach ( $this->pages as $id => $page ) {
-			// Remove the analytics menu.
-			if ( 'aioseo-monsterinsights' === $id ) {
+			// Remove page from admin bar menu.
+			if ( ! empty( $page['hide_admin_bar_menu'] ) ) {
 				continue;
 			}
 
@@ -765,7 +771,8 @@ class Admin {
 			'tools',
 			'feature-manager',
 			'monsterinsights',
-			'about'
+			'about',
+			'seo-revisions'
 		];
 
 		foreach ( $pages as $page ) {
@@ -942,7 +949,7 @@ class Admin {
 	 *
 	 * @since 4.0.0
 	 *
-	 * @param  WP_Post $post The post object.
+	 * @param  \WP_Post $post The post object.
 	 * @return void
 	 */
 	public function addPublishScore( $post ) {
@@ -958,8 +965,7 @@ class Admin {
 		$showTruSeo     = aioseo()->options->advanced->truSeo;
 		$isSpecialPage  = aioseo()->helpers->isSpecialPage( $post->ID );
 		$dynamicOptions = aioseo()->dynamicOptions->noConflict();
-		$showMetabox    = $dynamicOptions->searchAppearance->postTypes->has( $post->post_type, false )
-			&& $dynamicOptions->{$post->post_type}->advanced->showMetaBox;
+		$showMetabox    = $dynamicOptions->searchAppearance->postTypes->has( $post->post_type, false ) && $dynamicOptions->{$post->post_type}->advanced->showMetaBox;
 
 		$postTypesMB = [];
 		foreach ( $postTypes as $pt ) {
@@ -973,7 +979,10 @@ class Admin {
 					$postTypesMB[] = $pt['name'];
 				}
 			} else {
-				if ( 'attachment' !== $pt['name'] ) {
+				if (
+					'attachment' !== $pt['name'] &&
+					'aioseo-location' !== $pt['name']
+				) {
 					$postTypesMB[] = $pt['name'];
 				}
 			}
@@ -1126,7 +1135,7 @@ class Admin {
 	 * @param  array $messages The original messages.
 	 * @return array           The modified messages.
 	 */
-	public function appendTrashedMessage( $messages, $counts ) {
+	public function appendTrashedMessage( $messages ) {
 		// Let advanced users override this.
 		if ( apply_filters( 'aioseo_redirects_disable_trashed_posts_suggestions', false ) ) {
 			return $messages;

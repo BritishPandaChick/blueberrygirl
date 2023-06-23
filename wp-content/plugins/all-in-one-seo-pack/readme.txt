@@ -1,10 +1,10 @@
 === All in One SEO – Best WordPress SEO Plugin – Easily Improve SEO Rankings & Increase Traffic ===
 Contributors: aioseo, smub, benjaminprojas
 Tags: SEO, Google Search Console, XML Sitemap, meta description, schema, meta title, rich snippets, woocommerce seo, local seo, open graph, google news sitemap, video sitemap, robots.txt, seo audit, content analysis, seo plugin, redirection
-Tested up to: 6.2
+Tested up to: 6.2.2
 Requires at least: 4.9
 Requires PHP: 5.6
-Stable tag: 4.3.6.1
+Stable tag: 4.4.0.1
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
 
@@ -256,6 +256,60 @@ Visit <a href="http://www.wpbeginner.com/" rel="friend" title="WPBeginner">WPBeg
 
 
 == Changelog ==
+
+**New in Version 4.4.0.1**
+
+* Fixed: Table of Contents block sometimes not able to detect certain headings.
+
+**New in Version 4.4.0**
+
+* New: SEO Revisions - Keep a historical record of SEO changes, allowing you to monitor the effectiveness of your SEO efforts and make informed decisions.
+* New: Google Updates & Revision Markers for Search Statistics - Track how Google algorithm updates and SEO/post revisions affect your search traffic over time. 📈
+
+**New in Version 4.3.9**
+
+* Updated: Sitemap performance has been improved across the board, with up to 3 times faster loading times and 8 times less memory usage!
+* Updated: Additional design tweaks to make our UI more compact.
+* Fixed: Meta description in the preview now updates in realtime for the Product Short Description smart tag for WooCommerce Products.
+* Fixed: Preview for the Breadcrumbs widget not working with certain versions of WordPress Core.
+* Fixed: Add warning when AI Title/Description Generator returns empty suggestions due to an infraction of their usage policies.
+* Fixed: The AIOSEO FAQ block can now correctly be used as a widget.
+* Fixed: The Product Brand and Product Identifier schema properties are now correctly migrated over from older versions.
+* Fixed: Schema rating fields now allow float values to be added.
+* Fixed: Ingredient list for Recipe schema now lists ingredients as an array instead of a string as per Google’s documentation.
+* Fixed: Removed support for AggregateOffer for WooCommerce product variations per Google’s guidelines.
+* Fixed: Schema validator content missing due to a Vue 3 error.
+* Fixed: Scanning a URL with the SEO Analyzer no longer collapses the results card for the URL.
+* Fixed: TruSEO score is no displayed for Local SEO Locations.
+* Fixed: Local SEO Enhanced Search error when search term is empty.
+* Fixed: Attachment pages are now correctly scanned by the image sitemap and include their attached image.
+* Fixed: Remove support for keeping certain characters in image filenames in the Image SEO addon as they are automatically stripped out by WordPress Core.
+* Fixed: Plugin conflict where robots meta tag was not output on the homepage of the Extra theme.
+* Fixed: Plugin conflict with Timber where the title isn’t rewritten correctly due to a output buffer conflict.
+
+**New in Version 4.3.8**
+
+* New: WP Code Integration - You can now view curated code snippets for AIOSEO in the Tools menu and add them in one click through the WP Code plugin.
+* Updated: Added support for WooCommerce Product Categories and Product Tags to our Primary Term feature.
+* Fixed: Console error in Classic Editor when post has no assigned terms.
+
+**New in Version 4.3.7**
+
+* Updated: Added default arg values to filters/actions to prevent fatal errors in PHP 8 when hooks are called incorrectly by third-party themes or plugins.
+* Updated: Improved map preview in Local SEO by showing the address entered under Business Info.
+* Fixed: AI Title/Description Generator now allows non-admin users to generate SEO Titles and Meta Descriptions.
+* Fixed: PHP error when removing all plugin data on uninstall.
+* Fixed: PHP error when trying to deactivate RankMath as conflicting SEO plugin through our notice.
+* Fixed: Added filter to hide and remove version number from AIOSEO generator.
+* Fixed: URLs containing the word ‘null’ or encoded urls in the 404 redirect logs can now be deleted.
+* Fixed: Redirect source url is now normalized to be always relative.
+* Fixed: Conflict with Fiscomm PURS E-Fiscalisation plugin.
+* Fixed: Conflict with Elementor and AIOSEO’s Search Term tag.
+* Fixed: Headline Analyzer now correctly pushes previously analyzed headline to the top of the results if it is analyzed again.
+* Fixed: Content Rankings report in Search Statistics no longer breaks the ordering of results on pagination.
+* Fixed: PHP warning when activating an addon plugin.
+* Fixed: Editing text in Table of Contents block now saves correctly without errors in the console.
+* Fixed: Fixed glitchy ripple animation on tab component.
 
 **New in Version 4.3.6.1**
 
@@ -562,6 +616,6 @@ Additionally, AIOSEO can also provide you with data on the most frequently used 
 
 == Upgrade Notice ==
 
-= 4.3.6.1 =
+= 4.4.0.1 =
 
 This update adds major improvements and bug fixes.
