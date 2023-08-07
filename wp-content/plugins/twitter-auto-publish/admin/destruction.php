@@ -56,6 +56,11 @@ function twap_free_destroy()
 	delete_option('xyz_twap_dnt_shw_notice');
 	delete_option('xyz_twap_tw_char_limit');
 	delete_option('xyz_twap_credit_dismiss');
+	delete_option('xyz_twap_tw_app_sel_mode');
+	delete_option('xyz_twap_smapsoln_userid');
+	delete_option('xyz_twap_smapsoln_secret_key');
+	delete_option('xyz_twap_xyzscripts_user_id');
+	delete_option('xyz_twap_xyzscripts_hash_val');
 }
 
 register_uninstall_hook(XYZ_TWAP_PLUGIN_FILE,'twap_free_network_destroy');

@@ -28,7 +28,7 @@ function xyz_twap_menu()
 {
 	add_menu_page('Twitter Auto Publish - Manage settings', 'WP Twitter Auto Publish', 'manage_options', 'twitter-auto-publish-settings', 'xyz_twap_settings',plugin_dir_url( XYZ_TWAP_PLUGIN_FILE ) . 'images/twap.png');
 	$page=add_submenu_page('twitter-auto-publish-settings', 'Twitter Auto Publish - Manage settings', __('Settings','twitter-auto-publish'), 'manage_options', 'twitter-auto-publish-settings' ,'xyz_twap_settings'); // 8 for admin
-	if(get_option('xyz_twap_xyzscripts_hash_val')!=''&& get_option('xyz_twap_xyzscripts_user_id')!='')
+	if(get_option('xyz_twap_xyzscripts_hash_val')!='' && get_option('xyz_twap_xyzscripts_user_id')!='' && get_option('xyz_twap_smapsoln_userid') > 0)
 	    add_submenu_page('twitter-auto-publish-settings', 'Twitter Auto Publish - Manage Authorizations',  __('Manage Authorizations','twitter-auto-publish'), 'manage_options', 'twitter-auto-publish-manage-authorizations' ,'xyz_twap_manage_authorizations');
 	add_submenu_page('twitter-auto-publish-settings', 'Twitter Auto Publish - Logs', __('Logs','twitter-auto-publish'), 'manage_options', 'twitter-auto-publish-log' ,'xyz_twap_logs');
 	add_submenu_page('twitter-auto-publish-settings', 'Twitter Auto Publish - About', __('About','twitter-auto-publish'), 'manage_options', 'twitter-auto-publish-about' ,'xyz_twap_about'); // 8 for admin

@@ -128,6 +128,45 @@ jQuery(document).ready(function() {
 		}
 });
 
+/****************** Code to reload metabox content in Gutenberg editor ******************/
+jQuery(document).ready(function($) {
+    const appuntiStatusChange = ( function(){
+        const isSavingMetaBoxes = wp.data.select( 'core/edit-post' ).isSavingMetaBoxes;
+        var wasSaving = false;
+        return {
+            refreshMetabox: function(){
+                var isSaving = isSavingMetaBoxes();
+                if ( wasSaving && ! isSaving ) {
+                    //console.log("Post changed and saved.");
+                    var xyz_twap_default_selection_edit="<?php echo esc_html(get_option('xyz_twap_default_selection_edit'));?>";
+                    if(xyz_twap_default_selection_edit==0 && jQuery("input[name='xyz_twap_twpost_permission']:checked").val()==1) {
+                      document.getElementById("twmf_twap").style.display='none';
+                    	document.getElementById("twmftarea_twap").style.display='none';
+                    	document.getElementById("twai_twap").style.display='none';
+                    	jQuery('#xyz_twap_twpost_permission_0').prop('checked',true);
+                    	jQuery('#xyz_twap_twpost_permission_yes').removeClass('xyz_twap_toggle_on');
+                    	jQuery('#xyz_twap_twpost_permission_yes').addClass('xyz_twap_toggle_off');
+                    	jQuery('#xyz_twap_twpost_permission_no').removeClass('xyz_twap_toggle_off');
+                    	jQuery('#xyz_twap_twpost_permission_no').addClass('xyz_twap_toggle_on');
+                    }
+                    else if(xyz_twap_default_selection_edit==1 && jQuery("input[name='xyz_twap_twpost_permission']:checked").val()==0) {
+                    	document.getElementById("twmf_twap").style.display='';
+                    	document.getElementById("twmftarea_twap").style.display='';
+                    	document.getElementById("twai_twap").style.display='';
+                    	jQuery('#xyz_twap_twpost_permission_1').prop('checked',true);
+                    	jQuery('#xyz_twap_twpost_permission_no').removeClass('xyz_twap_toggle_on');
+                    	jQuery('#xyz_twap_twpost_permission_no').addClass('xyz_twap_toggle_off');
+                    	jQuery('#xyz_twap_twpost_permission_yes').removeClass('xyz_twap_toggle_off');
+                    	jQuery('#xyz_twap_twpost_permission_yes').addClass('xyz_twap_toggle_on');
+                    }
+                }
+                wasSaving = isSaving;
+            },
+        }
+    })();
+    wp.data.subscribe( appuntiStatusChange.refreshMetabox );
+});
+/*************************************************************************************/
 function twap_get_categorylist(val)
 {
 	var flag=true;

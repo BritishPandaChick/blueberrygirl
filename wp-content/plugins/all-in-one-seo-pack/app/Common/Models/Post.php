@@ -210,7 +210,7 @@ class Post extends Model {
 		foreach ( $post->schema->graphs as $graph ) {
 			// If the first character of the graph ID isn't a pound, add one.
 			// We have to do this because the schema migration in 4.2.5 didn't add the pound for custom graphs.
-			if ( '#' !== substr( $graph->id, 0, 1 ) ) {
+			if ( property_exists( $graph, 'id' ) && '#' !== substr( $graph->id, 0, 1 ) ) {
 				$graph->id = '#' . $graph->id;
 			}
 		}
@@ -591,9 +591,9 @@ class Post extends Model {
 	 *
 	 * @since 4.2.5
 	 *
-	 * @param  string       $existingOptions The existing options in JSON.
-	 * @param  null|WP_Post $post            The post object.
-	 * @return string                        The existing options with defaults added in JSON.
+	 * @param  string        $existingOptions The existing options in JSON.
+	 * @param  null|\WP_Post $post            The post object.
+	 * @return object                         The existing options with defaults added in JSON.
 	 */
 	public static function getDefaultSchemaOptions( $existingOptions = '', $post = null ) {
 		$defaultGraphName = aioseo()->schema->getDefaultPostTypeGraph( $post );
@@ -724,7 +724,7 @@ class Post extends Model {
 	 * @param  array $existingOptions The existing options.
 	 * @return array                  The default options.
 	 */
-	public static function getDefaultOpenAiOptions( $existingOptions = '' ) {
+	public static function getDefaultOpenAiOptions( $existingOptions = [] ) {
 		$defaults = [
 			'title'       => [
 				'suggestions' => [],

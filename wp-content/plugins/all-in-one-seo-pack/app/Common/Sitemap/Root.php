@@ -22,12 +22,11 @@ class Root {
 	public function indexes() {
 		$indexes = [];
 		if ( 'general' !== aioseo()->sitemap->type ) {
-			foreach ( aioseo()->addons->getLoadedAddons() as $loadedAddon ) {
-				if ( ! empty( $loadedAddon->root ) && method_exists( $loadedAddon->root, 'indexes' ) ) {
-					$indexes = $loadedAddon->root->indexes();
-					if ( $indexes ) {
-						return $indexes;
-					}
+			$addonIndexes = aioseo()->addons->doAddonFunction( 'root', 'indexes' );
+
+			foreach ( $addonIndexes as $addonIndex ) {
+				if ( $addonIndex ) {
+					return $addonIndex;
 				}
 			}
 
@@ -55,7 +54,10 @@ class Root {
 						! aioseo()->dynamicOptions->searchAppearance->archives->$postType->advanced->robotsMeta->noindex
 					)
 				) {
-					$postArchives[ $postType ] = aioseo()->sitemap->helpers->lastModifiedPostTime( $postType );
+					$lastModifiedPostTime = aioseo()->sitemap->helpers->lastModifiedPostTime( $postType );
+					if ( $lastModifiedPostTime ) {
+						$postArchives[ $postType ] = $lastModifiedPostTime;
+					}
 				}
 			}
 
@@ -78,7 +80,7 @@ class Root {
 			}
 		}
 
-		$postsTable = aioseo()->db->db->posts;
+		$postsTable = aioseo()->core->db->db->posts;
 		if (
 			aioseo()->sitemap->helpers->lastModifiedPost() &&
 			aioseo()->options->sitemap->general->author &&
@@ -92,9 +94,9 @@ class Root {
 				! aioseo()->options->searchAppearance->advanced->globalRobotsMeta->noindex
 			)
 		) {
-			$usersTable        = aioseo()->db->db->users;
+			$usersTable        = aioseo()->core->db->db->users;
 			$implodedPostTypes = aioseo()->helpers->implodeWhereIn( $postTypes, true );
-			$result            = aioseo()->db->execute(
+			$result            = aioseo()->core->db->execute(
 				"SELECT count(*) as amountOfAuthors FROM
 				(
 					SELECT u.ID FROM {$usersTable} as u
@@ -122,7 +124,7 @@ class Root {
 				! aioseo()->options->searchAppearance->advanced->globalRobotsMeta->noindex
 			)
 		) {
-			$result = aioseo()->db->execute(
+			$result = aioseo()->core->db->execute(
 				"SELECT count(*) as amountOfUrls FROM (
 					SELECT post_date
 					FROM {$postsTable}
@@ -199,8 +201,8 @@ class Root {
 	 *
 	 * @since 4.0.0
 	 *
-	 * @param  integer $entries The entries.
-	 * @return array            The indexes.
+	 * @param  array $entries Entries.
+	 * @return array          The index.
 	 */
 	private function buildAdditionalIndexes( $entries ) {
 		$postTypes             = aioseo()->sitemap->helpers->includedPostTypes();
@@ -231,7 +233,6 @@ class Root {
 			];
 
 			$indexes[] = $index;
-			continue;
 		}
 
 		return $indexes;
@@ -261,7 +262,7 @@ class Root {
 		for ( $i = 0; $i < $chunks; $i++ ) {
 			$indexNumber = 1 < $chunks ? $i + 1 : '';
 
-			$lastModified = aioseo()->db->start( 'users as u' )
+			$lastModified = aioseo()->core->db->start( 'users as u' )
 				->select( 'MAX(p.post_modified_gmt) as lastModified' )
 				->join( 'posts as p', 'u.ID = p.post_author' )
 				->where( 'p.post_status', 'publish' )
@@ -295,7 +296,7 @@ class Root {
 	 * @return array            The indexes.
 	 */
 	private function buildIndexesPostType( $postType ) {
-		$prefix           = aioseo()->db->prefix;
+		$prefix           = aioseo()->core->db->prefix;
 		$postsTable       = $prefix . 'posts';
 		$aioseoPostsTable = $prefix . 'aioseo_posts';
 		$linksPerIndex    = aioseo()->sitemap->linksPerIndex;
@@ -363,12 +364,12 @@ class Root {
 		}
 
 		if ( ! $posts ) {
-			foreach ( aioseo()->addons->getLoadedAddons() as $instance ) {
-				if ( ! empty( $instance->root ) && method_exists( $instance->root, 'buildIndexesPostType' ) ) {
-					$posts = $instance->root->buildIndexesPostType( $postType );
-					if ( $posts ) {
-						return $this->buildIndexes( $postType, $posts );
-					}
+			$addonsPosts = aioseo()->addons->doAddonFunction( 'root', 'buildIndexesPostType', [ $postType ] );
+
+			foreach ( $addonsPosts as $addonPosts ) {
+				if ( $addonPosts ) {
+					$posts = $addonPosts;
+					break;
 				}
 			}
 		}
@@ -381,7 +382,7 @@ class Root {
 	}
 
 	/**
-	 *Builds indexes for all eligible terms of a given taxonomy.
+	 * Builds indexes for all eligible terms of a given taxonomy.
 	 *
 	 * @since 4.0.0
 	 *
@@ -392,12 +393,12 @@ class Root {
 		$terms = aioseo()->sitemap->content->terms( $taxonomy, [ 'root' => true ] );
 
 		if ( ! $terms ) {
-			foreach ( aioseo()->addons->getLoadedAddons() as $instance ) {
-				if ( ! empty( $instance->root ) && method_exists( $instance->root, 'buildIndexesTaxonomy' ) ) {
-					$terms = $instance->root->buildIndexesTaxonomy( $taxonomy );
-					if ( $terms ) {
-						return $this->buildIndexes( $taxonomy, $terms );
-					}
+			$addonsTerms = aioseo()->addons->doAddonFunction( 'root', 'buildIndexesTaxonomy', [ $taxonomy ] );
+
+			foreach ( $addonsTerms as $addonTerms ) {
+				if ( $addonTerms ) {
+					$terms = $addonTerms;
+					break;
 				}
 			}
 		}
@@ -418,9 +419,9 @@ class Root {
 	 *
 	 * @param  string $name    The name of the object parent.
 	 * @param  array  $entries The sitemap entries.
-	 * @return array  $indexes The indexes.
+	 * @return array           The indexes.
 	 */
-	private function buildIndexes( $name, $entries ) {
+	public function buildIndexes( $name, $entries ) {
 		$filename = aioseo()->sitemap->filename;
 		$chunks   = aioseo()->sitemap->helpers->chunkEntries( $entries );
 		$indexes  = [];

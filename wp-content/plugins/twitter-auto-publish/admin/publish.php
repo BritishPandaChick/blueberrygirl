@@ -280,7 +280,7 @@ function xyz_twap_link_publish($post_ID) {
 				if(!empty($attachmenturl))
 					$img = wp_remote_get($attachmenturl,array('sslverify'=> (get_option('xyz_twap_peer_verification')=='1') ? true : false));
 					
-				if(is_array($img))
+				if(is_array($img) && ! is_wp_error( $img ) )
 				{
 					if (isset($img['body'])&& trim($img['body'])!='')
 					{
@@ -288,15 +288,35 @@ function xyz_twap_link_publish($post_ID) {
 							if (($img['headers']['content-length']) && trim($img['headers']['content-length'])!='')
 							{
 								$img_size=$img['headers']['content-length']/(1024*1024);
-								if($img_size>3){$image_found=0;$img_status="Image skipped(greater than 3MB)";}
+								if($img_size>3){
+									$image_found=0;$img_status="Image skipped(greater than 3MB)";
+									$image_found = 0;
+								}
 							}
 							
 						$img = $img['body'];
+						///////////////////////Create temp folder ß
+						$wp_twap_img_targetfolder = realpath(dirname(__FILE__) . '/../../../')."/uploads/xyz_twap_temp_images";
+						if (file_exists($wp_twap_img_targetfolder)==false)
+						{
+							if (mkdir($wp_twap_img_targetfolder, 0777, true))
+							{
+								chmod($wp_twap_img_targetfolder,0777);
+							}
+						}
+						////////////upload image to temporary folder and get path
+						$xyz_twap_ext = pathinfo($attachmenturl, PATHINFO_EXTENSION);
+						$xyz_twap_filename=pathinfo($attachmenturl, PATHINFO_FILENAME);
+						$xyz_twap_image_files=$wp_twap_img_targetfolder."/".$xyz_twap_filename.".".$xyz_twap_ext;
+					  file_put_contents($xyz_twap_image_files, $img);
 					
+						////////////////////////////
 					}
 					else
 						$image_found = 0;
 				}
+				else
+					$image_found = 0;
 					
 			}
 			///Twitter upload image end/////
@@ -430,87 +450,115 @@ function xyz_twap_link_publish($post_ID) {
                 	$substring=substr($substring, 0, $tw_max_len-3)."...";*/
 
  				 if($xyz_twap_tw_app_sel_mode==0)
-			$twobj = new TWAPTwitterOAuth(array( 'consumer_key' => $tappid, 'consumer_secret' => $tappsecret, 'user_token' => $taccess_token, 'user_secret' => $taccess_token_secret,'curl_ssl_verifypeer'   => false));
+					{
+						$twobj = new Abraham\TwitterOAuth\TwitterOAuth(
+										 $tappid,
+										 $tappsecret,
+										 $taccess_token,
+										 $taccess_token_secret,
+								 );
+								 $twobj->userId = explode('-', $taccess_token)[0];
+								 $twobj->setApiVersion('2');
 
+					}
 			$tw_publish_status='';
 			if($image_found==1 && $post_twitter_image_permission==1 && $xyz_twap_tw_app_sel_mode==0)
 			{
-			
-				$url = 'https://upload.twitter.com/1.1/media/upload.json';
-				$img_response = wp_remote_get($attachmenturl,array('sslverify'=> (get_option('xyz_twap_peer_verification')=='1') ? true : false) );
-				if ( is_array( $img_response ) ) {
-					$img_body = $img_response['body'];
-					$params=array('media_data' =>base64_encode($img_body));
-				$code = $twobj->request('POST', $url, $params, true,true);
-					$tw_api_count++;
-				if ($code == 200)
-				{
-					$response = json_decode($twobj->response['response']);
-					 $media_ids_str = $response->media_id_string;
-					$resultfrtw = $twobj->request('POST', $twobj->url('1.1/statuses/update'), array( 'media_ids' => $media_ids_str, 'status' => $substring));
-					$tw_api_count++;
-					if($resultfrtw==200)
+				$twobj->setTimeouts( 10, 60 );
+				$twobj->setApiVersion( '1.1' );
+				$response = $twobj->upload( 'media/upload', array( 'media' => $xyz_twap_image_files ) );
+				if ( ! isset( $response->media_id ) ) {
+					$media_upload_id = 0;
+				} else {
+					$media_upload_id = $response->media_id;
+				}
+
+				if ( $media_upload_id ) {
+				$twobj->setTimeouts( 10, 30 );
+				$twobj->setApiVersion( '2' );
+				$resultfrtw = $twobj->post(
+					'tweets',
+					array('text' =>$substring,'media'=>array(
+							'media_ids' => [ (string) $media_upload_id ],
+						) ),
+					true
+				);
+			if ( isset( $resultfrtw->data ) && ! is_wp_error( $resultfrtw->data ) ) {
+					// Tweet posted successfully
+						$tw_publish_status="<span style=\"color:green\">statuses/update : Success.</span>";
+				} else if( is_wp_error( $resultfrtw->data )) {
+				$error_string = $resultfrtw->data->get_error_message();
+				$tw_publish_status="<span style=\"color:red\">".$error_string.".</span>";
+				}
+				else
 					{
-						if ( $media_ids_str !='')
-							$tw_publish_status="<span style=\"color:green\">statuses/update_with_media : Success.</span>";
+					if(!empty($resultfrtw->detail))
+						$tw_publish_status="<span style=\"color:red\">".$resultfrtw->status.":".$resultfrtw->detail.".</span>";
 						else
-							$tw_publish_status="<span style=\"color:green\">statuses/update : Success.</span>";
+						$tw_publish_status="<span style=\"color:red\">Not Available</span>";
 					}
-					else 
-						$tw_publish_status="<span style=\"color:red\">statuses/update : ".$twobj->response['response']."</span>";
+				if($img_status!="")
+					$tw_publish_status.="<span style=\"color:red\">".$img_status.".</span>";
 					
+				$tw_api_count++;
 				}
 				else
 				{
-					$tw_publish_status="<span style=\"color:red\">statuses/update : ".$twobj->response['response']."</span>";
+					$tw_publish_status="<span style=\"color:red\">statuses/update : ".serialize($response)."</span>";
 				}
+				if (is_file($xyz_twap_image_files) === true)
+       				 {
+         			    unlink($xyz_twap_image_files);
 				}
 			}
 			else
 			{
 			    if($xyz_twap_tw_app_sel_mode==0)
 			    {
-        			$resultfrtw = $twobj->request('POST', $twobj->url('1.1/statuses/update'), array('status' =>$substring));
-        			$tw_api_count++;
-        			if($resultfrtw==200)
-    				{
+        		//	$resultfrtw = $twobj->request('POST', $twobj->url('1.1/statuses/update'), array('text' =>$substring));
+							$twobj->setTimeouts( 10, 30 );
+							$twobj->setApiVersion( '2' );
+							$resultfrtw = $twobj->post(
+								'tweets',
+								array('text' =>$substring),
+								true
+							);
+
+						if ( isset( $resultfrtw->data ) && ! is_wp_error( $resultfrtw->data ) ) {
+								// Tweet posted successfully
     					$tw_publish_status="<span style=\"color:green\">statuses/update : Success.</span>";
+							} else if( is_wp_error( $resultfrtw )) {
+							    // Handle error case
+										$error_string = $resultfrtw->get_error_message();
+										$tw_publish_status="<span style=\"color:red\">".$error_string.".</span>";
     				}
-    				elseif($resultfrtw!=200){
-    					if($twobj->response['response']!="")
-    					$tw_publish_status="<span style=\"color:red\">".$twobj->response['response'].".</span>";
+							else
+							{
+								if(!empty($resultfrtw->detail))
+									$tw_publish_status="<span style=\"color:red\">".$resultfrtw->status.":".$resultfrtw->detail.".</span>";
     					else
-    						$tw_publish_status=$resultfrtw;
+									$tw_publish_status="<span style=\"color:red\">Not Available</span>";
     				}
-    				else if($img_status!="")
-    					$tw_publish_status="<span style=\"color:red\">".$img_status.".</span>";
+
+							$tw_api_count++;
 			     }
 			}
 			$tweet_id_string='';
 			if ($xyz_twap_tw_app_sel_mode==0) 
 			{
-    			$resp = json_decode($twobj->response['response']);
-    			if (isset($resp->id_str) && !empty($resp->id_str)){
-    				$tweet_link="https://twitter.com/".$twid."/status/".$resp->id_str;
-    				$tweet_id_string="<br/><span style=\"color:#21759B;text-decoration:underline;\"><a target=\"_blank\" href=".$tweet_link.">View Tweet</a></span>";
-    					
-    			}
-    			elseif (isset($resp->id) && !empty($resp->id)){
+if(isset($resultfrtw->data))
+
+    			$resp = $resultfrtw->data;
+    		if (isset($resp->id) && !empty($resp->id)){
     				$tweet_link="https://twitter.com/".$twid."/status/".$resp->id;
     				$tweet_id_string="<br/><span style=\"color:#21759B;text-decoration:underline;\"><a target=\"_blank\" href=".$tweet_link.">View Tweet</a></span>";
     					
-    			}
-    			else 
-    			{
-    				$tweet_id_string="<br/><span style=\"color:red\">Not available.</span>";
+
     			}
     			
     			$tw_publish_status_insert=serialize($tw_publish_status.$tweet_id_string);
 	       	}
-			/*api_exceed_err:
-			if($api_exceed_err==1){
-				$tw_publish_status= "<span style=\"color:red\"> Daily API count limit exceeded,only '.$remaining_tw_api_count.' api calls left.</span>";//1;
-			}*/
+
 	       	if($xyz_twap_tw_app_sel_mode==1){
        	    
        	    $video=$tweet_id_string="";

@@ -60,7 +60,8 @@ if(isset($_POST['twit']))
 	$xyz_twap_tw_char_limit=intval($xyz_twap_tw_char_limit);
 	if ($xyz_twap_tw_char_limit<140)
 		$xyz_twap_tw_char_limit=140;
-// 	$xyz_twap_app_sel_mode_old=get_option('xyz_smap_tw_app_sel_mode');
+ 	$xyz_twap_app_sel_mode=get_option('xyz_smap_tw_app_sel_mode');
+	if(isset($_POST['xyz_twap_app_sel_mode']))
 	 $xyz_twap_app_sel_mode=intval($_POST['xyz_twap_app_sel_mode']);
 	if($tappid=="" && $tposting_permission==1 && $xyz_twap_app_sel_mode ==0)
 	{
@@ -204,7 +205,7 @@ function dethide_twap(id)
 
 			<div style="font-weight: bold;padding: 3px;"><?php _e('All fields given below are mandatory','twitter-auto-publish');?></div> 
 		<?php 	
-		$xyz_twap_app_sel_mode=1;
+		$xyz_twap_app_sel_mode=0;
 		$xyz_twap_app_sel_mode=get_option('xyz_twap_tw_app_sel_mode');
 			if ($xyz_twap_app_sel_mode==1){
 	 		$domain_name=trim(get_option('siteurl'));
@@ -252,15 +253,19 @@ function dethide_twap(id)
 				<td>
 				<input type="radio" name="xyz_twap_app_sel_mode" id="xyz_twap_app_sel_mode_reviewd" value="0" <?php if($xyz_twap_app_sel_mode==0) echo 'checked';?>>
 				<span style="color: #a7a7a7;font-weight: bold;"> <?php _e('Own App','twitter-auto-publish'); ?> (<a href="http://help.xyzscripts.com/docs/social-media-auto-publish/faq/how-can-i-create-twitter-application/" style="color: #a7a7a7;text-decoration: underline; " target="_blank" > <?php _e('Help','twitter-auto-publish'); ?> </a>)</span>
+	<?php if(get_option('xyz_twap_smapsoln_userid')>0) {?>
 				<br>
 				<input type="radio" name="xyz_twap_app_sel_mode" id="xyz_twap_app_sel_mode_xyzapp" value="1" <?php if($xyz_twap_app_sel_mode==1) echo 'checked';?>>
-				<span style="color: #000000;font-size: 13px;background-color: #f7a676;font-weight: 500;padding: 3px 5px;"><i class="fa fa-star-o" aria-hidden="true" style="margin-right:5px;"></i> <?php $twap_smap_site="SMAPsolution.com's"; $twap_ready_pub=sprintf(__('%s App (ready to publish)','twitter-auto-publish'),$twap_smap_site); echo $twap_ready_pub; ?> <i class="fa fa-star-o" aria-hidden="true" style="margin-right:5px;"></i></span><br> <span style="padding-left: 30px;"> <?php _e('Starts from 10 USD per year','twitter-auto-publish'); ?></span><br>
+				<span style="color: #000000;font-size: 13px;background-color: #f7a676;font-weight: 500;padding: 3px 5px;"><i class="fa fa-star-o" aria-hidden="true" style="margin-right:5px;"></i> <?php $twap_smap_site="SMAPsolution.com's"; $twap_ready_pub=sprintf(__('%s App (ready to publish)','twitter-auto-publish'),$twap_smap_site); echo $twap_ready_pub; ?> <i class="fa fa-star-o" aria-hidden="true" style="margin-right:5px;"></i></span><br> <span style="padding-left: 30px;"> <?php _e('Starts from 10 USD per year','twitter-auto-publish'); ?></span><br/>
+				<span style="color: #6a364a;font-size: 13px;padding-left: 30px;">SMAPSolutions will no-longer support media uploads,please use {PERMALINK}<br/></span>
+				<span style="color: #6a364a;font-size: 13px;padding-left: 30px;"> in message format to display preview of post</span><br>
 				<?php if(get_option('xyz_twap_smapsoln_userid')==0)
 				{?>
 				<span style="color: #ff5e00;padding-left: 27px;font-size: small;"><b><?php _e('30 DAYS FREE TRIAL AVAILABLE','twitter-auto-publish');?>*</b></span>
 				<br/>
 				<?php }?>
 				<a target="_blank" href="https://help.xyzscripts.com/docs/social-media-auto-publish/faq/how-can-i-use-the-alternate-solution-for-publishing-posts-to-twitter/" style="padding-left: 30px;"> <?php $twap_how_smap=sprintf(__('How to use %s application?','twitter-auto-publish'),$twap_smap_site); echo $twap_how_smap; ?></a>
+		<?php }?>
 				</td>
 			</tr>
 			<?php 
