@@ -186,7 +186,7 @@ class WPCode_Code_Snippets_Table extends WP_List_Table {
 			if ( ! empty( $recently_deactivated ) ) {
 				$tooltip_text = sprintf(
 				// Translators: %1$s is the time since the snippet was deactivated, %2$s is the date and time of deactivation.
-					__( 'This snippet was automatically deactivated because of a fatal erorr at %2$s on %3$s (%1$s ago)', 'insert-headers-and-footers' ),
+					__( 'This snippet was automatically deactivated because of a fatal error at %2$s on %3$s (%1$s ago)', 'insert-headers-and-footers' ),
 					human_time_diff( $recently_deactivated, time() ),
 					gmdate( 'H:i:s', $recently_deactivated ),
 					gmdate( 'Y-m-d', $recently_deactivated )
@@ -329,6 +329,26 @@ class WPCode_Code_Snippets_Table extends WP_List_Table {
 					),
 					esc_attr__( 'Move this snippet to trash', 'insert-headers-and-footers' ),
 					esc_html__( 'Trash', 'insert-headers-and-footers' )
+				);
+			}
+
+			if ( current_user_can( 'edit_post', $snippet->ID ) ) {
+				$actions['duplicate'] = sprintf(
+					'<a href="%s" title="%s">%s</a>',
+					esc_url(
+						wp_nonce_url(
+							add_query_arg(
+								array(
+									'action'     => 'duplicate',
+									'snippet_id' => $snippet->ID,
+								),
+								admin_url( 'admin.php?page=wpcode' )
+							),
+							'wpcode_duplicate_nonce'
+						)
+					),
+					esc_attr__( 'Duplicate this snippet', 'insert-headers-and-footers' ),
+					esc_html__( 'Duplicate', 'insert-headers-and-footers' )
 				);
 			}
 		}
@@ -859,6 +879,7 @@ class WPCode_Code_Snippets_Table extends WP_List_Table {
 			array(
 				'view',
 				'trashed',
+				'duplicated',
 				'untrashed',
 				'deleted',
 				'enabled',
