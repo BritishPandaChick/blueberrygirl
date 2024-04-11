@@ -602,12 +602,12 @@ function likebtn_admin_buttons()
                                                     <th scope="row"><label><?php _e('Google Rich Snippets', 'likebtn-like-button'); ?></label>
                                                     </th>
                                                     <td>
-                                                        <input type="checkbox" name="likebtn_settings_rich_snippet_<?php echo esc_attr($entity_name); ?>" value="1" <?php checked('1', get_option('likebtn_settings_rich_snippet_' . $entity_name)); ?> <?php if ($entity_name == LIKEBTN_ENTITY_PRODUCT || $entity_name == LIKEBTN_ENTITY_PRODUCT_LIST): ?>disabled="disabled"<?php endif ?>/>
-                                                        <?php if ($entity_name == LIKEBTN_ENTITY_PRODUCT || $entity_name == LIKEBTN_ENTITY_PRODUCT_LIST): ?>
+                                                        <input type="checkbox" name="likebtn_settings_rich_snippet_<?php echo esc_attr($entity_name); ?>" value="1" <?php checked('1', get_option('likebtn_settings_rich_snippet_' . $entity_name)); ?> <?php /*if ($entity_name == LIKEBTN_ENTITY_PRODUCT || $entity_name == LIKEBTN_ENTITY_PRODUCT_LIST): ?>disabled="disabled"<?php endif*/ ?>/>
+                                                        <?php /*if ($entity_name == LIKEBTN_ENTITY_PRODUCT || $entity_name == LIKEBTN_ENTITY_PRODUCT_LIST): ?>
                                                             <small style="color:gray"><?php echo __('WooCommerce is adding Rich Snippets to the products pages by default.', 'likebtn-like-button') ?></small>
-                                                        <?php else: ?>
+                                                        <?php else:*/ ?>
                                                             <small><a href="<?php echo __('https://likebtn.com/en/faq#rich_snippets', 'likebtn-like-button') ?>" target="_blank"><?php echo __('What are Google Rich Snippets and how do they boost traffic?', 'likebtn-like-button') ?></a><?php /* / <a href="https://www.google.com/search?q=%D0%A1%D1%82%D0%B0%D0%BB%D0%B8%D0%BD%D1%81%D0%BA%D0%B0%D1%8F+%D1%8D%D0%BA%D0%BE%D0%BD%D0%BE%D0%BC%D0%B8%D0%BA%D0%B0+%D1%8D%D1%82%D0%BE+%D0%BD%D0%B5+%D1%8D%D0%BA%D0%BE%D0%BD%D0%BE%D0%BC%D0%B8%D0%BA%D0%B0+%D0%A1%D0%A1%D0%A1%D0%A0+%D0%94%D0%95%D0%A0%D0%96%D0%90%D0%92%D0%90+%D0%A1%D0%95%D0%93%D0%9E%D0%94%D0%9D%D0%AF" target="_blank"><?php echo __('Live demo', 'likebtn-like-button') ?></a>*/ ?></small>
-                                                        <?php endif ?>
+                                                        <?php /*endif*/ ?>
                                                     </td>
                                                 </tr>
                                             <?php endif ?>

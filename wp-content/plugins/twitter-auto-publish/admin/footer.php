@@ -113,20 +113,20 @@ function verify_fields()
 <input class="xyz_twap_name"  type="text" placeholder="<?php _e('Name','twitter-auto-publish'); ?>" name="field1" value="<?php
 if ($current_user->user_firstname != "" || $current_user->user_lastname != "") 
 {
-    echo $current_user->user_firstname . " " . $current_user->user_lastname;
+    echo esc_html($current_user->user_firstname . " " . $current_user->user_lastname);
 } 
 else if (strcasecmp($current_user->display_name, 'admin')!=0 && strcasecmp($current_user->display_name , "administrator")!=0 ) 
 {
-    echo $current_user->display_name;
+    echo esc_html($current_user->display_name);
 } 
 else if (strcasecmp($current_user->user_login ,"admin")!=0 && strcasecmp($current_user->user_login , "administrator")!=0 ) 
 {
-    echo $current_user->user_login;
+    echo esc_html($current_user->user_login);
 }
 ?>"  >
 
 <input class="xyz_twap_email" name="email"
-type="text" placeholder="<?php _e('Email','twitter-auto-publish'); ?>" value="<?php    echo $current_user->user_email; ?>" />
+type="text" placeholder="<?php _e('Email','twitter-auto-publish'); ?>" value="<?php echo esc_html($current_user->user_email); ?>" />
 
 <input id="xyz_twap_submit_twap" class="sbmt_btn" type="submit" value="<?php _e('Subscribe','twitter-auto-publish');?>" name="Submit"  onclick="javascript: if(!verify_fields()) return false; " />
 

@@ -326,7 +326,7 @@ function xyz_twap_link_publish($post_ID) {
 		
 			$substring=str_replace('{POST_TITLE}', $name, $messagetopost);
 			$substring=str_replace('{BLOG_TITLE}', $caption,$substring);
-			$substring=str_replace('{PERMALINK}', $link, $substring);
+			$substring=str_replace('{PERMALINK}', ' '.$link.' ', $substring);
 			$substring=str_replace('{POST_EXCERPT}', $excerpt, $substring);
 			$substring=str_replace('{POST_CONTENT}', $description, $substring);
 			$substring=str_replace('{USER_NICENAME}', $user_nicename, $substring);
