@@ -262,6 +262,8 @@ trait WpContext {
 			$postContent = aioseo()->standalone->pageBuilderIntegrations[ $pageBuilder ]->processContent( $post->ID, $postContent );
 		}
 
+		$postContent = is_string( $postContent ) ? $postContent : '';
+
 		$content[ $post->ID ] = $this->theContent( $postContent );
 
 		if ( apply_filters( 'aioseo_description_include_custom_fields', true, $post ) ) {
@@ -349,11 +351,12 @@ trait WpContext {
 		}
 
 		$postContent = $this->getPostContent( $post );
+
 		// Strip images, captions and WP oembed wrappers (e.g. YouTube URLs) from the post content.
-		$postContent          = preg_replace( '/(<figure.*?\/figure>|<img.*?\/>|<div.*?class="wp-block-embed__wrapper".*?>.*?<\/div>)/s', '', $postContent );
-		$postContent          = str_replace( ']]>', ']]&gt;', $postContent );
-		$postContent          = trim( wp_strip_all_tags( strip_shortcodes( $postContent ) ) );
-		$content[ $post->ID ] = wp_trim_words( $postContent, 55, '' );
+		$postContent          = preg_replace( '/(<figure.*?\/figure>|<img.*?\/>|<div.*?class="wp-block-embed__wrapper".*?>.*?<\/div>)/s', '', (string) $postContent );
+		$postContent          = str_replace( ']]>', ']]&gt;', (string) $postContent );
+		$postContent          = trim( wp_strip_all_tags( strip_shortcodes( (string) $postContent ) ) );
+		$content[ $post->ID ] = wp_trim_words( (string) $postContent, 55, '' );
 
 		return $content[ $post->ID ];
 	}
@@ -399,16 +402,118 @@ trait WpContext {
 	 * @return bool         If the page is special or not.
 	 */
 	public function isSpecialPage( $postId = 0 ) {
-		if (
-			(int) get_option( 'page_for_posts' ) === (int) $postId ||
-			(int) get_option( 'wp_page_for_privacy_policy' ) === (int) $postId ||
-			$this->isBuddyPressPage( $postId ) ||
-			$this->isWooCommercePage( $postId )
-		) {
-			return true;
+		$specialPages = $this->getSpecialPageIds();
+
+		return in_array( (int) $postId, $specialPages, true );
+	}
+
+	/**
+	 * Returns the ID of all special pages (e.g. homepage, blog page, WooCommerce, BuddyPress, etc.).
+	 * This cannot be cached because the plugins need to be loaded first.
+	 *
+	 * @since 4.7.3
+	 *
+	 * @return array The IDs of all special pages.
+	 */
+	public function getSpecialPageIds() {
+		$pageForPostsId         = (int) get_option( 'page_for_posts' );
+		$pageForPrivacyPolicyId = (int) get_option( 'wp_page_for_privacy_policy' );
+		$buddyPressPageIds      = $this->getBuddyPressPageIds();
+		$wooCommercePageIds     = array_values( $this->getWooCommercePages() );
+
+		$specialPageIds = array_merge(
+			[
+				$pageForPostsId,
+				$pageForPrivacyPolicyId,
+			],
+			$buddyPressPageIds,
+			$wooCommercePageIds
+		);
+
+		// Ensure all values are integers.
+		$specialPageIds = array_map( 'intval', $specialPageIds );
+
+		return $specialPageIds;
+	}
+
+	/**
+	 * Returns whether a post is eligible for being analyzed by TruSEO.
+	 *
+	 * @since   4.6.1
+	 * @version 4.7.3 Renamed from "isPageAnalysisEligible" to "isTruSeoEligible" to make it more clear.
+	 *
+	 * @param  int  $postId Post ID.
+	 * @return bool         Whether a post is eligible for being analyzed by TruSEO.
+	 */
+	public function isTruSeoEligible( $postId ) {
+		static $isTruSeoEnabled = null;
+		if ( null === $isTruSeoEnabled ) {
+			$isTruSeoEnabled = aioseo()->options->advanced->truSeo;
 		}
 
-		return false;
+		if ( ! $isTruSeoEnabled ) {
+			return false;
+		}
+
+		static $isPostEligible = [];
+		if ( isset( $isPostEligible[ $postId ] ) ) {
+			return $isPostEligible[ $postId ];
+		}
+
+		// Set the default to true.
+		$isPostEligible[ $postId ] = true;
+
+		$wpPost = $this->getPost( $postId );
+		if ( ! is_a( $wpPost, 'WP_Post' ) ) {
+			$isPostEligible[ $postId ] = false;
+
+			return false;
+		}
+
+		$eligiblePostTypes = $this->getTruSeoEligiblePostTypes();
+		if (
+			! in_array( $wpPost->post_type, $eligiblePostTypes, true ) ||
+			$this->isSpecialPage( $wpPost->ID )
+		) {
+			$isPostEligible[ $postId ] = false;
+		}
+
+		return $isPostEligible[ $postId ];
+	}
+
+	/**
+	 * Returns the post types that are eligible for TruSEO analysis.
+	 *
+	 * @since 4.7.3
+	 *
+	 * @return array The post types that are eligible for TruSEO analysis.
+	 */
+	public function getTruSeoEligiblePostTypes() {
+		$allowedPostTypes  = aioseo()->helpers->getPublicPostTypes( true );
+		$excludedPostTypes = [ 'attachment', 'aioseo-location' ];
+		if ( class_exists( 'bbPress' ) ) {
+			$excludedPostTypes = array_merge( $excludedPostTypes, [ 'forum', 'topic', 'reply' ] );
+		}
+
+		// Remove the excluded post types from the allowed ones.
+		$allowedPostTypes = array_diff( $allowedPostTypes, $excludedPostTypes );
+
+		// Now, check if the metabox is enabled and that the post type is public for each of these.
+		foreach ( $allowedPostTypes as $postType ) {
+			$postObjectType = get_post_type_object( $postType );
+			if ( is_a( $postObjectType, 'WP_Post_Type' ) && ! $postObjectType->public ) {
+				unset( $allowedPostTypes[ $postType ] );
+			}
+
+			$dynamicOptions = aioseo()->dynamicOptions->noConflict();
+			if ( ! $dynamicOptions->searchAppearance->postTypes->has( $postType, false ) || ! $dynamicOptions->{$postType}->advanced->showMetaBox ) {
+				// If not, unset it.
+				unset( $allowedPostTypes[ $postType ] );
+			}
+		}
+
+		// Considering post types get registered during various stages of the WP load process, we should not cache this.
+		return $allowedPostTypes;
 	}
 
 	/**
@@ -593,7 +698,7 @@ trait WpContext {
 		$restUrl = wp_parse_url( get_rest_url() );
 		$restUrl = $restUrl['path'] . ( ! empty( $restUrl['query'] ) ? '?' . $restUrl['query'] : '' );
 
-		$isRestApiRequest = ( 0 === strpos( $_SERVER['REQUEST_URI'], $restUrl ) );
+		$isRestApiRequest = ( 0 === strpos( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ), $restUrl ) );
 
 		return apply_filters( 'aioseo_is_rest_api_request', $isRestApiRequest );
 	}
@@ -747,7 +852,7 @@ trait WpContext {
 	 */
 	public function isWpLoginPage() {
 		// We can't sanitize the filename using sanitize_file_name() here because it will cause issues with custom login pages and certain plugins/themes where this function is not defined.
-		$self = ! empty( $_SERVER['PHP_SELF'] ) ? wp_unslash( $_SERVER['PHP_SELF'] ) : ''; // phpcs:ignore HM.Security.ValidatedSanitizedInput.InputNotSanitized
+		$self = ! empty( $_SERVER['PHP_SELF'] ) ? sanitize_text_field( wp_unslash( $_SERVER['PHP_SELF'] ) ) : ''; // phpcs:ignore HM.Security.ValidatedSanitizedInput.InputNotSanitized
 		if ( preg_match( '/wp-login\.php$|wp-register\.php$/', $self ) ) {
 			return true;
 		}
@@ -890,5 +995,18 @@ trait WpContext {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Retrieves the website name.
+	 *
+	 * @since 4.6.1
+	 *
+	 * @return string The website name.
+	 */
+	public function getWebsiteName() {
+		return aioseo()->options->searchAppearance->global->schema->websiteName
+			? aioseo()->tags->replaceTags( aioseo()->options->searchAppearance->global->schema->websiteName )
+			: aioseo()->helpers->decodeHtmlEntities( get_bloginfo( 'name' ) );
 	}
 }

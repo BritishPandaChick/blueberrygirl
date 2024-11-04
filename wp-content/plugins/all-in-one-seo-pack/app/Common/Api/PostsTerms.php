@@ -220,11 +220,11 @@ class PostsTerms {
 		$body['id']                  = $postId;
 		$body['title']               = ! empty( $body['title'] ) ? sanitize_text_field( $body['title'] ) : null;
 		$body['description']         = ! empty( $body['description'] ) ? sanitize_text_field( $body['description'] ) : null;
-		$body['keywords']            = ! empty( $body['keywords'] ) ? sanitize_text_field( $body['keywords'] ) : null;
+		$body['keywords']            = ! empty( $body['keywords'] ) ? aioseo()->helpers->sanitize( $body['keywords'] ) : null;
 		$body['og_title']            = ! empty( $body['og_title'] ) ? sanitize_text_field( $body['og_title'] ) : null;
 		$body['og_description']      = ! empty( $body['og_description'] ) ? sanitize_text_field( $body['og_description'] ) : null;
 		$body['og_article_section']  = ! empty( $body['og_article_section'] ) ? sanitize_text_field( $body['og_article_section'] ) : null;
-		$body['og_article_tags']     = ! empty( $body['og_article_tags'] ) ? sanitize_text_field( $body['og_article_tags'] ) : null;
+		$body['og_article_tags']     = ! empty( $body['og_article_tags'] ) ? aioseo()->helpers->sanitize( $body['og_article_tags'] ) : null;
 		$body['twitter_title']       = ! empty( $body['twitter_title'] ) ? sanitize_text_field( $body['twitter_title'] ) : null;
 		$body['twitter_description'] = ! empty( $body['twitter_description'] ) ? sanitize_text_field( $body['twitter_description'] ) : null;
 
@@ -264,7 +264,9 @@ class PostsTerms {
 
 		$posts = [];
 		foreach ( $ids as $postId ) {
-			$headlineResult = aioseo()->standalone->headlineAnalyzer->getResult( html_entity_decode( get_the_title( $postId ) ) );
+			$postTitle      = get_the_title( $postId );
+			$headline       = ! empty( $postTitle ) ? sanitize_text_field( $postTitle ) : ''; // We need this to achieve consistency for the score when using special characters in titles
+			$headlineResult = aioseo()->standalone->headlineAnalyzer->getResult( $headline );
 
 			$posts[] = [
 				'id'                => $postId,
@@ -302,15 +304,6 @@ class PostsTerms {
 
 		$aioseoPost = Models\Post::getPost( $postId );
 		$aioseoData = json_decode( wp_json_encode( $aioseoPost ), true );
-
-		// Decode these below because `savePost()` expects them to be an array.
-		if ( ! empty( $aioseoData['keyphrases'] ) ) {
-			$aioseoData['keyphrases'] = json_decode( $aioseoData['keyphrases'], true );
-		}
-
-		if ( ! empty( $aioseoData['page_analysis'] ) ) {
-			$aioseoData['page_analysis'] = json_decode( $aioseoData['page_analysis'], true );
-		}
 
 		if ( $isMedia ) {
 			wp_update_post(

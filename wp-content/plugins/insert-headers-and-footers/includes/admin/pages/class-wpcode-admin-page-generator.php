@@ -60,6 +60,13 @@ class WPCode_Admin_Page_Generator extends WPCode_Admin_Page {
 	protected $capability = 'wpcode_edit_php_snippets';
 
 	/**
+	 * Hide the generator menu item.
+	 *
+	 * @var bool
+	 */
+	public $hide_menu = true;
+
+	/**
 	 * Call this just to set the page title translatable.
 	 */
 	public function __construct() {
@@ -130,7 +137,7 @@ class WPCode_Admin_Page_Generator extends WPCode_Admin_Page {
 		$categories = wpcode()->generator()->get_categories();
 		?>
 		<div class="wpcode-items-metabox wpcode-metabox">
-			<?php $this->get_items_list_sidebar( $categories, __( 'All Generators', 'insert-headers-and-footers' ), __( 'Search Generators' ) ); ?>
+			<?php $this->get_items_list_sidebar( $categories, __( 'All Generators', 'insert-headers-and-footers' ), __( 'Search Generators', 'insert-headers-and-footers' ) ); ?>
 			<div class="wpcode-items-list">
 				<ul class="wpcode-items-list-category">
 					<?php

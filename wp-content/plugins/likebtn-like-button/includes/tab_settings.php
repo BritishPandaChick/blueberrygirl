@@ -518,6 +518,7 @@ function likebtn_admin_settings() {
                                 <p class="description">
                                     <?php _e('Paste your Like Button configuration here and the plugin will load it into the database.'); ?>
                                 </p>
+                                <input type="hidden" name="nonce" value="<?php echo wp_create_nonce( 'likebtn_import' ); ?>" />
                                 <textarea class="likebtn_input" rows="4" name="likebtn_import_config"></textarea>
                                 <p class="notice update-nag"> 
                                     <?php _e('On importing current settings and buttons configuration will be overwritten. Votes and statistics will be preserved.', 'likebtn-like-button'); ?>
