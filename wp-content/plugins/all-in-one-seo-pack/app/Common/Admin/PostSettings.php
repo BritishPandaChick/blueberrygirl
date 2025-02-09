@@ -50,7 +50,7 @@ class PostSettings {
 		// Add metabox.
 		add_action( 'add_meta_boxes', [ $this, 'addPostSettingsMetabox' ] );
 
-		// Add metabox to terms on init hook.
+		// Add metabox (upsell) to terms on init hook.
 		add_action( 'init', [ $this, 'init' ], 1000 );
 
 		// Save metabox.
@@ -239,6 +239,7 @@ class PostSettings {
 
 		// If there is no data, there likely was an error, e.g. if the hidden field wasn't populated on load and the user saved the post without making changes in the metabox.
 		// In that case we should return to prevent a complete reset of the data.
+		// https://github.com/awesomemotive/aioseo/issues/2254
 		if ( empty( $currentPost ) ) {
 			return;
 		}
@@ -321,8 +322,8 @@ class PostSettings {
 					COUNT(*) as total,
 					COALESCE( SUM(CASE WHEN ap.keyphrases = '' OR ap.keyphrases IS NULL OR ap.keyphrases LIKE %s THEN 1 ELSE 0 END), 0) as withoutFocusKeyphrase,
 					COALESCE( SUM(CASE WHEN ap.seo_score < 50 AND NOT (ap.keyphrases = '' OR ap.keyphrases IS NULL OR ap.keyphrases LIKE %s) THEN 1 ELSE 0 END), 0) as needsImprovement,
-					COALESCE( SUM(CASE WHEN ap.seo_score BETWEEN 50 AND 80 AND NOT (ap.keyphrases = '' OR ap.keyphrases IS NULL OR ap.keyphrases LIKE %s) THEN 1 ELSE 0 END), 0) as okay,
-					COALESCE( SUM(CASE WHEN ap.seo_score > 80 AND NOT (ap.keyphrases = '' OR ap.keyphrases IS NULL OR ap.keyphrases LIKE %s) THEN 1 ELSE 0 END), 0) as good
+					COALESCE( SUM(CASE WHEN ap.seo_score BETWEEN 50 AND 79 AND NOT (ap.keyphrases = '' OR ap.keyphrases IS NULL OR ap.keyphrases LIKE %s) THEN 1 ELSE 0 END), 0) as okay,
+					COALESCE( SUM(CASE WHEN ap.seo_score >= 80 AND NOT (ap.keyphrases = '' OR ap.keyphrases IS NULL OR ap.keyphrases LIKE %s) THEN 1 ELSE 0 END), 0) as good
 				FROM {$wpdb->posts} as p
 				LEFT JOIN {$wpdb->prefix}aioseo_posts as ap ON ap.post_id = p.ID
 				WHERE p.post_status = 'publish'
@@ -334,7 +335,7 @@ class PostSettings {
 				'{"focus":{"keyphrase":""%',
 				'{"focus":{"keyphrase":""%',
 				$postType,
-				...$specialPageIds
+				...array_values( $specialPageIds )
 			),
 			ARRAY_A
 		);
@@ -406,7 +407,7 @@ class PostSettings {
 	 */
 	public function filterPostsAfterChangingClauses() {
 		remove_action( 'wp', [ $this, 'filterPostsAfterChangingClauses' ] );
-
+		// phpcs:disable Squiz.NamingConventions.ValidVariableName
 		global $wp_query;
 		if ( ! empty( $wp_query->posts ) && is_array( $wp_query->posts ) ) {
 			$wp_query->posts = array_filter( $wp_query->posts, function ( $post ) {
@@ -418,5 +419,6 @@ class PostSettings {
 				$wp_query->post_count = count( $wp_query->posts );
 			}
 		}
+		// phpcs:enable Squiz.NamingConventions.ValidVariableName
 	}
 }

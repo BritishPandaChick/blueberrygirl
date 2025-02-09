@@ -1,12 +1,12 @@
 <?php
 namespace AIOSEO\Plugin\Common\Traits\Helpers;
 
-use AIOSEO\Plugin\Common\Utils;
-
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+use AIOSEO\Plugin\Common\Utils;
 
 /**
  * Contains all WP related helper methods.
@@ -31,9 +31,9 @@ trait Wp {
 	 * @return array An array of user roles.
 	 */
 	public function getUserRoles() {
-		global $wp_roles;
+		global $wp_roles; // phpcs:ignore Squiz.NamingConventions.ValidVariableName
 
-		$wpRoles = $wp_roles;
+		$wpRoles = $wp_roles; // phpcs:ignore Squiz.NamingConventions.ValidVariableName
 		if ( ! is_object( $wpRoles ) ) {
 			// Don't assign this to the global because otherwise WordPress won't override it.
 			$wpRoles = new \WP_Roles();
@@ -167,9 +167,14 @@ trait Wp {
 	 * @param  bool  $namesOnly       Whether only the names should be returned.
 	 * @param  bool  $hasArchivesOnly Whether to only include post types which have archives.
 	 * @param  bool  $rewriteType     Whether to rewrite the type slugs.
+	 * @param  array $args            Additional arguments.
 	 * @return array                  List of public post types.
 	 */
-	public function getPublicPostTypes( $namesOnly = false, $hasArchivesOnly = false, $rewriteType = false ) {
+	public function getPublicPostTypes( $namesOnly = false, $hasArchivesOnly = false, $rewriteType = false, $args = [] ) {
+		$args = array_merge( [
+			'include' => [] // Post types to include.
+		], $args );
+
 		$postTypes   = [];
 		$postTypeObjects = get_post_types( [], 'objects' );
 		foreach ( $postTypeObjects as $postTypeObject ) {
@@ -183,7 +188,11 @@ trait Wp {
 			}
 		}
 
-		return apply_filters( 'aioseo_public_post_types', $postTypes, $namesOnly, $hasArchivesOnly );
+		if ( isset( aioseo()->standalone->buddyPress ) ) {
+			aioseo()->standalone->buddyPress->maybeAddPostTypes( $postTypes, $namesOnly, $hasArchivesOnly, $args );
+		}
+
+		return apply_filters( 'aioseo_public_post_types', $postTypes, $namesOnly, $hasArchivesOnly, $args );
 	}
 
 	/**
@@ -218,7 +227,11 @@ trait Wp {
 		}
 
 		if ( 'attachment' === $postTypeObject->name ) {
-			$postTypeObject->label = __( 'Attachments', 'all-in-one-seo-pack' );
+			// We have to check if the 'init' action has been fired to avoid a PHP notice
+			// in WP 6.7+ due to loading translations too early.
+			if ( did_action( 'init' ) ) {
+				$postTypeObject->label = __( 'Attachments', 'all-in-one-seo-pack' );
+			}
 		}
 
 		if ( 'product' === $postTypeObject->name && $this->isWooCommerceActive() ) {
@@ -235,11 +248,11 @@ trait Wp {
 			'label'        => ucwords( $postTypeObject->label ),
 			'singular'     => ucwords( $postTypeObject->labels->singular_name ),
 			'icon'         => $postTypeObject->menu_icon,
-			'hasExcerpt'   => post_type_supports( $postTypeObject->name, 'excerpt' ),
 			'hasArchive'   => $postTypeObject->has_archive,
 			'hierarchical' => $postTypeObject->hierarchical,
 			'taxonomies'   => get_object_taxonomies( $name ),
-			'slug'         => isset( $postTypeObject->rewrite['slug'] ) ? $postTypeObject->rewrite['slug'] : $name
+			'slug'         => isset( $postTypeObject->rewrite['slug'] ) ? $postTypeObject->rewrite['slug'] : $name,
+			'supports'     => get_all_post_type_supports( $name )
 		];
 	}
 
@@ -260,7 +273,11 @@ trait Wp {
 
 		$taxObjects = get_taxonomies( [], 'objects' );
 		foreach ( $taxObjects as $taxObject ) {
-			if ( empty( $taxObject->label ) || ! is_taxonomy_viewable( $taxObject ) ) {
+			if (
+				empty( $taxObject->label ) ||
+				! is_taxonomy_viewable( $taxObject ) ||
+				aioseo()->helpers->isWooCommerceProductAttribute( $taxObject->name )
+			) {
 				continue;
 			}
 
@@ -268,15 +285,6 @@ trait Wp {
 				'product_shipping_class',
 				'post_format'
 			], true ) ) {
-				continue;
-			}
-
-			// We need to exclude product attributes from this list as well.
-			if (
-				'pa_' === substr( $taxObject->name, 0, 3 ) &&
-				'manage_product_terms' === $taxObject->cap->manage_terms &&
-				! apply_filters( 'aioseo_woocommerce_product_attributes', false )
-			) {
 				continue;
 			}
 
@@ -290,9 +298,9 @@ trait Wp {
 				$name = '_aioseo_type';
 			}
 
-			global $wp_taxonomies;
-			$taxonomyPostTypes = ! empty( $wp_taxonomies[ $name ] )
-				? $wp_taxonomies[ $name ]->object_type
+			global $wp_taxonomies; // phpcs:ignore Squiz.NamingConventions.ValidVariableName
+			$taxonomyPostTypes = ! empty( $wp_taxonomies[ $name ] ) // phpcs:ignore Squiz.NamingConventions.ValidVariableName
+				? $wp_taxonomies[ $name ]->object_type // phpcs:ignore Squiz.NamingConventions.ValidVariableName
 				: [];
 
 			$taxonomies[] = [
@@ -306,6 +314,26 @@ trait Wp {
 				'restBase'           => ( $taxObject->rest_base ) ? $taxObject->rest_base : $taxObject->name,
 				'postTypes'          => $taxonomyPostTypes
 			];
+		}
+
+		if ( $this->isWooCommerceActive() ) {
+			// We inject a fake one for WooCommerce product attributes so that we can show a single set of settings
+			// instead of having to duplicate them for each attribute.
+			if ( $namesOnly ) {
+				$taxonomies[] = 'product_attributes';
+			} else {
+				$taxonomies[] = [
+					'name'               => 'product_attributes',
+					'label'              => __( 'Product Attributes', 'all-in-one-seo-pack' ),
+					'singular'           => __( 'Product Attribute', 'all-in-one-seo-pack' ),
+					'icon'               => 'dashicons-products',
+					'hierarchical'       => true,
+					'slug'               => 'product_attributes',
+					'primaryTermSupport' => true,
+					'restBase'           => 'product_attributes_class',
+					'postTypes'          => [ 'product' ]
+				];
+			}
 		}
 
 		return apply_filters( 'aioseo_public_taxonomies', $taxonomies, $namesOnly );
@@ -472,10 +500,10 @@ trait Wp {
 	 *
 	 * @since 4.0.0
 	 *
-	 * @param  string $type The parent object type ("postTypes" or "taxonomies").
+	 * @param  string $type The parent object type ("postTypes", "archives", "taxonomies").
 	 * @return array        A list of noindexed objects types.
 	 */
-	private function getNoindexedObjects( $type ) {
+	public function getNoindexedObjects( $type ) {
 		$noindexed = [];
 		foreach ( aioseo()->dynamicOptions->searchAppearance->$type->all() as $name => $object ) {
 			if (
@@ -828,9 +856,9 @@ trait Wp {
 	 * @return bool          Whether the legacy widget can be registered.
 	 */
 	public function canRegisterLegacyWidget( $idBase ) {
-		global $wp_version;
+		global $wp_version; // phpcs:ignore Squiz.NamingConventions.ValidVariableName
 		if (
-			version_compare( $wp_version, '5.8', '<' ) ||
+			version_compare( $wp_version, '5.8', '<' ) || // phpcs:ignore Squiz.NamingConventions.ValidVariableName
 			is_active_widget( false, false, $idBase ) ||
 			aioseo()->standalone->pageBuilderIntegrations['elementor']->isPluginActive()
 		) {

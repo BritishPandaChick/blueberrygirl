@@ -323,6 +323,8 @@ namespace AIOSEO\Plugin {
 			$this->filters            = $this->pro ? new Pro\Main\Filters() : new Lite\Main\Filters();
 			$this->crawlCleanup       = new Common\QueryArgs\CrawlCleanup();
 			$this->emailReports       = new Common\EmailReports\EmailReports();
+			$this->thirdParty         = new Common\ThirdParty\ThirdParty();
+			$this->writingAssistant   = new Common\WritingAssistant\WritingAssistant();
 
 			if ( ! wp_doing_ajax() && ! wp_doing_cron() ) {
 				$this->rss       = new Common\Rss();
@@ -348,7 +350,6 @@ namespace AIOSEO\Plugin {
 		public function loadInit() {
 			$this->settings = new Common\Utils\VueSettings( '_aioseo_settings' );
 			$this->sitemap->init();
-			$this->sitemap->ping->init();
 
 			$this->badBotBlocker->init();
 

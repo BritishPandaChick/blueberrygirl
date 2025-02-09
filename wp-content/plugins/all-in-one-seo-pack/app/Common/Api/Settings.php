@@ -374,6 +374,46 @@ class Settings {
 					// Clean up the array removing fields the user should not manage.
 					$post    = array_diff_key( $post, $notAllowedFields );
 					$thePost = Models\Post::getPost( $post['post_id'] );
+
+					// Remove primary term if the term is not attached to the post anymore.
+					if ( ! empty( $post['primary_term'] ) && aioseo()->helpers->isJsonString( $post['primary_term'] ) ) {
+						$primaryTerms = json_decode( $post['primary_term'], true );
+
+						foreach ( $primaryTerms as $tax => $termId ) {
+							$terms = wp_get_post_terms( $post['post_id'], $tax, [
+								'fields' => 'ids'
+							] );
+
+							if ( is_array( $terms ) && ! in_array( $termId, $terms, true ) ) {
+								unset( $primaryTerms[ $tax ] );
+							}
+						}
+
+						$post['primary_term'] = empty( $primaryTerms ) ? null : wp_json_encode( $primaryTerms );
+					}
+
+					// Remove FAQ Block schema if the block is not present in the post anymore.
+					if ( ! empty( $post['schema'] ) && aioseo()->helpers->isJsonString( $post['schema'] ) ) {
+						$schemas = json_decode( $post['schema'], true );
+
+						foreach ( $schemas['blockGraphs'] as $index => $block ) {
+							if ( 'aioseo/faq' !== $block['type'] ) {
+								continue;
+							}
+
+							$postBlocks   = parse_blocks( get_the_content( null, false, $post['post_id'] ) );
+							$postFaqBlock = array_filter( $postBlocks, function( $block ) {
+								return 'aioseo/faq' === $block['blockName'];
+							} );
+
+							if ( empty( $postFaqBlock ) ) {
+								unset( $schemas['blockGraphs'][ $index ] );
+							}
+						}
+
+						$post['schema'] = wp_json_encode( $schemas );
+					}
+
 					$thePost->set( $post );
 					$thePost->save();
 				}
@@ -432,7 +472,9 @@ class Settings {
 				$key = aioseo()->helpers->sanitizeOption( $key );
 
 				if ( ! empty( $value ) && in_array( $header[ $key ], $jsonFields, true ) && ! aioseo()->helpers->isJsonString( $value ) ) {
-					return false;
+					continue;
+				} elseif ( '' === trim( $value ) ) {
+					$value = null;
 				}
 
 				$content[ $header [ $key ] ] = $value;
@@ -544,12 +586,28 @@ class Settings {
 
 				// Generate content to CSV or JSON.
 				if ( ! empty( $posts ) ) {
+					// Change the order of keys so the post_title shows up at the beginning.
+					$data = [];
+					foreach ( $posts as $p ) {
+						$item = [
+							'id'         => '',
+							'post_id'    => '',
+							'post_title' => '',
+							'title'      => ''
+						];
+
+						$p['title']      = aioseo()->helpers->decodeHtmlEntities( $p['title'] );
+						$p['post_title'] = aioseo()->helpers->decodeHtmlEntities( $p['post_title'] );
+
+						$data[] = array_merge( $item, $p );
+					}
+
 					if ( 'csv' === $typeFile ) {
-						$contentPostType = self::dataToCsv( $posts );
+						$contentPostType = self::dataToCsv( $data );
 					}
 
 					if ( 'json' === $typeFile ) {
-						$contentPostType['postOptions']['content']['posts'] = $posts;
+						$contentPostType['postOptions']['content']['posts'] = $data;
 					}
 				}
 			}
@@ -574,7 +632,7 @@ class Settings {
 	 */
 	private static function getPostTypesData( $postOptions, $notAllowedFields = [] ) {
 		$posts = aioseo()->core->db->start( 'aioseo_posts as ap' )
-			->select( 'ap.*' )
+			->select( 'ap.*, p.post_title' )
 			->join( 'posts as p', 'ap.post_id = p.ID' )
 			->whereIn( 'p.post_type', $postOptions )
 			->orderBy( 'ap.id' )
@@ -719,6 +777,9 @@ class Settings {
 				aioseo()->internalOptions->internal->deprecatedOptions = array_values( $enabledDeprecated );
 				aioseo()->internalOptions->save( true );
 				break;
+			case 'aioseo-reset-seoboost-logins':
+				aioseo()->writingAssistant->seoBoost->resetLogins();
+				break;
 			default:
 				aioseo()->helpers->restoreCurrentBlog();
 
@@ -730,6 +791,25 @@ class Settings {
 
 		// Revert back to the current blog after processing to avoid conflict with other actions.
 		aioseo()->helpers->restoreCurrentBlog();
+
+		return new \WP_REST_Response( [
+			'success' => true
+		], 200 );
+	}
+
+	/**
+	 * Change Sem Rush Focus Keyphrase default country.
+	 *
+	 * @since 4.7.5
+	 *
+	 * @param  \WP_REST_Request  $request The REST Request
+	 * @return \WP_REST_Response          The response.
+	 */
+	public static function changeSemrushCountry( $request ) {
+		$body     = $request->get_json_params();
+		$country  = ! empty( $body['value'] ) ? sanitize_text_field( $body['value'] ) : 'US';
+
+		aioseo()->settings->semrushCountry = $country;
 
 		return new \WP_REST_Response( [
 			'success' => true

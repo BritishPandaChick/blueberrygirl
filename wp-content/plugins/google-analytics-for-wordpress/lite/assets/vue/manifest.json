@@ -7,13 +7,6 @@
     "file": "css/WelcomeOverlay.css",
     "src": "WelcomeOverlay.css"
   },
-  "_ReportReAuth-d74fcff0.min.js": {
-    "file": "js/chunks/ReportReAuth-d74fcff0.min.js",
-    "imports": [
-      "_vendor-0853f02f.min.js",
-      "_SettingsInfoTooltip-4f19e286.min.js"
-    ]
-  },
   "_SettingsInfoTooltip-4f19e286.min.js": {
     "file": "js/chunks/SettingsInfoTooltip-4f19e286.min.js",
     "imports": [
@@ -47,8 +40,8 @@
       "_vendor-0853f02f.min.js"
     ]
   },
-  "_date-intervals-b113628b.min.js": {
-    "file": "js/chunks/date-intervals-b113628b.min.js",
+  "_date-intervals-a53f62f5.min.js": {
+    "file": "js/chunks/date-intervals-a53f62f5.min.js",
     "imports": [
       "_vendor-0853f02f.min.js",
       "_index-baaf116c.min.js"
@@ -96,6 +89,13 @@
     "file": "js/chunks/index-baaf116c.min.js",
     "imports": [
       "_vendor-0853f02f.min.js"
+    ]
+  },
+  "_report-table-helper-39dc7ff9.min.js": {
+    "file": "js/chunks/report-table-helper-39dc7ff9.min.js",
+    "imports": [
+      "_vendor-0853f02f.min.js",
+      "_SettingsInfoTooltip-4f19e286.min.js"
     ]
   },
   "_vendor-0853f02f.min.js": {
@@ -1059,7 +1059,7 @@
     "file": "js/frontend.min.js",
     "imports": [
       "_vendor-0853f02f.min.js",
-      "_date-intervals-b113628b.min.js",
+      "_date-intervals-a53f62f5.min.js",
       "_WidgetReportError-b3fe6132.min.js",
       "_index-baaf116c.min.js"
     ],
@@ -1162,9 +1162,9 @@
     "file": "js/reports.min.js",
     "imports": [
       "_vendor-0853f02f.min.js",
-      "_date-intervals-b113628b.min.js",
+      "_date-intervals-a53f62f5.min.js",
       "_SettingsInfoTooltip-4f19e286.min.js",
-      "_ReportReAuth-d74fcff0.min.js",
+      "_report-table-helper-39dc7ff9.min.js",
       "_index-102a9c81.min.js",
       "_index-baaf116c.min.js",
       "_SlideDownUp-22dab176.min.js"
@@ -1413,8 +1413,8 @@
     "file": "js/widget.min.js",
     "imports": [
       "_vendor-0853f02f.min.js",
-      "_date-intervals-b113628b.min.js",
-      "_ReportReAuth-d74fcff0.min.js",
+      "_date-intervals-a53f62f5.min.js",
+      "_report-table-helper-39dc7ff9.min.js",
       "_SettingsInfoTooltip-4f19e286.min.js",
       "_WidgetReportError-b3fe6132.min.js",
       "_index-baaf116c.min.js"
