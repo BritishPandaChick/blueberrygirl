@@ -2,9 +2,9 @@
 Contributors: aioseo, smub, benjaminprojas
 Tags: SEO, Google Search Console, XML Sitemap, meta description, schema
 Tested up to: 6.8
-Requires at least: 5.3
-Requires PHP: 7.0
-Stable tag: 4.8.2
+Requires at least: 5.4
+Requires PHP: 7.2
+Stable tag: 4.8.6.1
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
 
@@ -18,7 +18,7 @@ All in One SEO is the original WordPress SEO plugin started in 2007. Today, over
 
 Our users consistently rate [AIOSEO](https://aioseo.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteplugin 'All in One SEO for WordPress') as the most comprehensive WordPress SEO plugin and marketing toolkit. It's the fastest way to optimize WordPress SEO settings, add schema markup, create XML sitemap, add local SEO, track SEO keyword rankings, automate internal linking, perform SEO audits, add Author SEO (EEAT), monitor SEO revisions, connect Google search console, and basically everything a SEO Pro would use to rank higher in search engines. 
 
-We have AI SEO features that helps you optimize SEO rankings using ChatGPT (OpenAI) and artificial intelligence.
+We have AI SEO features that help you optimize your posts for SEO by automatically generating SEO titles, meta descriptions, FAQs, key points, social media posts, and more.
 
 > <strong>AIOSEO Pro</strong><br />
 > This is the lite version of the All in One WordPress SEO Pro plugin that comes with all the powerful SEO features you will ever need to rank higher in search engines including **smart SEO schema markup, advanced SEO modules, powerful SEO sitemap suite, local SEO module, SEO keyword ranking tracking, automatic internal linking, WooCommerce SEO**, and tons more. [Click here to purchase the best premium WordPress SEO plugin now!](https://aioseo.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteplugin 'All in One SEO for WordPress')
@@ -37,8 +37,8 @@ Our SEO setup wizard optimizes your website's SEO settings based on your unique 
 * **Smart Schema Markup (aka Rich Snippets)** 
 Get better click through rate (CTR) and Google rich featured snippets using advanced SEO schema markups like FAQ schema, product schema, recipe schema markup, and dozens more using our custom [Schema Generator](https://aioseo.com/features/rich-snippets-schema/?utm_source=wprepo&utm_medium=link&utm_campaign=liteplugin 'Schema Generator').
 
-* **AI Title and Description Generator** 
-Save time by automatically generating SEO titles and meta descriptions using OpenAI ChatGPT.
+* **AI Content Generator** 
+Save time by automatically generating SEO titles, meta descriptions, FAQs, key points, social media posts, and more using our [AI Content Generator](https://aioseo.com/features/ai-content-generator/?utm_source=wprepo&utm_medium=link&utm_campaign=liteplugin 'AI Content Generator').
 
 * **Unlimited SEO Keywords** 
 Optimize for unlimited SEO keywords using our SEO content analyzer. Our TruSEO score gives you detailed content & readability analysis, so you can get higher SEO rankings.
@@ -51,6 +51,9 @@ Automate internal links between your pages using our smart [internal linking alg
 
 * **Local Business SEO**
 Improve your local SEO presence with local business schema, support for multiple local store locations, business opening hours, Google Maps integration, contact info (business email, business phone, business address, etc), and more with our [Local SEO module](https://aioseo.com/features/local-seo/?utm_source=wprepo&utm_medium=link&utm_campaign=liteplugin 'Local SEO').
+
+* **Site Audit**
+Get a detailed report of SEO issues for all posts and terms on your site, discover why these issues are important and how you can fix them.
 
 * **SEO Revisions**
 Keep a [historical record of SEO changes](https://aioseo.com/seo-revisions/?utm_source=wprepo&utm_medium=link&utm_campaign=liteplugin 'SEO Revisions'), monitor the impact of changes, and restore previous versions in one click.
@@ -69,6 +72,9 @@ Automatic 404 error monitor helps you track and redirect 404 errors, so you don'
 
 * **Author SEO**
 Add [custom author profile pages, author bio box, and relevant author schema](https://aioseo.com/features/author-seo-google-e-e-a-t/?utm_source=wprepo&utm_medium=link&utm_campaign=liteplugin 'Author SEO (E-E-A-T)') to boost Google EEAT score to help with Google's Helpful Content Update (HCU).
+
+* **LLMs.txt Generator**
+Generate an llms.txt file to help AI engines discover your site's content more easily so your content can rank in AI search results.
 
 * **SEO Audit Checklist**
 Improve your SEO ranking with our comprehensive SEO audit checklist.
@@ -156,9 +162,6 @@ Improve your mobile SEO rankings with Google AMP SEO.
 * **Semrush SEO integration**
 See additional SEO keywords with Semrush SEO integration.
 
-* **OpenAI Integration**
-Use ChatGPT to write SEO titles and meta descriptions to improve SEO rankings.
-
 * **Microsoft Clarity Integration**
 See visitor interactions with heatmaps and session recordings.
 
@@ -171,12 +174,20 @@ Better Elementor SEO for landing pages.
 * **Divi SEO**
 Better Divi SEO for landing pages.
 
+* **Avada SEO**
+Better Avada SEO for landing pages.
+
+* **WP Bakery SEO**
+Better WP Bakery SEO for landing pages.
+
 * **SeedProd SEO**
 Optimize SeedProd landing pages for SEO.
 
+* **SiteOrigin SEO**
+Better SiteOrigin SEO for landing pages.
+
 * **Open Graph Support**
 Improve SEO rankings with open graph meta data.
-
 
 ### WordPress SEO Plugin Importer ###
 
@@ -223,90 +234,99 @@ AIOSEO&reg; is a registered trademark of Semper Plugins LLC. When writing about 
 
 == Changelog ==
 
-**New in Version 4.8.2**
+**New in Version 4.8.6.1**
 
-* New: Index Status Report - Quickly identify which posts are indexed by Google and why others aren’t—with granular details on crawl status, fetch results, robots.txt and structured data.
-* Updated: Improved Table of Contents block rendering performance.
-* Updated: Hardened limit and order clauses in database queries.
-* Fixed: WP 6.8 deprecation warning for default Table of Contents and FAQ block styles.
-* Fixed: Potential page freeze issue when converting Table of Contents block from Group to Columns via block toolbar.
-* Fixed: Console error in Table of Contents block when switching between Visual and Code Editor in Block Editor.
+* Updated: Prevent potential plugin conflicts due to the loading of dependencies multiple times.
+* Updated: Local SEO render options for Opening Hours are now hidden when feature is disabled.
+* Fixed: Loading spinner for SEO Revisions in sidebar menu not aligned.
 
-**New in Version 4.8.1.1**
+**New in Version 4.8.6**
 
-* Fixed: CSS style conflict with Woocommerce Memberships and Abandoned Carts.
+* New: Site Audit - Get a detailed report of SEO issues for all posts and terms on your site, discover why these issues are important and how you can fix them. 🔨
+* Fixed: Multisite subsite requests to Search Statistics server sometimes fail due to missing license.
+* Fixed: Rare PHP error when breadcrumbs cannot be determined for non-standard pages.
 
-**New in Version 4.8.1**
+**New in Version 4.8.5**
 
-* Updated: DiscussionForumPosting schema is now output for bbPress forum topics and replies as well.
-* Updated: Improved the SEO Email Report header layout for dates in different languages.
-* Updated: Expiration date format in AIOSEO General Settings now reflects WordPress date format setting.
-* Updated: Various Keyword Rank Tracker UI/UX improvements.
-* Updated: The LinkedIn field in the Setup Wizard is now shown by default.
-* Updated: "Show post type archive link" setting for products has been removed from their breadcrumb template.
-* Updated: AIOSEO no longer loads its page builder integration for non-public Thrive Architect post types.
-* Fixed: Removed support for sitelinks schema as it is no longer supported by Google.
-* Fixed: YouTube embedded videos with additional parameters in the URL not being detected by the Video Sitemap addon.
-* Fixed: Uninstalling AIOSEO did not remove user role entries from the database as intended.
-* Fixed: Limit Modified Date feature sometimes not working for WooCommerce Products.
-* Fixed: Load admin bar assets on the frontend when logged in only if the admin bar is enabled for that user.
-* Fixed: Prevent unneeded popup warning on the user profile edit page when leaving without making edits.
-* Fixed: Restoring SEO revisions now updates meta keys to ensure localization.
-* Fixed: WPML translation to support admin pages in addition to Author/Reviewer Blocks.
-* Fixed: Additional keyphrases tooltip cutting off in page builders.
-* Fixed: Category in the permalink and breadcrumb did not match when the primary category is removed.
-* Fixed: "See Full Bio" link not correctly displaying for reviewers without posts, even when a custom author bio URL is set.
-* Fixed: Keyphrase in URL analysis didn't update correctly for auto-draft posts.
-* Fixed: Search Statistics now disconnects automatically if there's an authentication error.
-* Fixed: Phrase text missing from the Link Assistant's Link Suggestions table.
-* Fixed: SERP Preview update when changing primary term for a WooCommerce product.
-* Fixed: Updated SERP title to reflect selected primary term for the category when changed.
-* Fixed: SiteOrigin integration style conflict to prevent overlap with other modals.
-* Fixed: Images using the Post SEO Title smart tag were sometimes not parsed correctly.
-* Fixed: URL count for the root sitemap sometimes not entirely accurate.
-* Fixed: Robots.txt settings not correctly synced between multisite network and main site.
+* Updated: Author SEO (E-E-A-T) addon and Writing Assistant data are now fully removed when uninstalling the plugin.
+* Updated: Product Schema now favours WooCommerce brand field over its own custom field.
+* Updated: PHP version notices are now only shown to Administrators.
+* Fixed: Breadcrumbs taxonomy preview now correctly refreshes when user toggles between using the default settings
+* Fixed: WooCommerce Brand smart tag not correctly converted to expected value in previews.
+* Fixed: AIOSEO Details column now correctly reloads after quick-editing a post.
+* Fixed: Image URLs are no longer forcefully converted to lowercase in the Image Sitemap.
+* Fixed: Focus Keyword now saves correctly again for Divi built posts.
+* Fixed: Image SEO no longer breaks Divi built posts in rare cases.
+* Fixed: Multisite subsites no longer incorrectly inherit the "Block AI Crawlers" and "Block Crawling of Internal Site Search URLs" setting values from the main site in the network. 
+* Fixed: Notifications no longer contain encoded HTML entities
+* Fixed: Default options for new redirects not localized.
+* Fixed: PHP error in rare cases when breadcrumb link is a WP_Error.
+* Fixed: PHP error due to plugin conflict with MasterStudy LMS.
 
-**New in Version 4.8.0**
+**New in Version 4.8.4.1**
 
-* New: Crawl Optimization Improvements - We've added even more features to Crawl Cleanup to help you block unwanted bots from indexing your site and prevent spammers from abusing your internal site search results.
-* Fixed: TruSEO Highlighter not always working correctly when post content contains an empty or reusable block.
+* Fixed: PHP error for multisites when AI credits don't manage to update correctly.
 
-**New in Version 4.7.9.1**
+**New in Version 4.8.4**
 
-* Updated: Removed the Search Statistics menu item under Dashboard menu.
+* New: AI Content - Use our new smart AI features to automatically generate FAQs, Key Points, social media posts and more, that perfectly fit your articles. 🤖
+* New: LLMs.txt File - The new llms.txt file helps AI engines discover your site's content more easily so your content can rank in AI search results.
+* Updated: Index Status Report now fetches index data from Google on-the-fly when it is missing or expired.
+* Fixed: Image SEO addon no longer incorrectly encodes HTML in captions.
+* Fixed: PHP notice when trying to format price of products in Product schema where no price is set.
+* Fixed: Added back missing $crumb param to aioseo_breadcrumbs_template filter hook for compatibility.
 
-**New in Version 4.7.9**
+**New in Version 4.8.3.2**
 
-* Updated: Schema product suggestedMinAge/suggestedMaxAge properties to conform with Google's structured data merchant listing requirements.
-* Updated: Added a button to apply new headlines directly to the post title inside the Headline Analyzer.
-* Updated: TruSEO now supports additional ACF Custom Field types.
-* Updated: Exported JSON/CSV files now include the post title and term name columns.
-* Updated: Improved handling of Focus Keyphrase errors from Semrush API.
-* Updated: Turned off autoloading by default for a number of AIOSEO options to improve performance.
-* Fixed: Access control role check to properly verify if the role has edit_post permissions.
-* Fixed: Existing additional sitemap pages with different priority, frequency, or last modified values were not getting updated when importing a CSV file.
-* Fixed: Tabs were not displaying active status correctly when using RTL due to CSS conflicts.
-* Fixed: Image title sometimes duplicated when using Elementor page builder.
-* Fixed: Alt text settings were not applied to images when showing latest posts on the homepage.
-* Fixed: Excluded posts/terms would sometimes not be correctly excluded from sitemaps.
-* Fixed: SERP Preview disappearing when using numeric custom fields in ACF.
-* Fixed: Filenames duplicated in rare cases when Strip Punctuation is enabled in Image SEO.
-* Fixed: Adding links to WordPress Gallery Block would sometimes not work when Strip Punctuation is enabled in Image SEO.
-* Fixed: Trailing slash added to a redirect's target URL even if the URL is external.
-* Fixed: Orphaned Posts filter not working correctly in the Link Assistant.
-* Fixed: Table of Content block's heading could sometimes break when adding a link from Link Assistant.
-* Fixed: "Don't update the modified date" checkbox now works properly in post's quick edit screen.
-* Fixed: Missing tooltip for the AI Title/Description Generator modal.
-* Fixed: Headlines that couldn't be analyzed would sometimes break the Headline Analyzer UI.
-* Fixed: Automatic 404 redirects no longer affecting the dedicated HTML sitemap page.
-* Fixed: Canonical URL sometimes missing a slash for paged taxonomy terms.
-* Fixed: Canonical URL for a term could sometimes fail if the global query changed.
+* Updated: Defined purpose of SEO title and meta description so WPML can adhere to character limits when auto-translating these fields.
+* Fixed: Breadcrumbs schema error when homepage crumb link is disabled under Breadcrumb settings.
 
-**New in Version 4.7.8**
+**New in Version 4.8.3.1**
 
-* New: Keyword Rank Tracker Improvements - Import your best performing keywords directly from Google Search Console and explore Related Keywords to discover new keyword opportunities!
-* New: WooCommerce Product Attributes Support - Per popular demand, you can now control the SEO of your product attributes and include them in your sitemap to increase discoverability.
-* Updated: Added filter to control maximum number of additional keywords per post.
+* New: Custom Breadcrumb Trails – Create custom breadcrumb trails for all your posts and terms to granularly control how they are displayed.
+* New: Added multilingual sitemap support for Weglot.
+* Updated: Breadcrumb schema markup is now directly tied to your visual breadcrumb trail.
+* Updated: Deprecated Bad Bot Blocker feature has now been fully removed from the plugin.
+* Updated: Image Sitemap now stores locally hosted images as relative URLs in order to facilitate seamless site migrations.
+* Updated: AIOSEO autoloaded option no longer stores SEO Analyzer results in order to improve performance.
+* Updated: Improved performance by no longer storing Writing Assistant's country and language data in user metadata.
+* Updated: Minor performance improvements for General, HTML, and RSS sitemaps by removing unnecessary fields from database queries.
+* Updated: Added additional caching to prevent sites from sending redundant concurrent requests to AIOSEO servers to check for new updates.
+* Updated: Added support to TruSEO for Elementor's Optimized DOM feature.
+* Updated: Added support to import post/term level redirects from the Rank Math SEO plugin.
+* Updated: Added support for Bluesky and Threads to Social Networks settings.
+* Updated: Unified the “Last Modified Date” checkbox design across WooCommerce Products and Classic Editor posts.
+* Updated: Improved UX for the AIOSEO Overview widget by showing TruSEO scores for all posts, regardless of whether they have a Focus Keyword.
+* Updated: “Keyword in URL” TruSEO check is now disabled when WordPress permalinks are not enabled.
+* Updated: Improved sitemap validation to only allow “inherit” post status for attachments.
+* Fixed: Dynamic backup for temporarily deregistered post types and taxonomies now works correctly again.
+* Fixed: Add redirects bulk action within the 404 Logs tab now works correctly again.
+* Fixed: Cache issue in multisite when sub-site is not network activated.
+* Fixed: Additional Pages sitemap index no longer shows the image column.
+* Fixed: SEO revision now shows the correct name for taxonomies other than category.
+* Fixed: AIOSEO popup overlap in Divi.
+* Fixed: News Sitemap title now outputs encoded versions of special characters (&, >, <, ‘, etc.).
+* Fixed: When deleting the modified date for an additional sitemap record, it now shows as empty instead of invalid.
+* Fixed: Sitemap would sometimes throw an error if another plugin/theme added content to the output, causing it to be parsed incorrectly.
+* Fixed: TruSEO would sometimes not be able to read Elementor's post content.
+* Fixed: Tumblr URL format in the social meta and schema markup are now always the same.
+* Fixed: Book schema markup now correctly outputs the book format.
+* Fixed: Fact Check schema now correctly outputs the claim author.
+* Fixed: Google Rich Results Test link now appears again in the toolbar menu.
+* Fixed: URL input validation no longer shows an error for empty values.
+* Fixed: Improved Link Assistant's ability to handle large amounts of text by increasing the text size limit for paragraphs and optimizing how text content is processed.
+* Fixed: SEO settings now properly update when switching between pages in the Elementor editor.
+* Fixed: SEO Title and Meta Description compatibility with Astra Pro Site Builder and SureForms plugins.
+* Fixed: Link Assistant Inner post report would sometimes fail to refresh.
+* Fixed: Compatibility with LearnDash Notifications while using Redirect's Advanced 404 feature.
+* Fixed: Resolved duplicate DB queries when loading notifications for the Notification Center.
+* Fixed: URLs in the sitemap are now properly encoded for non-English languages when using WPML.
+* Fixed: TruSEO settings not being updated depending on the content.
+* Fixed: PHP deprecation warning for PHP 8.4 in Action Scheduler.
+* Fixed: PHP warning for taxonomy sitemap indexes.
+* Fixed: PHP warning when using Divi and custom schema markup.
+* Fixed: PHP notice in Author SEO (E-E-A-T) addon due to translations loaded too early.
+* Fixed: SEO Site Score widget sometimes not displaying results.
 
 **See our [changelog on aioseo.com](https://aioseo.com/changelog/?utm_source=wprepo&utm_medium=link&utm_campaign=aioseo) for previous releases.**
 
@@ -389,6 +409,6 @@ Additionally, AIOSEO can also provide you with data on the most frequently used 
 
 == Upgrade Notice ==
 
-= 4.8.2 =
+= 4.8.6.1 =
 
 This update adds major improvements and bug fixes.

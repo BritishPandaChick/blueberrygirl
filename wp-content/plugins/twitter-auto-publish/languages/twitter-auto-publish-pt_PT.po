@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: multilang\n"
-"POT-Creation-Date: 2025-03-24 18:42+0530\n"
-"PO-Revision-Date: 2025-03-24 18:42+0530\n"
+"POT-Creation-Date: 2025-07-29 11:43+0530\n"
+"PO-Revision-Date: 2025-07-29 15:23+0530\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: pt_PT\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.4\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: _e;__;esc_html_e\n"
 "X-Poedit-SearchPath-0: admin/about.php\n"
@@ -53,124 +53,124 @@ msgstr ""
 "target=\"_blank\">%s</a> que é uma versão premium deste plugin. Incluímos "
 "uma comparação rápida dos plugins gratuitos e premium para sua referência."
 
-#: admin/about.php:23
+#: admin/about.php:24
 msgid "Feature group"
 msgstr "Grupo de recursos"
 
-#: admin/about.php:24
+#: admin/about.php:25
 msgid "Feature"
 msgstr "Característica"
 
-#: admin/about.php:25
+#: admin/about.php:26
 msgid "Free"
 msgstr "Gratuito"
 
-#: admin/about.php:27
+#: admin/about.php:28
 msgid "Premium"
 msgstr "Prêmio"
 
-#: admin/about.php:29
+#: admin/about.php:30
 #, php-format
 msgid "%s Premium"
 msgstr "%s Premium"
 
-#: admin/about.php:34
+#: admin/about.php:35
 msgid "Supported Media"
 msgstr "Mídia compatível"
 
-#: admin/about.php:35 admin/admin-notices.php:56
+#: admin/about.php:36 admin/admin-notices.php:56
 msgid "Facebook"
 msgstr "Facebook"
 
-#: admin/about.php:45 admin/admin-notices.php:57 admin/metabox.php:291
+#: admin/about.php:46 admin/admin-notices.php:57 admin/metabox.php:291
 msgid "Twitter"
 msgstr "Twitter"
 
-#: admin/about.php:54 admin/admin-notices.php:58
+#: admin/about.php:55 admin/admin-notices.php:58
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: admin/about.php:63
+#: admin/about.php:64
 msgid "Instagram"
 msgstr "Instagram"
 
-#: admin/about.php:72
+#: admin/about.php:73
 msgid "Tumblr"
 msgstr "Tumblr"
 
-#: admin/about.php:81
+#: admin/about.php:82
 msgid "Pinterest"
 msgstr "Pinterest"
 
-#: admin/about.php:90
+#: admin/about.php:91
 msgid "Telegram"
 msgstr "Telegrama"
 
-#: admin/about.php:99
+#: admin/about.php:100
 msgid "Threads"
 msgstr "Threads"
 
-#: admin/about.php:110
+#: admin/about.php:111
 msgid "Posting Options"
 msgstr "Opções de postagem"
 
-#: admin/about.php:111
+#: admin/about.php:112
 msgid "Publish to facebook pages"
 msgstr "Publicar em páginas do facebook"
 
-#: admin/about.php:122
+#: admin/about.php:123
 msgid "Publish to twitter profile"
 msgstr "Publicar no perfil do Twitter"
 
-#: admin/about.php:132
+#: admin/about.php:133
 msgid "Publish to linkedin profile/company pages"
 msgstr "Publicar em páginas de perfil/empresa do linkedin"
 
-#: admin/about.php:141
+#: admin/about.php:142
 msgid "Publish to instagram Business accounts"
 msgstr "Publicar em contas comerciais do instagram"
 
-#: admin/about.php:151
+#: admin/about.php:152
 msgid "Publish to tumblr profile"
 msgstr "Publicar no perfil do tumblr"
 
-#: admin/about.php:161
+#: admin/about.php:162
 msgid "Publish to pinterest boards"
 msgstr "Publicar em pastas do pinterest"
 
-#: admin/about.php:171
+#: admin/about.php:172
 msgid "Publish to telegram channels and groups"
 msgstr "Publique em canais e grupos de telegramas"
 
-#: admin/about.php:180
+#: admin/about.php:181
 msgid "Publish to threads profile"
 msgstr "Publicar no perfil de threads"
 
-#: admin/about.php:189
+#: admin/about.php:190
 msgid "Option to add twitter image description for visually impaired people"
 msgstr ""
 "Opção para adicionar descrição de imagem do twitter para pessoas com "
 "deficiência visual"
 
-#: admin/about.php:199
+#: admin/about.php:200
 msgid "Option to republish existing posts"
 msgstr "Opção para republicar postagens existentes"
 
-#: admin/about.php:209
+#: admin/about.php:210
 msgid "Publish to multiple social media accounts"
 msgstr "Publicar em várias contas de mídia social"
 
-#: admin/about.php:219
+#: admin/about.php:220
 msgid ""
 "Seperate message formats for publishing to multiple social media accounts"
 msgstr ""
 "Formato de mensagem separado para publicação em várias contas de mídia social"
 
-#: admin/about.php:229
+#: admin/about.php:230
 msgid "Save auto publish settings of individual posts"
 msgstr "Salvar configurações de publicação automática de postagens individuais"
 
-#: admin/about.php:239
+#: admin/about.php:240
 msgid ""
 "Hash Tags support for Facebook, Twitter, Linkedin, Instagram, Tumblr, "
 "Threads, Pinterest and Telegram"
@@ -178,34 +178,38 @@ msgstr ""
 "Suporte para Hash Tags para Facebook, Twitter, Linkedin, Instagram, Tumblr, "
 "Threads, Pinterest e Telegram"
 
-#: admin/about.php:249
+#: admin/about.php:250
 msgid "Option to use post tags as hash tags"
 msgstr "Opção de usar a tag de postagem como hashtags"
 
-#: admin/about.php:258
+#: admin/about.php:259
 msgid "Option to use post categories as hash tags"
 msgstr "Opção para usar categorias de posts como hash tags"
 
-#: admin/about.php:268
+#: admin/about.php:269
 msgid "Enable/Disable SSL peer verification"
 msgstr "Ativar/desativar verificação de peer SSL"
 
-#: admin/about.php:280
+#: admin/about.php:278
+msgid "Carousel post support for Instagram and Telegram"
+msgstr "Suporte de publicação em carrossel para Instagram e Telegram"
+
+#: admin/about.php:289
 msgid "Image Options"
 msgstr "Opções de imagem"
 
-#: admin/about.php:281
+#: admin/about.php:290
 msgid "Publish images along with post content"
 msgstr "Publique imagens junto com o conteúdo da postagem"
 
-#: admin/about.php:292
+#: admin/about.php:301
 msgid ""
 "Separate default image url for publishing to multiple social media accounts"
 msgstr ""
 "URL de imagem padrão separado para publicação em várias contas de mídia "
 "social"
 
-#: admin/about.php:302
+#: admin/about.php:311
 msgid ""
 "Option to specify preference from featured image, post content, post meta "
 "and open graph tags"
@@ -213,25 +217,25 @@ msgstr ""
 "Opção para especificar a preferência da imagem em destaque, postar conteúdo, "
 "postar meta e abrir tags de gráfico"
 
-#: admin/about.php:312
+#: admin/about.php:321
 msgid ""
 "Publish multiple images to facebook, tumblr, linkedin, twitter, threads and "
 "telegram along with post content\t"
 msgstr ""
 "Publique várias imagens no Facebook, Tumblr, LinkedIn, Twitter, tópicos e "
-"telegrama junto com o conteúdo da postagem"
+"telegrama junto com o conteúdo da postagem "
 
-#: admin/about.php:322
+#: admin/about.php:331
 msgid "Option to specify multiphoto preference from post content and post meta"
 msgstr ""
 "Opção para especificar a preferência multifoto do conteúdo da postagem e da "
 "meta da postagem"
 
-#: admin/about.php:334
+#: admin/about.php:343
 msgid "Video/Audio Options"
 msgstr "Opções de vídeo/áudio"
 
-#: admin/about.php:335
+#: admin/about.php:344
 msgid ""
 "Publish video to facebook, tumblr,Linkedin, Instagram, twitter, threads and "
 "telegram along with post content"
@@ -239,18 +243,18 @@ msgstr ""
 "Publique vídeos no Facebook, Tumblr, Linkedin, Instagram, Twitter, tópicos e "
 "telegramas junto com o conteúdo da postagem"
 
-#: admin/about.php:345
+#: admin/about.php:354
 msgid ""
 "Option to specify preference from post content, post meta and open graph tags"
 msgstr ""
 "Opção para especificar a preferência de conteúdo de postagem, meta de "
 "postagem e tags de gráfico aberto"
 
-#: admin/about.php:355
+#: admin/about.php:364
 msgid "Publish audio to tumblr along with post content"
 msgstr "Publique áudio no tumblr junto com o conteúdo da postagem"
 
-#: admin/about.php:364
+#: admin/about.php:373
 msgid ""
 "Option to specify audio preference from  post content, post meta and open "
 "graph tags"
@@ -258,148 +262,148 @@ msgstr ""
 "Opção para especificar a preferência de áudio do conteúdo da postagem, meta "
 "de postagem e tags de gráfico aberto"
 
-#: admin/about.php:375
+#: admin/about.php:384
 msgid "Filter Options"
 msgstr "Opções de filtro"
 
-#: admin/about.php:376
+#: admin/about.php:385
 msgid "Filter posts to publish based on categories"
 msgstr "Filtre postagens para publicar com base em categorias"
 
-#: admin/about.php:386
+#: admin/about.php:395
 msgid "Filter posts to publish based on custom post types"
 msgstr ""
 "Filtre as postagens para publicar com base nos tipos de postagem "
 "personalizados"
 
-#: admin/about.php:395
+#: admin/about.php:404
 msgid "Filter posts to publish based on sticky posts"
 msgstr "Filtre postagens para publicar com base em postagens fixas"
 
-#: admin/about.php:404
+#: admin/about.php:413
 msgid "Configuration to enable/disable page publishing"
 msgstr "Configuração para habilitar/desabilitar a publicação de páginas"
 
-#: admin/about.php:414
+#: admin/about.php:423
 msgid "Category filter for individual accounts"
 msgstr "Filtro de categoria para contas individuais"
 
-#: admin/about.php:424
+#: admin/about.php:433
 msgid "Custom post type filter for individual accounts"
 msgstr "Filtro de tipo de postagem personalizado para contas individuais"
 
-#: admin/about.php:434
+#: admin/about.php:443
 msgid "Enable/Disable page publishing for individual accounts"
 msgstr "Ativar/desativar a publicação de páginas para contas individuais"
 
-#: admin/about.php:444
+#: admin/about.php:453
 msgid "Override auto publish scheduling for individual accounts"
 msgstr ""
 "Substituir a programação de publicação automática para contas individuais"
 
-#: admin/about.php:453
+#: admin/about.php:462
 msgid "Override auto publish based on sticky posts for individual accounts"
 msgstr ""
 "Substituir a publicação automática com base em postagens fixas para contas "
 "individuais"
 
-#: admin/about.php:464
+#: admin/about.php:473
 msgid "Scheduling"
 msgstr "Agendamento"
 
-#: admin/about.php:465
+#: admin/about.php:474
 msgid "Instantaneous post publishing"
 msgstr "Publicação instantânea de postagens"
 
-#: admin/about.php:475
+#: admin/about.php:484
 msgid "Scheduled post publishing using cron"
 msgstr "Publicação de postagem agendada usando cron"
 
-#: admin/about.php:485
+#: admin/about.php:494
 msgid "Status summary of auto publish tasks by mail"
 msgstr "Resumo do status das tarefas de publicação automática por e-mail"
 
-#: admin/about.php:495
+#: admin/about.php:504
 msgid "Configurable auto publishing time interval"
 msgstr "Intervalo de tempo de publicação automática configurável"
 
-#: admin/about.php:509
+#: admin/about.php:518
 msgid "Publishing History"
 msgstr "Histórico de publicação"
 
-#: admin/about.php:510
+#: admin/about.php:519
 msgid "View auto publish history"
 msgstr "Ver histórico de publicação automática"
 
-#: admin/about.php:519
+#: admin/about.php:528
 msgid "View auto publish error logs"
 msgstr "Ver registros de erros de publicação automática"
 
-#: admin/about.php:529
+#: admin/about.php:538
 msgid "Option to republish post"
 msgstr "Opção para republicar postagem"
 
-#: admin/about.php:539
+#: admin/about.php:548
 msgid "Option to reschedule publishing"
 msgstr "Opção para reagendar a publicação"
 
-#: admin/about.php:550
+#: admin/about.php:559
 msgid "Installation and Support"
 msgstr "Instalação e Suporte"
 
-#: admin/about.php:551
+#: admin/about.php:560
 msgid "Free Installation"
 msgstr "Instalação Gratuita"
 
-#: admin/about.php:560
+#: admin/about.php:569
 msgid "Privilege customer support"
 msgstr "Suporte ao cliente privilegiado"
 
-#: admin/about.php:571
+#: admin/about.php:580
 msgid "Addon Features"
 msgstr "Recursos adicionais"
 
-#: admin/about.php:572
+#: admin/about.php:581
 msgid "Advanced Autopublish Scheduler"
 msgstr "Agendador de publicação automática avançada"
 
-#: admin/about.php:581
+#: admin/about.php:590
 msgid "URL-Shortener"
 msgstr "Encurtador de URL"
 
-#: admin/about.php:590
+#: admin/about.php:599
 msgid "Privilege Management"
 msgstr "Gerenciamento de privilégios"
 
-#: admin/about.php:599
+#: admin/about.php:608
 msgid "Other"
 msgstr "Outro"
 
-#: admin/about.php:600
+#: admin/about.php:609
 msgid "Price"
 msgstr "Preço"
 
-#: admin/about.php:601
+#: admin/about.php:610
 msgid "FREE"
 msgstr "GRATUITO"
 
-#: admin/about.php:602
+#: admin/about.php:611
 msgid "Starts from 29 USD"
 msgstr "A partir de 29 USD"
 
-#: admin/about.php:603
+#: admin/about.php:612
 msgid "Starts from 59 USD"
 msgstr "A partir de 59 USD"
 
-#: admin/about.php:606
+#: admin/about.php:615
 msgid "Purchase"
 msgstr "Compra"
 
-#: admin/about.php:608 admin/footer.php:23
+#: admin/about.php:617 admin/footer.php:27
 msgid "Buy Now"
 msgstr "Compre Agora"
 
-#: admin/about.php:615
+#: admin/about.php:624
 msgid "Pinterest is added on experimental basis."
 msgstr "O Pinterest é adicionado em caráter experimental."
 
@@ -434,7 +438,7 @@ msgstr "Doar"
 msgid "Don't Show This Again"
 msgstr "Não mostre isso de novo"
 
-#: admin/footer.php:11
+#: admin/footer.php:15
 #, php-format
 msgid ""
 "%sUpgrade to the Fully Featured XYZ WP Social Media Auto Publish Premium "
@@ -443,7 +447,7 @@ msgstr ""
 "%s Atualize para o plug-in Premium de publicação automática nas redes "
 "sociais XYZ WP com todas as características por %s Apenas 29 USD %s"
 
-#: admin/footer.php:17
+#: admin/footer.php:21
 msgid ""
 "Unlock advanced scheduling, multi-account publishing, hashtag automation, "
 "and seamless social media integration!"
@@ -451,51 +455,51 @@ msgstr ""
 "Desbloqueie agendamento avançado, publicação em várias contas, automação de "
 "hashtag e integração perfeita de mídia social!"
 
-#: admin/footer.php:27
+#: admin/footer.php:31
 msgid "Compare Features"
 msgstr "Comparar recursos"
 
-#: admin/footer.php:38
+#: admin/footer.php:42
 msgid "Follow Us"
 msgstr "Siga-nos"
 
-#: admin/footer.php:46
+#: admin/footer.php:50
 msgid "Support"
 msgstr "Apoiar"
 
-#: admin/footer.php:47
+#: admin/footer.php:51
 msgid "Contact Us"
 msgstr "Contate-Nos"
 
-#: admin/footer.php:48
+#: admin/footer.php:52
 msgid "Please Rate Us"
 msgstr "Avalie-nos"
 
-#: admin/footer.php:52
+#: admin/footer.php:56
 msgid "Create a ticket at Wordpress forum"
 msgstr "Criar um ticket no fórum Wordpress"
 
-#: admin/footer.php:55
+#: admin/footer.php:59
 msgid "Stay tuned for our updates"
 msgstr "Fique atento às nossas atualizações"
 
-#: admin/footer.php:119
+#: admin/footer.php:123
 msgid "Name"
 msgstr "Nome"
 
-#: admin/footer.php:135
+#: admin/footer.php:139
 msgid "Email"
 msgstr "E-mail"
 
-#: admin/footer.php:137
+#: admin/footer.php:141
 msgid "Subscribe"
 msgstr "Subscrever"
 
-#: admin/footer.php:149
+#: admin/footer.php:153
 msgid "Our Plugins"
 msgstr "Nossos plug-ins"
 
-#: admin/footer.php:170
+#: admin/footer.php:174
 msgid "Powered by"
 msgstr "Distribuído por"
 
@@ -505,9 +509,9 @@ msgstr "Configurações atualizadas com sucesso."
 
 #: admin/header.php:19 admin/header.php:32 admin/header.php:49
 #: admin/manage-auth.php:9 admin/manage-auth.php:143 admin/manage-auth.php:207
-#: admin/settings.php:29 admin/settings.php:150 admin/settings.php:163
-#: admin/settings.php:173 admin/settings.php:181 admin/settings.php:190
-#: admin/settings.php:1033 admin/settings.php:1059 admin/suggest_feature.php:11
+#: admin/settings.php:29 admin/settings.php:155 admin/settings.php:168
+#: admin/settings.php:178 admin/settings.php:186 admin/settings.php:195
+#: admin/settings.php:1034 admin/settings.php:1060 admin/suggest_feature.php:11
 #: admin/suggest_feature.php:19 admin/suggest_feature.php:27
 msgid "Dismiss"
 msgstr "Demitir"
@@ -709,69 +713,69 @@ msgstr "Histórica"
 msgid "Suggest a Feature"
 msgstr "Sugerir um recurso"
 
-#: admin/metabox.php:298 admin/settings.php:343
+#: admin/metabox.php:298 admin/settings.php:348
 msgid "Enable auto publish posts to my twitter account"
 msgstr "Ativar publicação automática de postagens na minha conta do Twitter"
 
-#: admin/metabox.php:301 admin/metabox.php:314 admin/settings.php:346
-#: admin/settings.php:487 admin/settings.php:619 admin/settings.php:629
-#: admin/settings.php:726 admin/settings.php:754 admin/settings.php:797
-#: admin/settings.php:810
+#: admin/metabox.php:301 admin/metabox.php:314 admin/settings.php:351
+#: admin/settings.php:492 admin/settings.php:624 admin/settings.php:634
+#: admin/settings.php:731 admin/settings.php:759 admin/settings.php:802
+#: admin/settings.php:815
 msgid "Yes"
 msgstr "Sim"
 
-#: admin/metabox.php:302 admin/metabox.php:312 admin/settings.php:347
-#: admin/settings.php:488 admin/settings.php:620 admin/settings.php:630
-#: admin/settings.php:727 admin/settings.php:755 admin/settings.php:798
-#: admin/settings.php:811
+#: admin/metabox.php:302 admin/metabox.php:312 admin/settings.php:352
+#: admin/settings.php:493 admin/settings.php:625 admin/settings.php:635
+#: admin/settings.php:732 admin/settings.php:760 admin/settings.php:803
+#: admin/settings.php:816
 msgid "No"
 msgstr "Não"
 
-#: admin/metabox.php:307 admin/settings.php:484
+#: admin/metabox.php:307 admin/settings.php:489
 msgid "Attach image to twitter post"
 msgstr "Anexar imagem ao post do Twitter"
 
-#: admin/metabox.php:320 admin/settings.php:451
+#: admin/metabox.php:320 admin/settings.php:456
 msgid "Message format for posting"
 msgstr "Formato de mensagem para postagem"
 
-#: admin/metabox.php:324 admin/settings.php:455
+#: admin/metabox.php:324 admin/settings.php:460
 msgid "Insert the title of your post."
 msgstr "Insira o título do seu post."
 
-#: admin/metabox.php:325 admin/settings.php:456
+#: admin/metabox.php:325 admin/settings.php:461
 msgid "Insert the URL where your post is displayed."
 msgstr "Insira a URL onde sua postagem é exibida."
 
-#: admin/metabox.php:326 admin/settings.php:457
+#: admin/metabox.php:326 admin/settings.php:462
 msgid "Insert the excerpt of your post."
 msgstr "Insira o trecho de sua postagem."
 
-#: admin/metabox.php:327 admin/settings.php:458
+#: admin/metabox.php:327 admin/settings.php:463
 msgid "Insert the description of your post."
 msgstr "Insira a descrição do seu post."
 
-#: admin/metabox.php:328 admin/settings.php:459
+#: admin/metabox.php:328 admin/settings.php:464
 msgid "Insert the name of your blog."
 msgstr "Insira o nome do seu blog."
 
-#: admin/metabox.php:329 admin/settings.php:460
+#: admin/metabox.php:329 admin/settings.php:465
 msgid "Insert the nicename of the author."
 msgstr "Insira o nome legal do autor."
 
-#: admin/metabox.php:330 admin/settings.php:461
+#: admin/metabox.php:330 admin/settings.php:466
 msgid "Insert the ID of your post."
 msgstr "Insira o ID da sua postagem."
 
-#: admin/metabox.php:331 admin/settings.php:462
+#: admin/metabox.php:331 admin/settings.php:467
 msgid "Insert the publish date of your post."
 msgstr "Insira a data de publicação do seu post."
 
-#: admin/metabox.php:332 admin/settings.php:463
+#: admin/metabox.php:332 admin/settings.php:468
 msgid "Insert the display name of the author."
 msgstr "Insira o nome de exibição do autor."
 
-#: admin/metabox.php:336 admin/settings.php:467
+#: admin/metabox.php:336 admin/settings.php:472
 msgid "Select"
 msgstr "Selecionar"
 
@@ -781,96 +785,96 @@ msgid ""
 msgstr ""
 "Obrigado novamente por usar o plugin. Nunca mais mostraremos a mensagem."
 
-#: admin/settings.php:74
+#: admin/settings.php:75
 msgid "Please fill Client ID."
 msgstr "Preencha o ID do cliente."
 
-#: admin/settings.php:79
+#: admin/settings.php:80
 msgid "Please fill Client Secret."
 msgstr "Por favor preencha o Segredo do Cliente."
 
-#: admin/settings.php:87
+#: admin/settings.php:88
 msgid "Please fill api key."
 msgstr "Por favor, preencha a chave api."
 
-#: admin/settings.php:92
+#: admin/settings.php:93
 msgid "Please fill api secret."
 msgstr "Por favor, preencha o segredo da API."
 
-#: admin/settings.php:97
+#: admin/settings.php:99
 msgid "Please fill twitter access token."
 msgstr "Por favor, preencha o token de acesso do twitter."
 
-#: admin/settings.php:102
+#: admin/settings.php:104
 msgid "Please fill twitter access token secret."
 msgstr "Por favor, preencha o segredo do token de acesso do Twitter."
 
-#: admin/settings.php:108
+#: admin/settings.php:110
 msgid "Please fill twitter username."
 msgstr "Por favor, preencha o nome de usuário do twitter."
 
-#: admin/settings.php:113
+#: admin/settings.php:115
 msgid "Please fill message format for posting."
 msgstr "Por favor, preencha o formato da mensagem para postagem."
 
-#: admin/settings.php:149
+#: admin/settings.php:154
 msgid "Settings updated successfully"
 msgstr "Configurações atualizadas com sucesso"
 
-#: admin/settings.php:171
+#: admin/settings.php:176
 #, php-format
 msgid "Successfully connected to %s member area"
 msgstr "Conectado com sucesso à área de membros %s"
 
-#: admin/settings.php:180
+#: admin/settings.php:185
 msgid "Account has been authenticated successfully"
 msgstr "A conta foi autenticada com sucesso"
 
-#: admin/settings.php:211
-msgid "Twitter Settings"
-msgstr "Configurações do Twitter"
+#: admin/settings.php:216
+msgid "Twitter / X Settings"
+msgstr "Definições do Twitter/X"
 
-#: admin/settings.php:212
+#: admin/settings.php:217
 msgid "General Settings"
 msgstr "Configurações Gerais"
 
-#: admin/settings.php:221 admin/settings.php:245
+#: admin/settings.php:226 admin/settings.php:250
 msgid "Note:"
 msgstr "Nota:"
 
-#: admin/settings.php:221 admin/settings.php:245
+#: admin/settings.php:226 admin/settings.php:250
 msgid ""
 "You have to create a Twitter application before filling in following fields."
 msgstr ""
 "Você precisa criar um aplicativo do Twitter antes de preencher os campos a "
 "seguir."
 
-#: admin/settings.php:224 admin/settings.php:247
+#: admin/settings.php:229
 #, php-format
 msgid "%sClick here%s to create a new application."
 msgstr "%sClique aqui%s para criar um novo aplicativo."
 
-#: admin/settings.php:229 admin/settings.php:252
+#: admin/settings.php:234 admin/settings.php:257
 #, php-format
 msgid "In the twitter application, navigate to <b>%s</b>."
 msgstr "No aplicativo do Twitter, navegue até <b>%s</b>."
 
-#: admin/settings.php:232
+#: admin/settings.php:237
 #, php-format
 msgid "Set <b>App permissions</b> to <b>%s</b>."
 msgstr "Defina <b>Permissões da aplicação</b> para <b>%s</b>."
 
-#: admin/settings.php:235 admin/settings.php:261
+#: admin/settings.php:240 admin/settings.php:266
 #, php-format
 msgid "Specify <b>Website URL</b> as %s"
 msgstr "Especifique o <b>URL do site</b> como %s"
 
-#: admin/settings.php:240
+#: admin/settings.php:245
 #, php-format
 msgid "After updation , navigate to <b>%s</b> where you will get <b>%s</b>."
 msgstr "Após a atualização, navegue até <b>%s</b> onde obterá <b>%s</b>."
 
-#: admin/settings.php:241 admin/settings.php:267
+#: admin/settings.php:246 admin/settings.php:272
 #, php-format
 msgid ""
 "For detailed step by step instructions <b><a href=\"%s\" target=\"_blank\"> "
@@ -879,7 +883,12 @@ msgstr ""
 "Para instruções detalhadas passo a passo <b><a href=\"%s\" "
 "target=\"_blank\"> Clique aqui"
 
-#: admin/settings.php:256
+#: admin/settings.php:252
+#, php-format
+msgid "%s Click here %s to create a new application."
+msgstr "%s Clique aqui %s para criar uma nova solicitação."
+
+#: admin/settings.php:261
 #, php-format
 msgid ""
 "Set <b>App permissions</b> to <b>%s</b>, and <b>Type of App</b> to <b>%s</"
@@ -889,7 +898,7 @@ msgstr ""
 "b> como <b>%s</b> . <br>Na secção <b>Informações da aplicação</b>, defina "
 "<b>Redirect URI</b> como: %s ."
 
-#: admin/settings.php:266
+#: admin/settings.php:271
 #, php-format
 msgid ""
 "After updation , navigate to <b>%s</b> where you will get <b>%s</b><br>under "
@@ -898,102 +907,96 @@ msgstr ""
 "Após a atualização, navegue até <b>%s</b> onde encontrará <b>%s</b><br>em "
 "<b>%s</b>."
 
-#: admin/settings.php:284 admin/settings.php:324
+#: admin/settings.php:289 admin/settings.php:329
 msgid "Application needs authorisation"
 msgstr "O aplicativo precisa de autorização"
 
-#: admin/settings.php:289 admin/settings.php:327
+#: admin/settings.php:294 admin/settings.php:332
 msgid "Authorize"
 msgstr "Autorizar"
 
-#: admin/settings.php:298 admin/settings.php:336
+#: admin/settings.php:303 admin/settings.php:341
 msgid "Reauthorize"
 msgstr "Reautorizar"
 
-#: admin/settings.php:307
+#: admin/settings.php:312
 msgid "All fields given below are mandatory"
 msgstr "Todos os campos abaixo são obrigatórios"
 
-#: admin/settings.php:351
+#: admin/settings.php:356
 msgid "Application Selection"
 msgstr "Seleção de aplicativos"
 
-#: admin/settings.php:355
-msgid "Own App (Traditional: This is for supporting old users) "
-msgstr "Aplicativo próprio (tradicional: para suporte a usuários antigos)"
+#: admin/settings.php:360
+msgid "Own App- Traditional (Deprecating soon. Use OAuth 2.0) "
+msgstr ""
+"Aplicação própria - Tradicional (em breve será descontinuada. Utilizar OAuth "
+"2.0) "
 
-#: admin/settings.php:355
-msgid " We advise switching to OAuth 2.0) "
-msgstr " Aconselhamos mudar para OAuth 2.0) "
-
-#: admin/settings.php:355 admin/settings.php:358
-msgid "Help"
-msgstr "Ajuda"
-
-#: admin/settings.php:358
+#: admin/settings.php:363
 msgid "Own App (OAuth2.0 :Recommended)"
 msgstr "Aplicativo próprio (OAuth2.0: Recomendado)"
 
-#: admin/settings.php:364
+#: admin/settings.php:369
 #, php-format
 msgid "%s App (ready to publish)"
 msgstr "Aplicativo %s (pronto para publicar)"
 
-#: admin/settings.php:364
+#: admin/settings.php:369
 msgid "Starts from 10 USD per year"
 msgstr "A partir de 10 USD por ano"
 
-#: admin/settings.php:369
+#: admin/settings.php:374
 msgid "30 DAYS FREE TRIAL AVAILABLE"
 msgstr "30 DIAS DE TESTE GRÁTIS DISPONÍVEL"
 
-#: admin/settings.php:372
+#: admin/settings.php:377
 #, php-format
 msgid "How to use %s application?"
 msgstr "Como usar o aplicativo %s?"
 
-#: admin/settings.php:385
+#: admin/settings.php:390
 #, php-format
 msgid "Connect your %s account"
 msgstr "Conecte sua conta %s"
 
-#: admin/settings.php:392
+#: admin/settings.php:397
 msgid "API key"
 msgstr "Chave API"
 
-#: admin/settings.php:400
+#: admin/settings.php:405
 msgid "API secret"
 msgstr "Segredo da API"
 
-#: admin/settings.php:410
+#: admin/settings.php:415
 msgid "Client ID"
 msgstr "ID do cliente"
 
-#: admin/settings.php:418
+#: admin/settings.php:423
 msgid "Client Secret "
 msgstr "Segredo do cliente "
 
-#: admin/settings.php:427
+#: admin/settings.php:432
 msgid "Twitter username"
 msgstr "Nome de usuário do Twitter"
 
-#: admin/settings.php:435
+#: admin/settings.php:440
 msgid "Access token"
 msgstr "Token de acesso"
 
-#: admin/settings.php:443
+#: admin/settings.php:448
 msgid "Access token secret"
 msgstr "Segredo do token de acesso"
 
-#: admin/settings.php:493
+#: admin/settings.php:498
 msgid "Twitter character limit"
 msgstr "Limite de caracteres do Twitter"
 
-#: admin/settings.php:496
+#: admin/settings.php:501
 msgid "The character limit of tweets is 280."
 msgstr "O limite de caracteres dos tweets é de 280."
 
-#: admin/settings.php:497
+#: admin/settings.php:502
 msgid ""
 "Use 140 for languages like Chinese, Japanese and Korean <br/> which won't "
 "get the 280 character limit."
@@ -1001,53 +1004,53 @@ msgstr ""
 "Use 140 para idiomas como chinês, japonês e coreano <br/> que não terão o "
 "limite de 280 caracteres."
 
-#: admin/settings.php:508
+#: admin/settings.php:513
 msgid "Save"
 msgstr "Guardar"
 
-#: admin/settings.php:613
+#: admin/settings.php:618
 msgid "Basic Settings"
 msgstr "Configurações básicas"
 
-#: admin/settings.php:616
+#: admin/settings.php:621
 msgid "Publish wordpress `pages` to twitter"
 msgstr "Publicar \"páginas\" do wordpress no twitter"
 
-#: admin/settings.php:626
+#: admin/settings.php:631
 msgid "Publish wordpress `posts` to twitter"
 msgstr "Publique \"postagens\" do wordpress no twitter"
 
-#: admin/settings.php:650
+#: admin/settings.php:655
 msgid "Select wordpress custom post types for auto publish"
 msgstr ""
 "Selecione os tipos de postagem personalizados do wordpress para publicação "
 "automática"
 
-#: admin/settings.php:670
+#: admin/settings.php:675
 msgid "Advanced Settings"
 msgstr "Configurações avançadas"
 
-#: admin/settings.php:674
+#: admin/settings.php:679
 msgid "Select post categories for auto publish"
 msgstr "Selecione categorias de postagem para publicação automática"
 
-#: admin/settings.php:680
+#: admin/settings.php:685
 msgid "All"
 msgstr "Tudo"
 
-#: admin/settings.php:682
+#: admin/settings.php:687
 msgid "Specific"
 msgstr "Específica"
 
-#: admin/settings.php:717
+#: admin/settings.php:722
 msgid "NIL"
 msgstr "NADA"
 
-#: admin/settings.php:722
+#: admin/settings.php:727
 msgid "Add twitter cards while posting to twitter"
 msgstr "Adicionar cartões do twitter ao postar no twitter"
 
-#: admin/settings.php:724
+#: admin/settings.php:729
 msgid ""
 "By crawling twitter card specific meta tags, twitter can generate a "
 "summarised preview of the tweeted link."
@@ -1055,7 +1058,7 @@ msgstr ""
 "Ao rastrear metatags específicas do cartão do Twitter, o Twitter pode gerar "
 "uma visualização resumida do link twittado."
 
-#: admin/settings.php:724
+#: admin/settings.php:729
 msgid ""
 "To generate tweet preview of post,set <b>Attach media to twitter post</b> as "
 "<b>No</b>"
@@ -1063,51 +1066,51 @@ msgstr ""
 "Para gerar a visualização do tweet da postagem, defina <b>Anexar mídia à "
 "postagem do Twitter</b> como <b>Não</b>"
 
-#: admin/settings.php:732
+#: admin/settings.php:737
 msgid "Auto publish on creating posts/pages/custom post types"
 msgstr ""
 "Publicação automática na criação de postagens/páginas/tipos de postagem "
 "personalizados"
 
-#: admin/settings.php:735 admin/settings.php:745
+#: admin/settings.php:740 admin/settings.php:750
 msgid "Enabled"
 msgstr "Habilitada"
 
-#: admin/settings.php:736 admin/settings.php:746
+#: admin/settings.php:741 admin/settings.php:751
 msgid "Disabled"
 msgstr "Desativada"
 
-#: admin/settings.php:737 admin/settings.php:747
+#: admin/settings.php:742 admin/settings.php:752
 msgid "Use metabox settings"
 msgstr "Usar configurações do metabox"
 
-#: admin/settings.php:742
+#: admin/settings.php:747
 msgid "Auto publish on editing posts/pages/custom post types"
 msgstr ""
 "Publicação automática na edição de postagens/páginas/tipos de postagem "
 "personalizados"
 
-#: admin/settings.php:752
+#: admin/settings.php:757
 msgid "Enable SSL peer verification in remote requests"
 msgstr "Habilite a verificação de peer SSL em solicitações remotas"
 
-#: admin/settings.php:760
+#: admin/settings.php:765
 msgid "Apply filters during publishing"
 msgstr "Aplicar filtros durante a publicação"
 
-#: admin/settings.php:790
+#: admin/settings.php:795
 msgid "Other Settings"
 msgstr "Outros ajustes"
 
-#: admin/settings.php:794
+#: admin/settings.php:799
 msgid "Enable credit link to author"
 msgstr "Ativar link de crédito para o autor"
 
-#: admin/settings.php:807
+#: admin/settings.php:812
 msgid "Enable premium version ads"
 msgstr "Ativar anúncios da versão premium"
 
-#: admin/settings.php:825
+#: admin/settings.php:830
 msgid "Update Settings"
 msgstr "Atualizar configurações"
 
@@ -1124,11 +1127,11 @@ msgstr "%s não pode processar a solicitação."
 msgid "Please suggest a feature"
 msgstr "Por favor, sugira um recurso"
 
-#: admin/suggest_feature.php:60
+#: admin/suggest_feature.php:66
 msgid "Contribute And Get Rewarded"
 msgstr "Contribua e seja recompensado"
 
-#: admin/suggest_feature.php:61
+#: admin/suggest_feature.php:67
 msgid ""
 "Suggest a feature for this plugin and stand a chance to get a free copy of "
 "premium version of this plugin."
@@ -1136,7 +1139,7 @@ msgstr ""
 "Sugira um recurso para este plugin e tenha a chance de obter uma cópia "
 "gratuita da versão premium deste plugin."
 
-#: admin/suggest_feature.php:67
+#: admin/suggest_feature.php:73
 msgid "Send Mail To Us"
 msgstr "Envie um e-mail para nós"
 
@@ -1145,11 +1148,17 @@ msgid "Hi there! Im just a plugin, not much I can do when called directly."
 msgstr ""
 "Olá! Sou apenas um plugin, não posso fazer muito quando chamado diretamente."
 
-#: xyz-functions.php:210
-#, fuzzy
-#| msgid "Every 2 Hours"
-msgid "Every 2 hours"
-msgstr "A cada 2 horas"
+#~ msgid "Every 2 hours"
+#~ msgstr "A cada 2 horas"
+
+#~ msgid "Own App (Traditional: This is for supporting old users) "
+#~ msgstr "Aplicativo próprio (tradicional: para suporte a usuários antigos) "
+
+#~ msgid " We advise switching to OAuth 2.0) "
+#~ msgstr " Aconselhamos mudar para OAuth 2.0) "
+
+#~ msgid "Help"
+#~ msgstr "Ajuda"
 
 #~ msgid "Just 29 USD"
 #~ msgstr "Apenas 29 dólares"

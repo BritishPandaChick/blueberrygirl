@@ -3,7 +3,7 @@
  Plugin Name: WP Twitter Auto Publish
 Plugin URI: https://xyzscripts.com/wordpress-plugins/twitter-auto-publish/
 Description:   Publish posts automatically from your blog to Twitter social media. You can publish your posts to Twitter as simple text message or as text message with image. The plugin supports filtering posts by post-types and categories.
-Version: 1.7
+Version: 1.7.3
 Requires PHP: 7.4
 Author: xyzscripts.com
 Author URI: https://xyzscripts.com/
@@ -48,6 +48,7 @@ if (!defined('XYZ_TWAP_SMAPSOLUTION_AUTH_URL'))
 	define('XYZ_TWAP_SMAPSOLUTION_AUTH_URL','https://authorize.smapsolutions.com/');
 if (!defined('XYZ_TWAP_SMAPSOLUTION_PUBLISH_URL'))
 	define('XYZ_TWAP_SMAPSOLUTION_PUBLISH_URL','https://tw-publish.smapsolutions.com/');
+define('XYZ_TWAP_API_OAUTH2_URL','https://api.x.com/2/');
 
 require_once( dirname( __FILE__ ) . '/admin/install.php' );
 require_once( dirname( __FILE__ ) . '/xyz-functions.php' );
@@ -80,4 +81,15 @@ function xyz_twap_add_action_links( $links ) {
 			'<a href="' . admin_url( 'admin.php?page=twitter-auto-publish-settings' ) . '">Settings</a>',
 	);
 	return array_merge( $links, $xyz_twap_links);
+}
+add_action('admin_init', 'xyz_twap_check_and_upgrade_plugin_version');
+function xyz_twap_check_and_upgrade_plugin_version() {
+	$current_version = xyz_twap_plugin_get_version();
+	$saved_version   = get_option('xyz_twap_free_version');
+	if ($saved_version === false) {
+		add_option('xyz_twap_free_version', $current_version);
+	} elseif (version_compare($current_version, $saved_version, '>')) {
+		xyz_twap_run_upgrade_routines();
+		update_option('xyz_twap_free_version', $current_version);
+	}
 }

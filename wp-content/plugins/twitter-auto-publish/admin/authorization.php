@@ -29,7 +29,7 @@ if (isset($_POST['tw_auth'])) {
     setcookie("xyz_twap_code_verifier", $code_verifier, time() + 3600, "/");
   
     // Generate the authorization URL with sha256 challenge
-    $authUrl = "https://twitter.com/i/oauth2/authorize?";
+    $authUrl = "https://x.com/i/oauth2/authorize?";
     $authUrl .= http_build_query([
         'response_type' => 'code',
         'client_id' => $clientId,
@@ -46,7 +46,7 @@ if (isset($_POST['tw_auth'])) {
     exit;
 }
 if (isset($_COOKIE['xyz_twap_session_state']) && isset($_REQUEST['state']) && ($_COOKIE['xyz_twap_session_state'] === $_REQUEST['state'])) {
-    $token_url = "https://api.twitter.com/2/oauth2/token";
+    $token_url = XYZ_TWAP_API_OAUTH2_URL."oauth2/token";
     $current_time=time();
     // Retrieve code_verifier from the cookie
     $code_verifier = $_COOKIE['xyz_twap_code_verifier'] ?? '';
@@ -79,14 +79,15 @@ if (isset($_COOKIE['xyz_twap_session_state']) && isset($_REQUEST['state']) && ($
             update_option('xyz_twap_tw_refresh_token', $refresh_token);
             update_option('xyz_twap_last_auth_time', $current_time);
             update_option('xyz_twap_tw_af', 0);
-            header("Location:" . admin_url('admin.php?page=twitter-auto-publish-settings&auth=1&msg=2'));
+            wp_safe_redirect( admin_url( 'admin.php?page=twitter-auto-publish-settings&auth=1&msg=2' ) );
             exit;
         } else {
             $error='Error:';
             if (isset($params->error)) {
                 $error.= $params->error;
             }
-            header("Location:" . admin_url('admin.php?page=twitter-auto-publish-settings&error_msg='.urlencode($error)));
+            $error = isset( $error ) ? sanitize_text_field( $error ) : '';
+            wp_safe_redirect( admin_url( 'admin.php?page=twitter-auto-publish-settings&error_msg=' . urlencode( $error ) ) );
             exit;
         }
     }

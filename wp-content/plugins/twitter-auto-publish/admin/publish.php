@@ -148,14 +148,16 @@ $tw_af=1;
 	$post_twitter_image_permission=get_option('xyz_twap_twpost_image_permission');
 	if(isset($_POST['xyz_twap_twpost_image_permission']))
 		$post_twitter_image_permission=$_POST['xyz_twap_twpost_image_permission'];
-
+	global $wpdb;
 	
-	$postpp= get_post($post_ID);global $wpdb;
 	$reg_exUrl = "/(http|https)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
-	$entries0 = $wpdb->get_results($wpdb->prepare( 'SELECT user_nicename,display_name FROM '.$wpdb->base_prefix.'users WHERE ID=%d',$postpp->post_author));
-	foreach( $entries0 as $entry ) {			
-		$user_nicename=$entry->user_nicename;
-		$user_displayname=$entry->display_name;
+	$display_name =$user_nicename = '';
+	$postpp= get_post($post_ID);
+	$author_id = $postpp->post_author;
+	$user = get_userdata($author_id);
+	if ($user) {
+	$user_displayname = $user->display_name;
+	$user_nicename = $user->user_nicename;
 	}
 	
 	if ($postpp->post_status == 'publish')
@@ -625,7 +627,7 @@ if(isset($resultfrtw->data))
 
     			$resp = $resultfrtw->data;
     		if (isset($resp->id) && !empty($resp->id)){
-    				$tweet_link="https://twitter.com/".$twid."/status/".$resp->id;
+    				$tweet_link="https://x.com/".$twid."/status/".$resp->id;
     				$tweet_id_string="<br/><span style=\"color:#21759B;text-decoration:underline;\"><a target=\"_blank\" href=".$tweet_link.">View Tweet</a></span>";
     					
     			}    			
@@ -636,7 +638,7 @@ if(isset($resultfrtw->data))
 				if(isset($response['data']))
 					$resp = $response['data'];
 				if (isset($resp['id']) && !empty($resp['id'])){
-					$tweet_link="https://twitter.com/".$twid."/status/".$resp['id'];
+					$tweet_link="https://x.com/".$twid."/status/".$resp['id'];
 					$tweet_id_string="<br/><span style=\"color:#21759B;text-decoration:underline;\"><a target=\"_blank\" href=".$tweet_link.">View Tweet</a></span>";
 				}
     			$tw_publish_status_insert=serialize($tw_publish_status.$tweet_id_string);

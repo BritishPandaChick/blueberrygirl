@@ -16,6 +16,7 @@ use AIOSEO\Plugin\Common\Traits\Helpers as TraitHelpers;
 class Helpers {
 	use TraitHelpers\Api;
 	use TraitHelpers\Arrays;
+	use TraitHelpers\Buffer;
 	use TraitHelpers\Constants;
 	use TraitHelpers\Deprecated;
 	use TraitHelpers\DateTime;
@@ -33,6 +34,36 @@ class Helpers {
 	use TraitHelpers\WpContext;
 	use TraitHelpers\WpMultisite;
 	use TraitHelpers\WpUri;
+
+	/**
+	 * Holds the data for Vue.
+	 *
+	 * @since   4.4.9
+	 * @version 4.8.6.1 Moved from Vue trait as it's shared between Lite, Common and Pro.
+	 *
+	 * @var array
+	 */
+	protected $data = [];
+
+	/**
+	 * Optional arguments for setting the data.
+	 *
+	 * @since   4.4.9
+	 * @version 4.8.6.1 Moved from Vue trait as it's shared between Lite, Common and Pro.
+	 *
+	 * @var array
+	 */
+	protected $args = [];
+
+	/**
+	 * Holds the cached data.
+	 *
+	 * @since   4.5.1
+	 * @version 4.8.6.1 Moved from Vue trait as it's shared between Lite, Common and Pro.
+	 *
+	 * @var array
+	 */
+	protected $cache = [];
 
 	/**
 	 * Generate a UTM URL from the url and medium/content passed in.
@@ -233,6 +264,13 @@ class Helpers {
 				$sanitized = [];
 				foreach ( (array) $value as $child ) {
 					$sanitized[] = aioseo()->helpers->sanitizeOption( $child );
+				}
+
+				return $sanitized;
+			case 'object':
+				$sanitized = [];
+				foreach ( (array) $value as $key => $child ) {
+					$sanitized[ $key ] = aioseo()->helpers->sanitizeOption( $child );
 				}
 
 				return $sanitized;

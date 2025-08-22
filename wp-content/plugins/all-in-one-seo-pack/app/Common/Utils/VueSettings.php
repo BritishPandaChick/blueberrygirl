@@ -99,7 +99,6 @@ class VueSettings {
 			'localBusinessMapsApiKey'      => true,
 			'localBusinessMapsSettings'    => true,
 			'robotsEditor'                 => true,
-			'badBotBlocker'                => true,
 			'databaseTools'                => true,
 			'htaccessEditor'               => true,
 			'databaseToolsLogs'            => true,
@@ -119,6 +118,7 @@ class VueSettings {
 			'404Settings'                  => true,
 			'userProfiles'                 => true,
 			'queryArgLogs'                 => true,
+			'aiContentSettings'            => true,
 			'writingAssistantSettings'     => true,
 			'writingAssistantCta'          => true
 		],
@@ -133,10 +133,9 @@ class VueSettings {
 			'searchConsoleSitemapErrors'      => false
 		],
 		'internalTabs'    => [
-			'authorArchives'    => 'title-description',
-			'dateArchives'      => 'title-description',
-			'searchArchives'    => 'title-description',
-			'seoAuditChecklist' => 'all-items'
+			'authorArchives' => 'title-description',
+			'dateArchives'   => 'title-description',
+			'searchArchives' => 'title-description',
 		],
 		'tablePagination' => [
 			'networkDomains'                         => 20,
@@ -155,7 +154,8 @@ class VueSettings {
 			'searchStatisticsKrtGroups'              => 20,
 			'searchStatisticsKrtGroupsTableKeywords' => 10,
 			'searchStatisticsIndexStatus'            => 20,
-			'queryArgs'                              => 20
+			'queryArgs'                              => 20,
+			'seoAnalysis'                            => 20
 		],
 		'semrushCountry'  => 'US'
 	];

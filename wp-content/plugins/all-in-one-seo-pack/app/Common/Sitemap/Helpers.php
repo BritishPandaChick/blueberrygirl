@@ -353,7 +353,7 @@ class Helpers {
 	 * @return string       The formatted datetime.
 	 */
 	public function lastModifiedAdditionalPage( $page ) {
-		return gmdate( 'c', strtotime( (string) $page->lastModified ) );
+		return aioseo()->helpers->isValidDate( $page->lastModified ) ? gmdate( 'c', strtotime( $page->lastModified ) ) : '';
 	}
 
 	/**
@@ -401,6 +401,11 @@ class Helpers {
 	 */
 	private function excludedObjectIds( $option ) {
 		$type = aioseo()->sitemap->type;
+
+		if ( 'llms' === $type ) {
+			return '';
+		}
+
 		// The RSS Sitemap needs to exclude whatever is excluded in the general sitemap.
 		if ( 'rss' === $type ) {
 			$type = 'general';
