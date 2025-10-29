@@ -3,7 +3,7 @@
   Plugin Name: Like Button Rating ♥ LikeBtn
   Plugin URI: https://likebtn.com/en/wordpress-like-button-plugin
   Description: Add Like button to posts, pages, comments, WooCommerce, BuddyPress, bbPress, custom post types! Sort content by likes! Get instant stats and insights!
-  Version: 2.6.56
+  Version: 2.6.57
   Text Domain: likebtn-like-button
   Author: LikeBtn
   Author URI: https://likebtn.com
@@ -14,7 +14,7 @@
 // ini_set('error_reporting', E_ALL);
 
 // Plugin version
-define('LIKEBTN_VERSION', '2.6.56');
+define('LIKEBTN_VERSION', '2.6.57');
 // Current DB version
 define('LIKEBTN_DB_VERSION', 20);
 
@@ -3938,7 +3938,8 @@ function _likebtn_save_bp_member_votes($entity_id, $likes, $dislikes, $likes_min
 
     if (!empty($bp_xprofile)) {
         if ($likes !== null) {
-            if (count(bp_xprofile_get_meta($entity_id, LIKEBTN_BP_XPROFILE_OBJECT_TYPE, LIKEBTN_META_KEY_LIKES)) > 1) {
+            $bp_meta = bp_xprofile_get_meta($entity_id, LIKEBTN_BP_XPROFILE_OBJECT_TYPE, LIKEBTN_META_KEY_LIKES);
+            if ((is_countable($bp_meta) || is_array($bp_meta)) && count($bp_meta) > 1) {
                 bp_xprofile_delete_meta($entity_id, LIKEBTN_BP_XPROFILE_OBJECT_TYPE, LIKEBTN_META_KEY_LIKES);
                 bp_xprofile_add_meta($entity_id, LIKEBTN_BP_XPROFILE_OBJECT_TYPE, LIKEBTN_META_KEY_LIKES, $likes, true);
             } else {
@@ -3946,7 +3947,8 @@ function _likebtn_save_bp_member_votes($entity_id, $likes, $dislikes, $likes_min
             }
         }
         if ($dislikes !== null) {
-            if (count(bp_xprofile_get_meta($entity_id, LIKEBTN_BP_XPROFILE_OBJECT_TYPE, LIKEBTN_META_KEY_DISLIKES)) > 1) {
+            $bp_meta = bp_xprofile_get_meta($entity_id, LIKEBTN_BP_XPROFILE_OBJECT_TYPE, LIKEBTN_META_KEY_DISLIKES);
+            if ((is_countable($bp_meta) || is_array($bp_meta)) && count($bp_meta) > 1) {
                 bp_xprofile_delete_meta($entity_id, LIKEBTN_BP_XPROFILE_OBJECT_TYPE, LIKEBTN_META_KEY_DISLIKES);
                 bp_xprofile_add_meta($entity_id, LIKEBTN_BP_XPROFILE_OBJECT_TYPE, LIKEBTN_META_KEY_DISLIKES, $dislikes, true);
             } else {
@@ -3954,7 +3956,8 @@ function _likebtn_save_bp_member_votes($entity_id, $likes, $dislikes, $likes_min
             }
         }
         if ($likes_minus_dislikes !== null) {
-            if (count(bp_xprofile_get_meta($entity_id, LIKEBTN_BP_XPROFILE_OBJECT_TYPE, LIKEBTN_META_KEY_LIKES_MINUS_DISLIKES)) > 1) {
+            $bp_meta = bp_xprofile_get_meta($entity_id, LIKEBTN_BP_XPROFILE_OBJECT_TYPE, LIKEBTN_META_KEY_LIKES_MINUS_DISLIKES);
+            if ((is_countable($bp_meta) || is_array($bp_meta)) && count($bp_meta) > 1) {
                 bp_xprofile_delete_meta($entity_id, LIKEBTN_BP_XPROFILE_OBJECT_TYPE, LIKEBTN_META_KEY_LIKES_MINUS_DISLIKES);
                 bp_xprofile_add_meta($entity_id, LIKEBTN_BP_XPROFILE_OBJECT_TYPE, LIKEBTN_META_KEY_LIKES_MINUS_DISLIKES, $likes_minus_dislikes, true);
             } else {

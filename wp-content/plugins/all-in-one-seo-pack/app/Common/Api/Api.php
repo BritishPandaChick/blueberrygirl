@@ -43,15 +43,19 @@ class Api {
 			'writing-assistant/user-info'                 => [ 'callback' => [ 'WritingAssistant', 'getUserInfo' ], 'access' => 'aioseo_page_writing_assistant_settings' ],
 			'writing-assistant/user-options'              => [ 'callback' => [ 'WritingAssistant', 'getUserOptions' ], 'access' => 'aioseo_page_writing_assistant_settings' ],
 			'writing-assistant/report-history'            => [ 'callback' => [ 'WritingAssistant', 'getReportHistory' ], 'access' => 'aioseo_page_writing_assistant_settings' ],
-			'seo-analysis/competitors'                    => [ 'callback' => [ 'Analyze', 'getCompetitorsResults' ], 'access' => 'aioseo_seo_analysis_settings' ]
+			'seo-analysis/competitors'                    => [ 'callback' => [ 'Analyze', 'getCompetitorsResults' ], 'access' => 'aioseo_seo_analysis_settings' ],
+			'ai/image-generator'                          => [ 'callback' => [ 'Ai', 'fetchImages' ], 'access' => 'aioseo_page_ai_content_settings' ]
 		],
 		'POST'   => [
 			'ai/auth'                                               => [ 'callback' => [ 'Ai', 'storeAccessToken' ], 'access' => 'aioseo_page_ai_content_settings' ],
+			'ai/credits'                                            => [ 'callback' => [ 'Ai', 'getCredits' ], 'access' => 'aioseo_page_ai_content_settings' ],
 			'ai/meta/title'                                         => [ 'callback' => [ 'Ai', 'generateTitles' ], 'access' => 'aioseo_page_ai_content_settings' ],
 			'ai/meta/description'                                   => [ 'callback' => [ 'Ai', 'generateDescriptions' ], 'access' => 'aioseo_page_ai_content_settings' ],
 			'ai/faqs'                                               => [ 'callback' => [ 'Ai', 'generateFaqs' ], 'access' => 'aioseo_page_ai_content_settings' ],
 			'ai/key-points'                                         => [ 'callback' => [ 'Ai', 'generateKeyPoints' ], 'access' => 'aioseo_page_ai_content_settings' ],
 			'ai/social-posts'                                       => [ 'callback' => [ 'Ai', 'generateSocialPosts' ], 'access' => 'aioseo_page_ai_content_settings' ],
+			'ai/assistant'                                          => [ 'callback' => [ 'Ai', 'generateAssistantCompletion' ], 'access' => 'aioseo_page_ai_content_settings' ],
+			'ai/image-generator'                                    => [ 'callback' => [ 'Ai', 'generateImage' ], 'access' => 'aioseo_page_ai_content_settings' ],
 			'ai/deactivate'                                         => [ 'callback' => [ 'Ai', 'deactivate' ], 'access' => 'aioseo_page_ai_content_settings' ],
 			'htaccess'                                              => [ 'callback' => [ 'Tools', 'saveHtaccess' ], 'access' => 'aioseo_tools_settings' ],
 			'post'                                                  => [
@@ -84,11 +88,10 @@ class Api {
 			'backup'                                                => [ 'callback' => [ 'Tools', 'createBackup' ], 'access' => 'aioseo_tools_settings' ],
 			'backup/restore'                                        => [ 'callback' => [ 'Tools', 'restoreBackup' ], 'access' => 'aioseo_tools_settings' ],
 			'email-debug-info'                                      => [ 'callback' => [ 'Tools', 'emailDebugInfo' ], 'access' => 'aioseo_tools_settings' ],
-			'migration/fix-blank-formats'                           => [ 'callback' => [ 'Migration', 'fixBlankFormats' ], 'access' => 'any' ],
+			'notification/email-reports-enable'                     => [ 'callback' => [ 'EmailSummary', 'enableEmailReports' ], 'access' => 'aioseo_general_settings' ],
 			'notification/blog-visibility-reminder'                 => [ 'callback' => [ 'Notifications', 'blogVisibilityReminder' ], 'access' => 'any' ],
 			'notification/conflicting-plugins-reminder'             => [ 'callback' => [ 'Notifications', 'conflictingPluginsReminder' ], 'access' => 'any' ],
 			'notification/description-format-reminder'              => [ 'callback' => [ 'Notifications', 'descriptionFormatReminder' ], 'access' => 'any' ],
-			'notification/email-reports-enable'                     => [ 'callback' => [ 'EmailSummary', 'enableEmailReports' ], 'access' => 'any' ],
 			'notification/install-addons-reminder'                  => [ 'callback' => [ 'Notifications', 'installAddonsReminder' ], 'access' => 'any' ],
 			'notification/install-aioseo-image-seo-reminder'        => [ 'callback' => [ 'Notifications', 'installImageSeoReminder' ], 'access' => 'any' ],
 			'notification/install-aioseo-local-business-reminder'   => [ 'callback' => [ 'Notifications', 'installLocalBusinessReminder' ], 'access' => 'any' ],
@@ -120,7 +123,7 @@ class Api {
 			'settings/items-per-page'                               => [ 'callback' => [ 'Settings', 'changeItemsPerPage' ], 'access' => 'any' ],
 			'settings/semrush-country'                              => [ 'callback' => [ 'Settings', 'changeSemrushCountry' ], 'access' => 'any' ],
 			'settings/do-task'                                      => [ 'callback' => [ 'Settings', 'doTask' ], 'access' => 'aioseo_tools_settings' ],
-			'sitemap/deactivate-conflicting-plugins'                => [ 'callback' => [ 'Sitemaps', 'deactivateConflictingPlugins' ], 'access' => 'any' ],
+			'sitemap/deactivate-conflicting-plugins'                => [ 'callback' => [ 'Sitemaps', 'deactivateConflictingPlugins' ], 'access' => 'deactivate_plugins' ],
 			'sitemap/delete-static-files'                           => [ 'callback' => [ 'Sitemaps', 'deleteStaticFiles' ], 'access' => 'aioseo_sitemap_settings' ],
 			'sitemap/validate-html-sitemap-slug'                    => [ 'callback' => [ 'Sitemaps', 'validateHtmlSitemapSlug' ], 'access' => 'aioseo_sitemap_settings' ],
 			'tools/delete-robots-txt'                               => [ 'callback' => [ 'Tools', 'deleteRobotsTxt' ], 'access' => 'aioseo_tools_settings' ],
@@ -160,7 +163,7 @@ class Api {
 			],
 			'email-summary/send'                                    => [
 				'callback' => [ 'EmailSummary', 'send' ],
-				'access'   => 'aioseo_page_advanced_settings'
+				'access'   => 'aioseo_general_settings'
 			],
 			'writing-assistant/process'                             => [
 				'callback' => [ 'WritingAssistant', 'processKeyword' ],
@@ -185,7 +188,8 @@ class Api {
 		],
 		'DELETE' => [
 			'backup'                 => [ 'callback' => [ 'Tools', 'deleteBackup' ], 'access' => 'aioseo_tools_settings' ],
-			'search-statistics/auth' => [ 'callback' => [ 'SearchStatistics', 'deleteAuth' ], 'access' => [ 'aioseo_search_statistics_settings', 'aioseo_general_settings' ] ]
+			'search-statistics/auth' => [ 'callback' => [ 'SearchStatistics', 'deleteAuth' ], 'access' => [ 'aioseo_search_statistics_settings', 'aioseo_general_settings' ] ],
+			'ai/image-generator'     => [ 'callback' => [ 'Ai', 'deleteImages' ], 'access' => 'aioseo_page_ai_content_settings' ]
 		]
 		// phpcs:enable WordPress.Arrays.ArrayDeclarationSpacing.AssociativeArrayFound
 	];
@@ -361,7 +365,7 @@ class Api {
 		if ( empty( $routeData ) ) {
 			foreach ( $this->getRoutes()[ $request->get_method() ] as $routeRegex => $routeInfo ) {
 				$routeRegex = str_replace( '@', '\@', $routeRegex );
-				if ( preg_match( "@{$routeRegex}@", (string) $route ) ) {
+				if ( preg_match( "@^{$routeRegex}$@", (string) $route ) ) {
 					$routeData = $routeInfo;
 					break;
 				}

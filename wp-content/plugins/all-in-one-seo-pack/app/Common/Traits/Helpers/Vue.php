@@ -52,6 +52,7 @@ trait Vue {
 		$this->setWritingAssistantData();
 		$this->setBreadcrumbsData();
 		$this->setSeoAnalyzerData();
+		$this->setAiImageGeneratorData();
 
 		$this->cache[ $hash ] = $this->data;
 
@@ -97,7 +98,7 @@ trait Vue {
 				'assetsPath'        => aioseo()->core->assets->getAssetsPath(),
 				'generalSitemapUrl' => aioseo()->sitemap->helpers->getUrl( 'general' ),
 				'rssSitemapUrl'     => aioseo()->sitemap->helpers->getUrl( 'rss' ),
-				'llmsUrl'           => aioseo()->llms->getUrl(),
+				'llmsUrl'           => aioseo()->helpers->getLlmsUrl(),
 				'robotsTxtUrl'      => $this->getSiteUrl() . '/robots.txt',
 				'marketingSiteUrl'  => $this->getMarketingSiteUrl(),
 				'upgradeUrl'        => apply_filters( 'aioseo_upgrade_link', AIOSEO_MARKETING_URL . 'lite-upgrade/' ),
@@ -679,6 +680,19 @@ trait Vue {
 		}
 
 		$this->data['analyzer'] = aioseo()->seoAnalysis->getVueData();
+	}
+
+	/**
+	 * Set Vue AI Image Generator data.
+	 *
+	 * @since 4.8.9
+	 *
+	 * @return void
+	 */
+	private function setAiImageGeneratorData() {
+		if ( 'post' === $this->args['page'] ) {
+			$this->data['aiImageGenerator'] = aioseo()->ai->image->getVueDataEdit( $this->args['staticPostId'] ?? null );
+		}
 	}
 
 	/**

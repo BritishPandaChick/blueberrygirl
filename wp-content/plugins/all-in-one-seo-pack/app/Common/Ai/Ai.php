@@ -14,6 +14,15 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Ai {
 	/**
+	 * The image class.
+	 *
+	 * @since 4.8.8
+	 *
+	 * @var Image|null
+	 */
+	public $image = null;
+
+	/**
 	 * The base URL for the licensing server.
 	 *
 	 * @since 4.8.4
@@ -21,6 +30,16 @@ class Ai {
 	 * @var string
 	 */
 	private $licensingUrl = 'https://licensing.aioseo.com/v1/';
+
+	/**
+	 * The AI Generator API URL.
+	 *
+	 * @since   4.8.4
+	 * @version 4.8.8 Moved from {@see \AIOSEO\Plugin\Common\Api\Ai}.
+	 *
+	 * @var string
+	 */
+	private $aiGeneratorApiUrl = 'https://ai-generator.aioseo.com/v1/';
 
 	/**
 	 * The action name for fetching credits.
@@ -51,6 +70,8 @@ class Ai {
 
 			aioseo()->core->cache->update( 'ai_get_credits', true, 5 * MINUTE_IN_SECONDS );
 		}
+
+		$this->image = new Image();
 	}
 
 	/**
@@ -68,7 +89,7 @@ class Ai {
 			return;
 		}
 
-		if ( aioseo()->cache->get( 'ai-access-token-error' ) ) {
+		if ( aioseo()->core->cache->get( 'ai-access-token-error' ) ) {
 			return;
 		}
 
@@ -79,7 +100,7 @@ class Ai {
 		] );
 
 		if ( is_wp_error( $response ) ) {
-			aioseo()->cache->update( 'ai-access-token-error', true, 1 * HOUR_IN_SECONDS );
+			aioseo()->core->cache->update( 'ai-access-token-error', true, 1 * HOUR_IN_SECONDS );
 
 			// Schedule another, one-time event in approx. 1 hour from now.
 			aioseo()->actionScheduler->scheduleSingle( $this->creditFetchAction, 1 * ( HOUR_IN_SECONDS + wp_rand( 0, 30 * MINUTE_IN_SECONDS ) ), [] );
@@ -90,7 +111,7 @@ class Ai {
 		$body = wp_remote_retrieve_body( $response );
 		$data = json_decode( $body );
 		if ( empty( $data->accessToken ) ) {
-			aioseo()->cache->update( 'ai-access-token-error', true, 1 * HOUR_IN_SECONDS );
+			aioseo()->core->cache->update( 'ai-access-token-error', true, 1 * HOUR_IN_SECONDS );
 
 			// Schedule another, one-time event in approx. 1 hour from now.
 			aioseo()->actionScheduler->scheduleSingle( $this->creditFetchAction, 1 * ( HOUR_IN_SECONDS + wp_rand( 0, 30 * MINUTE_IN_SECONDS ) ), [] );
@@ -100,6 +121,9 @@ class Ai {
 
 		aioseo()->internalOptions->internal->ai->accessToken        = sanitize_text_field( $data->accessToken );
 		aioseo()->internalOptions->internal->ai->isTrialAccessToken = $data->isFree ?? false;
+
+		// Reset the manually connected flag when getting a new token automatically.
+		aioseo()->internalOptions->internal->ai->isManuallyConnected = false;
 
 		// Fetch the credit totals.
 		$this->updateCredits( true );
@@ -128,7 +152,7 @@ class Ai {
 	 * @return void
 	 */
 	public function updateCredits( $refresh = false ) {
-		if ( aioseo()->cache->get( 'ai-credits-error' ) && ! $refresh ) {
+		if ( aioseo()->core->cache->get( 'ai-credits-error' ) && ! $refresh ) {
 			return;
 		}
 
@@ -141,7 +165,7 @@ class Ai {
 		] );
 
 		if ( is_wp_error( $response ) ) {
-			aioseo()->cache->update( 'ai-credits-error', true, HOUR_IN_SECONDS );
+			aioseo()->core->cache->update( 'ai-credits-error', true, HOUR_IN_SECONDS );
 
 			// Schedule another, one-time event in approx. 1 hour from now.
 			aioseo()->actionScheduler->scheduleSingle( $this->creditFetchAction, 1 * ( HOUR_IN_SECONDS + wp_rand( 0, 30 * MINUTE_IN_SECONDS ) ), [] );
@@ -157,7 +181,7 @@ class Ai {
 				aioseo()->internalOptions->internal->ai->accessToken = '';
 			}
 
-			aioseo()->cache->update( 'ai-credits-error', true, HOUR_IN_SECONDS );
+			aioseo()->core->cache->update( 'ai-credits-error', true, HOUR_IN_SECONDS );
 
 			// Schedule another, one-time event in approx. 1 hour from now.
 			aioseo()->actionScheduler->scheduleSingle( $this->creditFetchAction, 1 * ( HOUR_IN_SECONDS + wp_rand( 0, 30 * MINUTE_IN_SECONDS ) ), [] );
@@ -226,5 +250,17 @@ class Ai {
 		}
 
 		return $this->licensingUrl;
+	}
+
+	/**
+	 * Returns the AI Generator API URL.
+	 *
+	 * @since   4.8.4
+	 * @version 4.8.8 Moved from {@see \AIOSEO\Plugin\Common\Api\Ai}.
+	 *
+	 * @return string The AI Generator API URL.
+	 */
+	public function getAiGeneratorApiUrl() {
+		return defined( 'AIOSEO_AI_GENERATOR_URL' ) ? AIOSEO_AI_GENERATOR_URL : $this->aiGeneratorApiUrl;
 	}
 }
