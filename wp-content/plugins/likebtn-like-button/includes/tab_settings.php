@@ -6,9 +6,9 @@ function likebtn_admin_settings() {
     //global $likebtn_plans;
     global $likebtn_sync_intervals;
 
-    wp_enqueue_script('likebtn-jquery-ui', _likebtn_get_public_url().'js/jquery/jquery-ui/jquery-ui.js', array('jquery'), LIKEBTN_VERSION);
-    wp_enqueue_style('likebtn-jquery-ui-css', _likebtn_get_public_url().'css/jquery/jquery-ui/jquery-ui.css', false, LIKEBTN_VERSION, 'all');
-    wp_enqueue_script('likebtn-durationpicker', _likebtn_get_public_url().'js/jquery/jquery.ui.durationPicker.js', array('jquery', 'likebtn-jquery-ui'), LIKEBTN_VERSION);
+    //wp_enqueue_script('likebtn-jquery-ui', _likebtn_get_public_url().'js/jquery/jquery-ui/jquery-ui.js', array('jquery'), LIKEBTN_VERSION);
+    //wp_enqueue_style('likebtn-jquery-ui-css', _likebtn_get_public_url().'css/jquery/jquery-ui/jquery-ui.css', false, LIKEBTN_VERSION, 'all');
+    wp_enqueue_script('likebtn-durationpicker', _likebtn_get_public_url().'js/jquery/jquery.ui.durationPicker.js', array('jquery'/*, 'likebtn-jquery-ui'*/), LIKEBTN_VERSION);
     wp_enqueue_style('likebtn-durationpicker', _likebtn_get_public_url().'css/jquery/jquery.ui.durationPicker.css', array(), LIKEBTN_VERSION, 'all');
 
     // reset sync interval

@@ -230,12 +230,12 @@ function monsterinsights_ajax_dismiss_notice() {
 add_action( 'wp_ajax_monsterinsights_ajax_dismiss_notice', 'monsterinsights_ajax_dismiss_notice' );
 
 /**
- * Dismiss SEMRush CTA
+ * Dismiss SEOBoost CTA
  *
  * @access public
  * @since 7.12.3
  */
-function monsterinsights_ajax_dismiss_semrush_cta() {
+function monsterinsights_ajax_dismiss_seoboost_cta() {
 	check_ajax_referer( 'mi-admin-nonce', 'nonce' );
 
 	if ( ! current_user_can( 'monsterinsights_save_settings' ) ) {
@@ -243,7 +243,7 @@ function monsterinsights_ajax_dismiss_semrush_cta() {
 	}
 
 	// Deactivate the notice
-	if ( update_option( 'monsterinsights_dismiss_semrush_cta', 'yes' ) ) {
+	if ( update_option( 'monsterinsights_dismiss_seoboost_cta', 'yes' ) ) {
 		// Return true
 		wp_send_json( array(
 			'dismissed' => 'yes',
@@ -258,7 +258,7 @@ function monsterinsights_ajax_dismiss_semrush_cta() {
 	wp_die();
 }
 
-add_action( 'wp_ajax_monsterinsights_vue_dismiss_semrush_cta', 'monsterinsights_ajax_dismiss_semrush_cta' );
+add_action( 'wp_ajax_monsterinsights_vue_dismiss_seoboost_cta', 'monsterinsights_ajax_dismiss_seoboost_cta' );
 
 
 /**
@@ -295,17 +295,17 @@ add_action( 'wp_ajax_monsterinsights_vue_dismiss_aiseo_cta', 'monsterinsights_vu
 /**
  * Get the sem rush cta dismiss status value
  */
-function monsterinsights_get_sem_rush_cta_status() {
+function monsterinsights_get_seo_boost_cta_status() {
 	check_ajax_referer( 'mi-admin-nonce', 'nonce' );
 
-	$dismissed_cta = get_option( 'monsterinsights_dismiss_semrush_cta', 'no' );
+	$dismissed_cta = get_option( 'monsterinsights_dismiss_seoboost_cta', 'no' );
 
 	wp_send_json( array(
 		'dismissed' => $dismissed_cta,
 	) );
 }
 
-add_action( 'wp_ajax_monsterinsights_get_sem_rush_cta_status', 'monsterinsights_get_sem_rush_cta_status' );
+add_action( 'wp_ajax_monsterinsights_get_seo_boost_cta_status', 'monsterinsights_get_seo_boost_cta_status' );
 
 /**
  * Checks if AISEO call-to-action is dismissed.
